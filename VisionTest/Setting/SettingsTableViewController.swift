@@ -1,0 +1,432 @@
+
+
+import UIKit
+import CoreData
+import Speech
+
+class SettingsTableViewController: UITableViewController, UITextFieldDelegate, SFSpeechRecognizerDelegate {
+    
+    
+    private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "ru_RU"))!
+    
+    let purchasesCellID = "PurchasesCell"
+    let userCellID = "UserCell"
+    let settingsCellID = "SettingsCell"
+    let symbolCellId = "SymbolCell"
+    let userInfoImageView = UIImageView()
+    
+    var name = ""
+    var photo = Data()
+    var userInfoText = "info"
+    let otstup = "   "
+    
+    var avtoDetectDistBool = false
+    var speechRecognBool = false
+    var distanceTest = Float(0.5)
+    var timeToStart = Float(0)
+    var symbolTest = "Snellen"
+    
+    var labelTextField = UITextField()
+    var coverView = UIView()
+    var settingTextLabelTag = Int()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 2)
+        self.tabBarItem = tabBarItem
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(actionSave))
+        
+        self.tableView.register(PurchasesTableViewCell.self, forCellReuseIdentifier: purchasesCellID)
+        self.tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: settingsCellID)
+        self.tableView.register(UserTableViewCell.self, forCellReuseIdentifier: userCellID)
+        self.tableView.register(SymbolTableViewCell.self, forCellReuseIdentifier: symbolCellId)
+        
+//        tableView.allowsSelection = true
+//        tableView.isUserInteractionEnabled = true
+//        tableView.gestureRecognizers.
+        
+        
+        tableView.tableFooterView = UIView()
+        
+        labelTextField.delegate = self
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapTableView(recognizer:)))
+        self.view.addGestureRecognizer(tap)
+        
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super .viewWillAppear(true)
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let image = UIImage(named: "placeholder")?.pngData()!
+        do {
+            let resultUser = try context.fetch(User.fetchRequest())
+//            let resultSettings = try context.fetch(SettingsApp.fetchRequest())
+            
+            if resultUser.count > 0 {
+                name = (resultUser.last as! User).name ?? ""
+                userInfoText = (resultUser.last as! User).info ?? "info"
+                
+                photo = ((resultUser.last as! User).photo) ?? image!}
+            else{
+                name = "name"
+                userInfoText = "info"
+                photo = image!
+            }//надо переделать
+        } catch let error as NSError {
+            print(error)
+        }
+        tableView.reloadData()
+    }
+    
+    // MARK: - Table view data source
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 3
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            return 2
+        case 2:
+            return 3
+        default:
+            break
+        }
+        return 0
+    }
+    
+    
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        var cell = UITableViewCell()
+        
+        if indexPath.section == 0 {
+            
+            let cell1 = tableView.dequeueReusableCell(withIdentifier: userCellID, for: indexPath) as! UserTableViewCell
+            cell1.userPhotoImageView.image = UIImage(data: photo)//UIImage(named: "placeholder")
+            let gestureUserPhotoView = UITapGestureRecognizer(target: self, action: #selector(tapGestureUserInfoAction(tapGestureRecognizer:)))
+            cell1.userPhotoImageView.addGestureRecognizer(gestureUserPhotoView)
+            gestureUserPhotoView.numberOfTapsRequired = 1
+            cell1.userPhotoImageView.isUserInteractionEnabled = true
+            
+            cell1.userNameLabel.text = name
+            cell1.userInfoLabel.text = userInfoText
+            cell1.userInfoLabel.isUserInteractionEnabled = true
+//            let gestureUserInfo = UITapGestureRecognizer(target: self, action: #selector(userCellAction(recognizer:)))
+//            cell1.userInfoLabel.addGestureRecognizer(gestureUserInfo)
+            cell1.accessoryBtn.addTarget(self, action: #selector(userCellAction), for: .touchUpInside)
+            
+            cell = cell1
+            return cell
+            
+        }
+            
+        else if indexPath.section == 1{
+            let cell2 = tableView.dequeueReusableCell(withIdentifier: purchasesCellID, for: indexPath) as! PurchasesTableViewCell
+            if indexPath.row == 0{
+                
+                cell2.settingLabel.text = otstup + "AvtoDetectDistance"
+                cell2.settingSwitch.addTarget(self, action: #selector(avtodetectSwitchAction(paramSwitch:)), for: .valueChanged)
+                
+            }else{
+                cell2.settingLabel.text = otstup + "SpeechRecognition"
+                cell2.settingSwitch.addTarget(self, action: #selector(speechSwitchAction(paramSwitch:)), for: .valueChanged)
+            }
+            cell2.accessoryType = .detailButton
+            cell = cell2
+            return cell
+            
+        }
+        else if indexPath.section == 2{
+            
+            if indexPath.row == 0{
+                let cell3 = tableView.dequeueReusableCell(withIdentifier: settingsCellID, for: indexPath) as! SettingsTableViewCell
+                cell3.settingLabel.text = otstup + "Set distance for test "
+                cell3.deteilLabel.text = "m."
+                cell3.accessoryType = .detailButton
+                cell3.settingTextLabel.text = "\(distanceTest)"
+                
+                let tap = UITapGestureRecognizer(target: self, action: #selector(labelDistTextAction(_:)))
+                tap.numberOfTapsRequired = 1
+                cell3.settingTextLabel.isUserInteractionEnabled = true
+                cell3.settingTextLabel.addGestureRecognizer(tap)
+                
+                cell = cell3
+                
+            }else if indexPath.row == 1{
+                let cell3 = tableView.dequeueReusableCell(withIdentifier: settingsCellID, for: indexPath) as! SettingsTableViewCell
+                cell3.settingLabel.text = otstup + "Set time before start"
+                cell3.deteilLabel.text = "s."
+                cell3.accessoryType = .detailButton
+                cell3.settingTextLabel.text = "\(timeToStart)"
+                
+                let tap = UITapGestureRecognizer(target: self, action: #selector(labelTimeTextAction(_:)))
+                tap.numberOfTapsRequired = 1
+                cell3.settingTextLabel.isUserInteractionEnabled = true
+                cell3.settingTextLabel.addGestureRecognizer(tap)
+                
+                cell = cell3
+                
+            }else if indexPath.row == 2{
+                let cell3 = tableView.dequeueReusableCell(withIdentifier: symbolCellId, for: indexPath) as! SymbolTableViewCell
+                
+                cell3.settingsLabel.text = otstup + "Set symbol "
+//                cell3.symbolSegment.selectedSegmentIndex = 0
+                cell3.symbolSegment.addTarget(self, action: #selector(segmetAction), for: .valueChanged)
+
+                if cell3.symbolView.isEqual(cell3.landolt){
+                    symbolTest = "Landolt"
+                }else{symbolTest = "Snellen"}
+                cell3.backgroundColor = .white
+                
+                cell = cell3
+            }
+            
+            return cell
+        }
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section {
+        case 0:
+            return " "
+        case 1:
+            return "In-app purchases settings"
+        case 2:
+            return "Myopia settings"
+        default:
+            break
+        }
+        return "11"
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        var height = CGFloat()
+        if  indexPath.section == 0{
+            height = 150
+        } else {
+            height = 50
+        }
+        return height
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if indexPath.section == 0{
+            if indexPath.row == 0{
+                let userVC = UserViewController()
+                self.navigationController?.pushViewController(userVC, animated: false)
+            }
+        }
+    }
+   
+    @objc func actionSave() {
+        
+        let appDelegat = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegat.persistentContainer.viewContext
+        
+        do {
+            let result = try context.fetch(SettingsApp.fetchRequest())
+            
+            for res in result{
+                context.delete(res as! NSManagedObject)
+            }
+
+            
+            try? context.save()
+            
+        } catch let error as NSError {
+            print(error)
+        }
+        let settingsNew = SettingsApp(context: context)
+        settingsNew.setValue(avtoDetectDistBool, forKey: "avtoDetectDistance")
+        settingsNew.setValue(speechRecognBool, forKey: "speechRecognize")
+        settingsNew.setValue(distanceTest, forKey: "distanceTest")
+        settingsNew.setValue(timeToStart, forKey: "timeBeforeTest")
+        settingsNew.setValue(symbolTest, forKey: "symbolTest")
+        
+        do {
+            try context.save()
+        }catch let error as NSError{
+            print(error)
+        }
+    }
+    
+    @objc func tapGestureUserPhotoAction(tapGestureRecognizer: UITapGestureRecognizer) {
+        
+        let vc = CameraViewController()
+        self.navigationController?.pushViewController(vc, animated: false)
+        
+    }
+    
+    @objc func tapGestureUserInfoAction(tapGestureRecognizer: UITapGestureRecognizer){
+        self.view.addSubview(userInfoImageView)
+        userInfoImageView.translatesAutoresizingMaskIntoConstraints = false
+        userInfoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        userInfoImageView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
+        userInfoImageView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
+        userInfoImageView.image = UIImage(data: photo)
+        userInfoImageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(removeCoverImage))
+        userInfoImageView.addGestureRecognizer(tap)
+    }
+    
+    @objc func tapTableView(recognizer: UITapGestureRecognizer) {
+        
+    }
+    
+    func saveName(name: String){
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let user = User(context: context)
+        user.setValue(name, forKey: "name")
+        do {
+            try context.save()
+        }catch let error as NSError{
+            print(error)
+        }
+    }
+    @objc func segmetAction() {
+        tableView.reloadData()
+        
+        
+    }
+    
+    @objc func userCellAction(){
+        let userVC = UserViewController()
+        self.navigationController?.pushViewController(userVC, animated: false)
+    }
+    
+    @objc func avtodetectSwitchAction(paramSwitch: UISwitch){
+        if paramSwitch.isOn{
+            avtoDetectDistBool = true
+            
+        }else{
+            avtoDetectDistBool = false
+        }
+    }
+    
+    @objc func speechSwitchAction(paramSwitch: UISwitch){
+        if paramSwitch.isOn{
+            speechRecognBool = true
+            
+            speechRecognizer.delegate = self
+            SFSpeechRecognizer.requestAuthorization { authStatus in
+
+                // Divert to the app's main thread so that the UI
+                // can be updated.
+                OperationQueue.main.addOperation {
+                    switch authStatus {
+                    case .authorized:
+//
+                        print(true)
+                    case .denied:
+
+                        print("User denied access to speech recognition")
+                    case .restricted:
+
+                        print("Speech recognition restricted on this device")
+                    case .notDetermined:
+
+                        print("Speech recognition not yet authorized")
+                    default:
+                        print(false)
+                    }
+                }
+            }
+        }else{
+            speechRecognBool = false
+        }
+    }
+     
+    @objc func labelDistTextAction(_ sender: UILabel){
+        self.view.addSubview(coverView)
+        coverView.addSubview(labelTextField)
+        
+        coverView.translatesAutoresizingMaskIntoConstraints = false
+        coverView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        coverView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor).isActive = true
+        coverView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        coverView.backgroundColor = .white
+        coverView.isOpaque = true
+        coverView.alpha = 0.95
+        
+        labelTextField.translatesAutoresizingMaskIntoConstraints = false
+        labelTextField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/4).isActive = true
+        labelTextField.heightAnchor.constraint(equalTo: labelTextField.widthAnchor, multiplier: 1/5).isActive = true
+        labelTextField.centerXAnchor.constraint(equalTo: coverView.centerXAnchor).isActive = true
+        labelTextField.centerYAnchor.constraint(equalTo: coverView.centerYAnchor).isActive = true
+        labelTextField.backgroundColor = .lightGray
+        labelTextField.keyboardType = .decimalPad
+        
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(resingFirstREspDist))
+        coverView.isUserInteractionEnabled = true
+        coverView.addGestureRecognizer(tap)
+        
+        labelTextField.delegate = self
+        
+
+    }
+    
+    
+    @objc func resingFirstREspDist(){
+        
+        distanceTest = Float(labelTextField.text!) ?? (0.5)
+        
+        labelTextField.resignFirstResponder()
+        labelTextField.removeFromSuperview()
+        coverView.removeFromSuperview()
+        tableView.reloadData()
+    }
+    
+    @objc func labelTimeTextAction(_ sender: UILabel){
+        self.view.addSubview(coverView)
+        coverView.addSubview(labelTextField)
+        
+        coverView.translatesAutoresizingMaskIntoConstraints = false
+        coverView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        coverView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor).isActive = true
+        coverView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        coverView.backgroundColor = .white
+        coverView.isOpaque = true
+        coverView.alpha = 0.95
+        
+        labelTextField.translatesAutoresizingMaskIntoConstraints = false
+        labelTextField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/4).isActive = true
+        labelTextField.heightAnchor.constraint(equalTo: labelTextField.widthAnchor, multiplier: 1/5).isActive = true
+        labelTextField.centerXAnchor.constraint(equalTo: coverView.centerXAnchor).isActive = true
+        labelTextField.centerYAnchor.constraint(equalTo: coverView.centerYAnchor).isActive = true
+        labelTextField.backgroundColor = .lightGray
+        labelTextField.keyboardType = .decimalPad
+        
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(resingFirstREspTime))
+        coverView.isUserInteractionEnabled = true
+        coverView.addGestureRecognizer(tap)
+        
+        labelTextField.delegate = self
+    }
+    @objc func resingFirstREspTime(){
+        
+        timeToStart = Float(labelTextField.text!) ?? (0)
+        
+        labelTextField.resignFirstResponder()
+        labelTextField.removeFromSuperview()
+        coverView.removeFromSuperview()
+        tableView.reloadData()
+    }
+    
+    @objc func removeCoverImage(recognizer: UITapGestureRecognizer){
+        userInfoImageView.removeFromSuperview()
+    }
+}
+
