@@ -13,7 +13,7 @@ class HyperopiaViewController: UIViewController, SFSpeechRecognizerDelegate {
     private var recognitionTask: SFSpeechRecognitionTask?
     
     private let audioEngine = AVAudioEngine()
-
+    
     let wordArray = ["Верх","Низ","Лево","Право"]
     var currentText = String()
     var speechBool = false
@@ -55,29 +55,29 @@ class HyperopiaViewController: UIViewController, SFSpeechRecognizerDelegate {
         
         // Asynchronously make the authorization request.
         SFSpeechRecognizer.requestAuthorization { authStatus in
-
+            
             // Divert to the app's main thread so that the UI
             // can be updated.
             OperationQueue.main.addOperation {
                 switch authStatus {
                 case .authorized:
-//                    self.recordButton.isEnabled = true
+                    //                    self.recordButton.isEnabled = true
                     print("authorized")
                     
                 case .denied:
-//                    self.recordButton.isEnabled = false
-//                    self.recordButton.setTitle("User denied access to speech recognition", for: .disabled)
+                    //                    self.recordButton.isEnabled = false
+                    //                    self.recordButton.setTitle("User denied access to speech recognition", for: .disabled)
                     print("authorized")
                 case .restricted:
-//                    self.recordButton.isEnabled = false
-//                    self.recordButton.setTitle("Speech recognition restricted on this device", for: .disabled)
+                    //                    self.recordButton.isEnabled = false
+                    //                    self.recordButton.setTitle("Speech recognition restricted on this device", for: .disabled)
                     print("authorized")
                 case .notDetermined:
-//                    self.recordButton.isEnabled = false
-//                    self.recordButton.setTitle("Speech recognition not yet authorized", for: .disabled)
+                    //                    self.recordButton.isEnabled = false
+                    //                    self.recordButton.setTitle("Speech recognition not yet authorized", for: .disabled)
                     print("authorized")
                 default:
-//                    self.recordButton.isEnabled = false
+                    //                    self.recordButton.isEnabled = false
                     print("authorized")
                 }
             }
@@ -102,7 +102,7 @@ class HyperopiaViewController: UIViewController, SFSpeechRecognizerDelegate {
         try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
         try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         let inputNode = audioEngine.inputNode
-
+        
         // Create and configure the speech recognition request.
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         guard let recognitionRequest = recognitionRequest else { fatalError("Unable to create a SFSpeechAudioBufferRecognitionRequest object") }
@@ -120,24 +120,33 @@ class HyperopiaViewController: UIViewController, SFSpeechRecognizerDelegate {
             
             if let result = result {
                 // Update the text view with the results.
-//                self.textView.text = result.bestTranscription.formattedString
+                //                self.textView.text = result.bestTranscription.formattedString
                 isFinal = result.isFinal
-                print("\(result.bestTranscription.formattedString)")
-                self.currentText = result.bestTranscription.formattedString
+//                print("\(result.bestTranscription.formattedString)")
+//                let printArray = result.transcriptions
+//                print(result.transcriptions.count)
+//                for i in printArray{
+//                    print("\(i.formattedString)")
+//                }
                 
+                
+                self.currentText = result.bestTranscription.formattedString
+                print(self.currentText + "-" + self.wordLabel.text!)
+                
+                self.stopRecognition()
             }
             
             if error != nil || isFinal {
                 // Stop recognizing speech if there is a problem.
                 self.audioEngine.stop()
                 inputNode.removeTap(onBus: 0)
-
+                
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
-
+                
             }
         }
-
+        
         // Configure the microphone input.
         let recordingFormat = inputNode.outputFormat(forBus: 0)
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
@@ -146,7 +155,6 @@ class HyperopiaViewController: UIViewController, SFSpeechRecognizerDelegate {
         
         audioEngine.prepare()
         try audioEngine.start()
-        
         
     }
     
@@ -165,29 +173,34 @@ class HyperopiaViewController: UIViewController, SFSpeechRecognizerDelegate {
         if audioEngine.isRunning {
             audioEngine.stop()
             recognitionRequest?.endAudio()
+            audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
         } else {
             do {
                 try startRecording()
-//
+                
             } catch {
             }
+            //
         }
     }
     
     func stopRecognition(){
-        if currentText == "Верх" || currentText == "Низ" || currentText == "Лево" || currentText == "Право" {
+        let labelText = wordLabel.text ?? ""
+        let compare = compareString(str1: labelText, str2: currentText)
+        if compare == true {
             
-            audioEngine.stop()
-            recognitionRequest?.endAudio()
-            print(12211221)
+            print("ok")
             fontSize -= 1
             wordLabel.text = wordArray.randomElement()
-           
+            wordLabel.font = .boldSystemFont(ofSize: CGFloat(fontSize))
+            
+        }else{
+             print("not ok")
+            fontSize += 1
+            wordLabel.text = wordArray.randomElement()
+            wordLabel.font = .boldSystemFont(ofSize: CGFloat(fontSize))
         }
     }
-    
-    
-    
     
     func addWordLabel() {
         view.addSubview(wordLabel)
@@ -200,5 +213,44 @@ class HyperopiaViewController: UIViewController, SFSpeechRecognizerDelegate {
         wordLabel.text = wordArray.randomElement()
         wordLabel.textAlignment = .center
         wordLabel.font = .boldSystemFont(ofSize: CGFloat(fontSize))
+        
+        wordLabel.addObserver(self, forKeyPath: "text", options: [.old, .new], context: nil)
+    }
+    
+    func compareString(str1: String, str2: String) -> Bool {
+        var boolCompare = false
+        var second1 = Array(str1)
+        second1.removeLast()
+        let second2 = Array(str2)
+        for i in 0...second2.count-1{
+            if second2[i]==second1[0]{
+                for j in 0...second1.count-1{
+                    if second2[i+j] == second1[j]{
+                        boolCompare = true
+                    }
+                }
+            }
+            return boolCompare
+        }
+        
+        
+//        second1.removeFirst()
+//        second2.removeFirst()
+//
+//        if (str1.first == str2.first) && (second1.first == second2.first){
+//            boolCompare = true
+//        }
+        return boolCompare
+    }
+    
+    func startStopSpechRecogn() {
+        
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "text" {
+            //print("все пропало")
+            //recordButtonTapped()
+        }
     }
 }
