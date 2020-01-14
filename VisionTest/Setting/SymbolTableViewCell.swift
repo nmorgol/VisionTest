@@ -1,9 +1,10 @@
 
 
 import UIKit
+import CoreData
 
 class SymbolTableViewCell: UITableViewCell, UITableViewDelegate{
-
+    
     let cellID = "SymbolCell"
     var symbolSegment = UISegmentedControl(items: ["Landolt", "Snellen"])
     var symbolView = UIView()
@@ -11,6 +12,7 @@ class SymbolTableViewCell: UITableViewCell, UITableViewDelegate{
     var symbolArray = [UIView]()
     let snellen = SnellenRightView()
     let landolt = LandoltRightUIView()
+    var currentSymbol = String()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -20,8 +22,27 @@ class SymbolTableViewCell: UITableViewCell, UITableViewDelegate{
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super .init(style: .subtitle, reuseIdentifier: cellID)
         
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
+        do {
+            let settings = try context.fetch(SettingsApp.fetchRequest())
+            if settings.count > 0{
+                currentSymbol = (settings.last as! SettingsApp).symbolTest ?? "Landolt"
+            }else{
+                currentSymbol = "Landolt"
+            }
+        } catch let error as NSError {
+            print(error)
+        }
+        
         symbolArray = [landolt, snellen]
-//        symbolView = landolt
+//                symbolView = landolt
+        
+        if currentSymbol == "Snellen"{
+            symbolView = snellen
+        }else{
+            symbolView = landolt
+        }
         
         addSubview(symbolView)
         addSubview(symbolSegment)
@@ -37,13 +58,14 @@ class SymbolTableViewCell: UITableViewCell, UITableViewDelegate{
         symbolView.leftAnchor.constraint(equalTo: settingsLabel.rightAnchor, constant: 0).isActive = true
         symbolView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
         symbolView.widthAnchor.constraint(equalTo: self.heightAnchor).isActive = true
-
+        
+        
         symbolSegment.translatesAutoresizingMaskIntoConstraints = false
         symbolSegment.leftAnchor.constraint(equalTo: symbolView.rightAnchor, constant: 15).isActive = true
         symbolSegment.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1/3).isActive = true
         symbolSegment.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 2/4).isActive = true
         symbolSegment.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-                
+        
         symbolSegment.addTarget(self, action: #selector(segmentAction(target:)), for: .valueChanged)
         
         
@@ -55,7 +77,7 @@ class SymbolTableViewCell: UITableViewCell, UITableViewDelegate{
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
     
@@ -82,5 +104,5 @@ class SymbolTableViewCell: UITableViewCell, UITableViewDelegate{
         
         
     }
-
+    
 }
