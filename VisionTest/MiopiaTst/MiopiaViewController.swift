@@ -94,6 +94,7 @@ class MiopiaViewController: UIViewController {
     @objc func actionResults() {
         let resultVC = ResultsTableViewController()
         resultVC.title = "Miopia test results"
+        resultVC.state = "Miopia"
         self.navigationController?.pushViewController(resultVC, animated: true)
     }
     

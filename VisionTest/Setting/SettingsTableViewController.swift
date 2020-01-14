@@ -62,13 +62,14 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         let image = UIImage(named: "placeholder")?.pngData()!
         do {
             let resultUser = try context.fetch(User.fetchRequest())
-//            let resultSettings = try context.fetch(SettingsApp.fetchRequest())
+            let resCurrentUser = try context.fetch(CurrentUser.fetchRequest())
             
-            if resultUser.count > 0 {
-                name = (resultUser.last as! User).name ?? ""
-                userInfoText = (resultUser.last as! User).info ?? "info"
+            if resCurrentUser.count > 0 {
+                let curUser = (resCurrentUser.last as! CurrentUser).currentUser
+                name = (resultUser[Int(curUser)] as! User).name ?? ""
+                userInfoText = (resultUser[Int(curUser)] as! User).info ?? "info"
                 
-                photo = ((resultUser.last as! User).photo) ?? image!}
+                photo = ((resultUser[Int(curUser)] as! User).photo) ?? image!}
             else{
                 name = "name"
                 userInfoText = "info"
@@ -120,8 +121,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             cell1.userNameLabel.text = name
             cell1.userInfoLabel.text = userInfoText
             cell1.userInfoLabel.isUserInteractionEnabled = true
-//            let gestureUserInfo = UITapGestureRecognizer(target: self, action: #selector(userCellAction(recognizer:)))
-//            cell1.userInfoLabel.addGestureRecognizer(gestureUserInfo)
+
             cell1.accessoryBtn.addTarget(self, action: #selector(userCellAction), for: .touchUpInside)
             
             cell = cell1
@@ -135,12 +135,14 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
                 
                 cell2.settingLabel.text = otstup + "AvtoDetectDistance"
                 cell2.settingSwitch.addTarget(self, action: #selector(avtodetectSwitchAction(paramSwitch:)), for: .valueChanged)
+                cell2.accessoryType = .detailButton
                 
             }else{
                 cell2.settingLabel.text = otstup + "SpeechRecognition"
                 cell2.settingSwitch.addTarget(self, action: #selector(speechSwitchAction(paramSwitch:)), for: .valueChanged)
+                cell2.accessoryType = .detailButton
             }
-            cell2.accessoryType = .detailButton
+//            cell2.accessoryType = .detailButton
             cell = cell2
             return cell
             
@@ -228,6 +230,27 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             }
         }
     }
+    
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        switch indexPath.section {
+        case 0:
+            print(0)
+        case 1:
+            if indexPath.row == 0{
+                accessoryButtonAction(title: "AvtoDetectDistance")
+            }else{
+               accessoryButtonAction(title: "SpeechRecognize")
+            }
+        case 2:
+            if indexPath.row == 0{
+                accessoryButtonAction(title: "DistanceTest")
+            }else{
+                accessoryButtonAction(title: "TimeBeforeTest")
+            }
+        default:
+            print("default")
+        }
+    }
    
     @objc func actionSave() {
         
@@ -241,7 +264,6 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
                 context.delete(res as! NSManagedObject)
             }
 
-            
             try? context.save()
             
         } catch let error as NSError {
@@ -273,11 +295,15 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         userInfoImageView.translatesAutoresizingMaskIntoConstraints = false
         userInfoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         userInfoImageView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
-        userInfoImageView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
+        userInfoImageView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor).isActive = true
         userInfoImageView.image = UIImage(data: photo)
+        userInfoImageView.contentMode = .scaleAspectFit
+        userInfoImageView.backgroundColor = .white
         userInfoImageView.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(removeCoverImage))
         userInfoImageView.addGestureRecognizer(tap)
+        self.navigationController?.navigationBar.isHidden = true
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     @objc func tapTableView(recognizer: UITapGestureRecognizer) {
@@ -361,10 +387,10 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         
         labelTextField.translatesAutoresizingMaskIntoConstraints = false
         labelTextField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/4).isActive = true
-        labelTextField.heightAnchor.constraint(equalTo: labelTextField.widthAnchor, multiplier: 1/5).isActive = true
+        labelTextField.heightAnchor.constraint(equalTo: labelTextField.widthAnchor, multiplier: 1/3).isActive = true
         labelTextField.centerXAnchor.constraint(equalTo: coverView.centerXAnchor).isActive = true
         labelTextField.centerYAnchor.constraint(equalTo: coverView.centerYAnchor).isActive = true
-        labelTextField.backgroundColor = .lightGray
+        labelTextField.backgroundColor = .systemGray4
         labelTextField.keyboardType = .decimalPad
         
         
@@ -381,7 +407,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     @objc func resingFirstREspDist(){
         
         distanceTest = Float(labelTextField.text!) ?? (0.5)
-        
+        labelTextField.text = ""
         labelTextField.resignFirstResponder()
         labelTextField.removeFromSuperview()
         coverView.removeFromSuperview()
@@ -402,10 +428,10 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         
         labelTextField.translatesAutoresizingMaskIntoConstraints = false
         labelTextField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/4).isActive = true
-        labelTextField.heightAnchor.constraint(equalTo: labelTextField.widthAnchor, multiplier: 1/5).isActive = true
+        labelTextField.heightAnchor.constraint(equalTo: labelTextField.widthAnchor, multiplier: 1/3).isActive = true
         labelTextField.centerXAnchor.constraint(equalTo: coverView.centerXAnchor).isActive = true
         labelTextField.centerYAnchor.constraint(equalTo: coverView.centerYAnchor).isActive = true
-        labelTextField.backgroundColor = .lightGray
+        labelTextField.backgroundColor = .systemGray4
         labelTextField.keyboardType = .decimalPad
         
         
@@ -418,7 +444,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     @objc func resingFirstREspTime(){
         
         timeToStart = Float(labelTextField.text!) ?? (0)
-        
+        labelTextField.text = ""
         labelTextField.resignFirstResponder()
         labelTextField.removeFromSuperview()
         coverView.removeFromSuperview()
@@ -427,6 +453,19 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     
     @objc func removeCoverImage(recognizer: UITapGestureRecognizer){
         userInfoImageView.removeFromSuperview()
+        self.navigationController?.navigationBar.isHidden = false
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
+//    @objc func infoButtonAction(){
+//        let infoVC = InfoViewController()
+//        self.navigationController?.pushViewController(infoVC, animated: false)
+//    }
+    
+    @objc func accessoryButtonAction(title: String){
+        let infoVC = InfoViewController()
+        infoVC.title = title
+        self.navigationController?.pushViewController(infoVC, animated: false)
     }
 }
 

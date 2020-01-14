@@ -12,6 +12,8 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     var frameImag = CGRect()
     
+    var comletion:((Data)->())?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,10 +42,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     override func viewWillLayoutSubviews() {
         super .viewWillLayoutSubviews()
-        //        let orig = photoImageView.frame.origin
-        //        let origg = resultImageView.frame.origin
-        //
-        //        print(orig, origg)
+        
         
     }
     
@@ -75,11 +74,13 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     @objc func resultImageViewAction(){
         
-        //        let origX = resultImageView.frame.origin.x - photoImageView.frame.origin.x
-        //        let origY = resultImageView.frame.origin.y - photoImageView.frame.origin.y
-        
-        //        let img = photoImageView.image?.cgImage?.cropping(to: CGRect(origin: CGPoint(x: origX, y: origY),
-        //                                                                     size: resultImageView.frame.size))
+        //прилетает нил надо проверка
+        if photoImageView.image == nil{
+            deletePhotoButton.isEnabled = false
+            return
+        }else{
+            deletePhotoButton.isEnabled = true
+        }
         let img = cropImage(photoImageView.image!, toRect: resultImageView.frame, viewWidth: photoImageView.frame.width, viewHeight: photoImageView.frame.height  )
         
         photoImageView.image = nil
@@ -120,27 +121,30 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     @objc func savePhotoAction(){
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let photoPNG = resultImageView.image?.pngData()
-        do {
-            let result = try context.fetch(User.fetchRequest())
-            
-            //            print((result.last as! User).photo as Any)
-            if result.count > 0 {
-                (result.last as! User).photo = photoPNG
-                try? context.save()
-            }else{
-                let userNew = User(context: context)
-                userNew.setValue(photoPNG, forKey: "photo")
-                do {
-                    try context.save()
-                }catch let error as NSError{
-                    print(error)
-                }
-            }
-        } catch let error as NSError {
-            print(error)
-        }
+        let data:Data = photoPNG ?? (UIImage(named: "placeholder")?.pngData())!
+//        do {
+//            let result = try context.fetch(User.fetchRequest())
+//
+//            //            print((result.last as! User).photo as Any)
+//            if result.count > 0 {
+//                (result.last as! User).photo = photoPNG
+//                try? context.save()
+//            }else{
+//                let userNew = User(context: context)
+//                userNew.setValue(photoPNG, forKey: "photo")
+//                do {
+//                    try context.save()
+//                }catch let error as NSError{
+//                    print(error)
+//                }
+//            }
+//        } catch let error as NSError {
+//            print(error)
+//        }
+        comletion?(data)
+        self.navigationController?.popViewController(animated: false)
     }
     
     func displayImagePickerContr() {

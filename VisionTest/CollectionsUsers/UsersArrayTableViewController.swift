@@ -5,13 +5,17 @@ import CoreData
 
 class UsersArrayTableViewController: UITableViewController {
     
+    var state = String()
+    
+    var complition:((Int)->())?
+    
     var usersArray = [User]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let cellID = "UsersArrayCell"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print(state)
         do {
             usersArray = try context.fetch(User.fetchRequest())
         } catch let error as NSError {
@@ -52,51 +56,35 @@ class UsersArrayTableViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if state == "Main"{
+            do {
+                let result = try context.fetch(CurrentUser.fetchRequest())
+                
+                for res in result{
+                    context.delete(res as! NSManagedObject)
+                }
+
+                try? context.save()
+                
+            } catch let error as NSError {
+                print(error)
+            }
+            let newCurrentUser = CurrentUser(context: context)
+            newCurrentUser.setValue(Float(indexPath.row), forKey: "currentUser")
+            do {
+                try context.save()
+            }catch let error as NSError{
+                print(error)
+            }
+            let curUser = indexPath.row
+            complition?(curUser)
+            self.navigationController?.popViewController(animated: false)
+        }
+        
+    }
     
-    /*
-     // Override to support conditional editing of the table view.
-     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the specified item to be editable.
-     return true
-     }
-     */
-    
-    /*
-     // Override to support editing the table view.
-     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-     if editingStyle == .delete {
-     // Delete the row from the data source
-     tableView.deleteRows(at: [indexPath], with: .fade)
-     } else if editingStyle == .insert {
-     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-     }
-     }
-     */
-    
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-     
-     }
-     */
-    
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the item to be re-orderable.
-     return true
-     }
-     */
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
+
     override func viewWillDisappear(_ animated: Bool) {
         super .viewWillAppear(false)
         self.tabBarController?.tabBar.isHidden = false

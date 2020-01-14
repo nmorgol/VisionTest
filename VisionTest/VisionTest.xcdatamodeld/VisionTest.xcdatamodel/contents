@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CurrentUserApp" representedClassName=".CurrentUser" syncable="YES" codeGenerationType="class">
+        <attribute name="currentUser" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="HyperopiaTestResult" representedClassName=".HyperopiaTestResult" syncable="YES" codeGenerationType="class">
+        <attribute name="dateTest" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="result" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="relationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="relationship1" inverseEntity="User"/>
+    </entity>
+    <entity name="MiopiaTestResult" representedClassName=".MiopiaTestResult" syncable="YES" codeGenerationType="class">
+        <attribute name="dateTest" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="distance" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="leftEye" optional="YES" attributeType="String"/>
+        <attribute name="result" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="rightEye" optional="YES" attributeType="String"/>
+        <relationship name="relationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="relationship" inverseEntity="User"/>
+    </entity>
+    <entity name="SettingsApp" representedClassName=".SettingsApp" syncable="YES" codeGenerationType="class">
+        <attribute name="avtoDetectDistance" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="distanceTest" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="speechRecognize" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="symbolTest" optional="YES" attributeType="String"/>
+        <attribute name="timeBeforeTest" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="User" representedClassName=".User" syncable="YES" codeGenerationType="class">
+        <attribute name="info" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="photo" optional="YES" attributeType="Binary"/>
+        <relationship name="relationship" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MiopiaTestResult" inverseName="relationship" inverseEntity="MiopiaTestResult"/>
+        <relationship name="relationship1" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HyperopiaTestResult" inverseName="relationship" inverseEntity="HyperopiaTestResult"/>
+    </entity>
+    <elements>
+        <element name="HyperopiaTestResult" positionX="-7639.7109375" positionY="-3528.6484375" width="128" height="88"/>
+        <element name="MiopiaTestResult" positionX="-8012.640625" positionY="-3513.578125" width="128" height="133"/>
+        <element name="SettingsApp" positionX="-7825.8125" positionY="-3313.87890625" width="128" height="118"/>
+        <element name="User" positionX="-7828.15625" positionY="-3513.53125" width="144.93359375" height="73"/>
+        <element name="CurrentUserApp" positionX="-8048.11328125" positionY="-3296.42578125" width="128" height="58"/>
+    </elements>
+</model>

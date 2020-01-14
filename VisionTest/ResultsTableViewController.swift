@@ -4,6 +4,8 @@ import UIKit
 
 class ResultsTableViewController: UITableViewController {
 
+    var state = String()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -94,6 +96,7 @@ class ResultsTableViewController: UITableViewController {
     
     @objc func navBarAction(){
         let usersVC = UsersArrayTableViewController()
+        usersVC.state = state
         self.navigationController?.pushViewController(usersVC, animated: false)
     }
     
