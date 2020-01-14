@@ -16,7 +16,7 @@ class SymbolTableViewCell: UITableViewCell, UITableViewDelegate{
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        // Initialization code ььь
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
