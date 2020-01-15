@@ -37,7 +37,7 @@ class HyperopiaViewController: UIViewController {
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
         fontSize = 17
-        print(speechBool)
+        
         ifSpeechBoolIsTrue(speechB: speechBool)
     }
     

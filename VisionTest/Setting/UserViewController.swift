@@ -16,6 +16,8 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     var currentUser = Int()
     var imageData = Data()
     
+    var newUserBool = false
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
@@ -44,6 +46,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         self.tabBarController?.tabBar.isHidden = true
         
         addView()
+        print(newUserBool)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -131,7 +134,10 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         self.navigationItem.rightBarButtonItems?.removeAll()
         self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAddButtonAction))]
         userImageView.image = UIImage(named: "placeholder")
+        userTextView.text = ""
+        userTextField.text = ""
         
+        newUserBool = true
     }
     
     @objc func photoButtonAction(){
@@ -159,7 +165,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     }
     
     @objc func saveAddButtonAction(){
-        let userNew = User(context: context)
+        let userNew = User(context: context)//добавили нового пользователя
         userNew.setValue(userImageView.image?.pngData(), forKey: "photo")
         userNew.setValue(userTextField.text, forKey: "name")
         userNew.setValue(userTextView.text, forKey: "info")
@@ -168,13 +174,38 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         }catch let error as NSError{
             print(error)
         }
+        if newUserBool == true{ //если это новый пользователь
+            do {//удаляем текущего пользователя
+                let result = try context.fetch(CurrentUser.fetchRequest())
+                for res in result{
+                    context.delete(res as! NSManagedObject)
+                }
+                try? context.save()
+            } catch let error as NSError {
+                print(error)
+            }
+            
+            var count = Int()
+            do {//получили массив всех юзеров
+                count = try context.fetch(User.fetchRequest()).count//присвоили переменной длину массива
+            }catch let error as NSError {
+                print(error)
+            }
+            let newCurrentUser = CurrentUser(context: context)
+            newCurrentUser.setValue(Float(count - 1), forKey: "currentUser")//создали нового текущего пользователя - последний в списке
+            do {
+                try context.save()
+            }catch let error as NSError{
+                print(error)
+            }
+        }
         self.navigationItem.rightBarButtonItems?.removeAll()
         self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonAction)), UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(organizeButtonAction))]
     }
-
+    
     
     @objc func saveEditButtonAction(){
-        usersArray[currentUser].photo = userImageView.image?.pngData()
+        usersArray[currentUser].photo = userImageView.image?.jpeg(.lowest)
         usersArray[currentUser].name = userTextField.text
         usersArray[currentUser].info = userTextField.text
     }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		EB16C35123CC6D85006E9C4D /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB16C35023CC6D85006E9C4D /* InfoViewController.swift */; };
+		EB16C35423CF48B3006E9C4D /* ExtensionUIImageDataSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB16C35323CF48B3006E9C4D /* ExtensionUIImageDataSize.swift */; };
 		EB1F611B23C25D6C00E96024 /* HyperopiaSpeechViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1F611A23C25D6C00E96024 /* HyperopiaSpeechViewController.swift */; };
 		EB2D59C623AF9EE100D42A7D /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D59C523AF9EE100D42A7D /* SettingsTableViewCell.swift */; };
 		EB2D59C823AFA6F600D42A7D /* SymbolTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D59C723AFA6F600D42A7D /* SymbolTableViewCell.swift */; };
@@ -29,7 +30,7 @@
 		EB492092239A478B0062D974 /* SnellenBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB492091239A478B0062D974 /* SnellenBottomView.swift */; };
 		EB492095239BB5BE0062D974 /* ExtensionUIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB492094239BB5BE0062D974 /* ExtensionUIDevice.swift */; };
 		EB4FB53623A506D0002C0735 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FB53523A506D0002C0735 /* CameraViewController.swift */; };
-		EB8C340623B9E90500AFA10A /* ExtensionUIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8C340523B9E90500AFA10A /* ExtensionUIImage.swift */; };
+		EB8C340623B9E90500AFA10A /* ExtensionUIImageOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8C340523B9E90500AFA10A /* ExtensionUIImageOrientation.swift */; };
 		EBD11F6C23BB42BE00AA9FF1 /* UsersArrayTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD11F6B23BB42BE00AA9FF1 /* UsersArrayTableViewController.swift */; };
 		EBD11F6E23BB489800AA9FF1 /* UserArrayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD11F6D23BB489800AA9FF1 /* UserArrayTableViewCell.swift */; };
 		EBE633DE239D4A2A00FDCA38 /* ResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE633DD239D4A2A00FDCA38 /* ResultsTableViewController.swift */; };
@@ -58,6 +59,7 @@
 
 /* Begin PBXFileReference section */
 		EB16C35023CC6D85006E9C4D /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
+		EB16C35323CF48B3006E9C4D /* ExtensionUIImageDataSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIImageDataSize.swift; sourceTree = "<group>"; };
 		EB1F611A23C25D6C00E96024 /* HyperopiaSpeechViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HyperopiaSpeechViewController.swift; sourceTree = "<group>"; };
 		EB2D59C523AF9EE100D42A7D /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		EB2D59C723AFA6F600D42A7D /* SymbolTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolTableViewCell.swift; sourceTree = "<group>"; };
@@ -85,7 +87,7 @@
 		EB492091239A478B0062D974 /* SnellenBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnellenBottomView.swift; sourceTree = "<group>"; };
 		EB492094239BB5BE0062D974 /* ExtensionUIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIDevice.swift; sourceTree = "<group>"; };
 		EB4FB53523A506D0002C0735 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
-		EB8C340523B9E90500AFA10A /* ExtensionUIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIImage.swift; sourceTree = "<group>"; };
+		EB8C340523B9E90500AFA10A /* ExtensionUIImageOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIImageOrientation.swift; sourceTree = "<group>"; };
 		EBD11F6B23BB42BE00AA9FF1 /* UsersArrayTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersArrayTableViewController.swift; sourceTree = "<group>"; };
 		EBD11F6D23BB489800AA9FF1 /* UserArrayTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserArrayTableViewCell.swift; sourceTree = "<group>"; };
 		EBE633DD239D4A2A00FDCA38 /* ResultsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsTableViewController.swift; sourceTree = "<group>"; };
@@ -120,6 +122,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EB16C35223CDEB6A006E9C4D /* Landolt Snellen views */ = {
+			isa = PBXGroup;
+			children = (
+				EB359752239634FE001C2240 /* LandoltView */,
+				EB49208A239832670062D974 /* SnellenView */,
+			);
+			path = "Landolt Snellen views";
+			sourceTree = "<group>";
+		};
 		EB1F611823C25B6000E96024 /* HyperopiaTest */ = {
 			isa = PBXGroup;
 			children = (
@@ -177,8 +188,7 @@
 				EBE633DD239D4A2A00FDCA38 /* ResultsTableViewController.swift */,
 				EB951CA423BA10E700C2DD7B /* CollectionsUsers */,
 				EB3A772223AF4627006AEE70 /* Setting */,
-				EB49208A239832670062D974 /* SnellenView */,
-				EB359752239634FE001C2240 /* LandoltView */,
+				EB16C35223CDEB6A006E9C4D /* Landolt Snellen views */,
 				EB492093239BB5770062D974 /* Extension */,
 				EB38F44D2393A93400D30348 /* Assets.xcassets */,
 				EB38F4552393A93400D30348 /* Info.plist */,
@@ -244,7 +254,8 @@
 			isa = PBXGroup;
 			children = (
 				EB492094239BB5BE0062D974 /* ExtensionUIDevice.swift */,
-				EB8C340523B9E90500AFA10A /* ExtensionUIImage.swift */,
+				EB8C340523B9E90500AFA10A /* ExtensionUIImageOrientation.swift */,
+				EB16C35323CF48B3006E9C4D /* ExtensionUIImageDataSize.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -388,11 +399,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB16C35423CF48B3006E9C4D /* ExtensionUIImageDataSize.swift in Sources */,
 				EBE633E0239D5E6A00FDCA38 /* UserTableViewCell.swift in Sources */,
 				EBF48D92239656EB00CB3418 /* LandoltBottomUIView.swift in Sources */,
 				EB38F484239553BE00D30348 /* PurchasesTableViewCell.swift in Sources */,
 				EB38F47A2393ECB100D30348 /* HyperopiaViewController.swift in Sources */,
-				EB8C340623B9E90500AFA10A /* ExtensionUIImage.swift in Sources */,
+				EB8C340623B9E90500AFA10A /* ExtensionUIImageOrientation.swift in Sources */,
 				EB1F611B23C25D6C00E96024 /* HyperopiaSpeechViewController.swift in Sources */,
 				EB38F4862395667F00D30348 /* SettingsTableViewController.swift in Sources */,
 				EB2D59C623AF9EE100D42A7D /* SettingsTableViewCell.swift in Sources */,

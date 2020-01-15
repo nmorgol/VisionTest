@@ -5,7 +5,7 @@ import CoreData
 
 class UsersArrayTableViewController: UITableViewController {
     
-    var state = String()
+    var state = String()//определить откуда был переход
     
     var complition:((Int)->())?
     
@@ -13,8 +13,11 @@ class UsersArrayTableViewController: UITableViewController {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let cellID = "UsersArrayCell"
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         print(state)
         do {
             usersArray = try context.fetch(User.fetchRequest())
@@ -51,7 +54,8 @@ class UsersArrayTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! UserArrayTableViewCell
 //        cell.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/5).isActive = true
         let dataPh = UIImage(named: "placeholder")?.pngData()
-        cell.userPhotoImageView.image = UIImage(data: usersArray[indexPath.row].photo ?? dataPh!)
+//        cell.userPhotoImageView.image = UIImage(data: usersArray[indexPath.row].photo ?? dataPh!)
+        cell.userPhotoImageView.image = UIImage(data: usersArray[indexPath.row].photo ?? dataPh!, scale: 0.000001 )
         cell.userNameLabel.text = usersArray[indexPath.row].name
         return cell
     }
@@ -80,7 +84,12 @@ class UsersArrayTableViewController: UITableViewController {
             let curUser = indexPath.row
             complition?(curUser)
             self.navigationController?.popViewController(animated: false)
+        }else if state == "Hyperopia"{
+            let curUser = indexPath.row
+            complition?(curUser)
+            self.navigationController?.popViewController(animated: false)
         }
+        
         
     }
     

@@ -43,17 +43,14 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         self.tableView.register(UserTableViewCell.self, forCellReuseIdentifier: userCellID)
         self.tableView.register(SymbolTableViewCell.self, forCellReuseIdentifier: symbolCellId)
         
-//        tableView.allowsSelection = true
-//        tableView.isUserInteractionEnabled = true
-//        tableView.gestureRecognizers.
         
         
         tableView.tableFooterView = UIView()
         
         labelTextField.delegate = self
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tapTableView(recognizer:)))
-        self.view.addGestureRecognizer(tap)
+//        let tap = UITapGestureRecognizer(target: self, action: #selector(tapTableView(recognizer:)))
+//        self.view.addGestureRecognizer(tap)
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -221,16 +218,16 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         return height
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        if indexPath.section == 0{
-            if indexPath.row == 0{
-                let userVC = UserViewController()
-                self.navigationController?.pushViewController(userVC, animated: false)
-            }
-        }
-    }
-    
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//
+//        if indexPath.section == 0{
+//            if indexPath.row == 0{
+//                let userVC = UserViewController()
+//                self.navigationController?.pushViewController(userVC, animated: false)
+//            }
+//        }
+//    }
+//
     override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
@@ -306,20 +303,18 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         self.tabBarController?.tabBar.isHidden = true
     }
     
-    @objc func tapTableView(recognizer: UITapGestureRecognizer) {
-        
-    }
+
     
-    func saveName(name: String){
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        let user = User(context: context)
-        user.setValue(name, forKey: "name")
-        do {
-            try context.save()
-        }catch let error as NSError{
-            print(error)
-        }
-    }
+//    func saveName(name: String){
+//        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//        let user = User(context: context)
+//        user.setValue(name, forKey: "name")
+//        do {
+//            try context.save()
+//        }catch let error as NSError{
+//            print(error)
+//        }
+//    }
     @objc func segmetAction() {
         tableView.reloadData()
         
