@@ -25,9 +25,6 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonAction)), UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(organizeButtonAction))]
         
-        addSubView()
-        
-        
         do {
             usersArray = try context.fetch(User.fetchRequest())
             let resCurrUser = try context.fetch(CurrentUser.fetchRequest())
@@ -39,18 +36,22 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         }
         
         setImage()
+        addSubView()
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(true)
         self.tabBarController?.tabBar.isHidden = true
         
+        
         addView()
-        print(newUserBool)
+//        print(newUserBool)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super .viewWillAppear(false)
+        super .viewWillDisappear(false)
         self.tabBarController?.tabBar.isHidden = false
     }
     
@@ -166,7 +167,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     
     @objc func saveAddButtonAction(){
         let userNew = User(context: context)//добавили нового пользователя
-        userNew.setValue(userImageView.image?.pngData(), forKey: "photo")
+        userNew.setValue(userImageView.image?.jpeg(.lowest), forKey: "photo")
         userNew.setValue(userTextField.text, forKey: "name")
         userNew.setValue(userTextView.text, forKey: "info")
         do {
@@ -174,6 +175,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         }catch let error as NSError{
             print(error)
         }
+        
         if newUserBool == true{ //если это новый пользователь
             do {//удаляем текущего пользователя
                 let result = try context.fetch(CurrentUser.fetchRequest())
@@ -198,6 +200,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
             }catch let error as NSError{
                 print(error)
             }
+            print(count - 1)
         }
         self.navigationItem.rightBarButtonItems?.removeAll()
         self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonAction)), UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(organizeButtonAction))]
@@ -208,6 +211,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         usersArray[currentUser].photo = userImageView.image?.jpeg(.lowest)
         usersArray[currentUser].name = userTextField.text
         usersArray[currentUser].info = userTextField.text
+        print(currentUser)
     }
     
     

@@ -55,6 +55,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     }
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(true)
+        
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let image = UIImage(named: "placeholder")?.pngData()!
         do {
@@ -65,7 +66,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
                 let curUser = (resCurrentUser.last as! CurrentUser).currentUser
                 name = (resultUser[Int(curUser)] as! User).name ?? ""
                 userInfoText = (resultUser[Int(curUser)] as! User).info ?? "info"
-                
+                print(curUser)
                 photo = ((resultUser[Int(curUser)] as! User).photo) ?? image!}
             else{
                 name = "name"
@@ -218,16 +219,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         return height
     }
     
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//
-//        if indexPath.section == 0{
-//            if indexPath.row == 0{
-//                let userVC = UserViewController()
-//                self.navigationController?.pushViewController(userVC, animated: false)
-//            }
-//        }
-//    }
-//
+
     override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
@@ -304,17 +296,6 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     }
     
 
-    
-//    func saveName(name: String){
-//        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-//        let user = User(context: context)
-//        user.setValue(name, forKey: "name")
-//        do {
-//            try context.save()
-//        }catch let error as NSError{
-//            print(error)
-//        }
-//    }
     @objc func segmetAction() {
         tableView.reloadData()
         

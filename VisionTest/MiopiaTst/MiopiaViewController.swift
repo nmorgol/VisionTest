@@ -15,6 +15,7 @@ class MiopiaViewController: UIViewController {
     let bottomButton = UIButton()
     let rightButton = UIButton()
     let leftButton = UIButton()
+    let centralButton = UIButton()
     
     let rightSnellenView = SnellenRightView()
     let leftSnellenView = SnellenLeftView()
@@ -32,6 +33,10 @@ class MiopiaViewController: UIViewController {
     
     var koef = Float()//коэфициент рассчета размера символа
     var counter = Float(1)//счетчик нажатий
+    
+    var wrongCounter = Float(0)//считаем неправильные результаты
+    var superWrong = Float(0)//счетчик неправильных нажатий итогового принятия решения
+    var visualAcuity = Float()//острота зрения
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -196,17 +201,56 @@ class MiopiaViewController: UIViewController {
             currentView = workViewArray.randomElement()!
             
             counter += 1
-            
             let koeficient = koef*counter
+            
+            wrongCounter = 0
             
             addLandoltSnellenView(addingView: currentView, koef: koeficient)
         }else{//если не угадал символ
-            currentView.removeFromSuperview()
-            currentView = workViewArray.randomElement()!
             
-            let koeficient = koef*counter
+            wrongCounter += 1
+            if wrongCounter == 2{
+                wrongCounter = 0
+                
+                superWrong += 1
+                print(superWrong)
+                if superWrong == 2{
+                    let alertContr = UIAlertController(title: "тест завершен", message: "острота зрения равна:\(counter/10)", preferredStyle: .alert)
+                    let alertAct = UIAlertAction(title: "ok", style: .default) { (action) in
+                        self.counter = 1
+                        self.wrongCounter = 0
+                        self.superWrong = 0
+                        self.currentView.removeFromSuperview()
+                        self.currentView = self.workViewArray.randomElement()!
+                        
+                        let koeficient = self.koef*self.counter
+                        
+                        self.addLandoltSnellenView(addingView: self.currentView, koef: koeficient)
+                    }
+                    alertContr.addAction(alertAct)
+                    self.present(alertContr, animated: true, completion: nil)
+                }else{
+                    currentView.removeFromSuperview()
+                    currentView = workViewArray.randomElement()!
+                    
+                    if counter > 1{
+                        counter -= 1
+                    }
+                    
+                    let koeficient = koef*counter
+                    
+                    addLandoltSnellenView(addingView: currentView, koef: koeficient)
+                }
+                
+            }else{
+                currentView.removeFromSuperview()
+                currentView = workViewArray.randomElement()!
+                
+                let koeficient = koef*counter
+                
+                addLandoltSnellenView(addingView: currentView, koef: koeficient)
+            }
             
-            addLandoltSnellenView(addingView: currentView, koef: koeficient)
         }
         
     }

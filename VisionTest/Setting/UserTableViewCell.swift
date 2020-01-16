@@ -70,9 +70,9 @@ class UserTableViewCell: UITableViewCell {
         
         accessoryBtn.translatesAutoresizingMaskIntoConstraints = false
         accessoryBtn.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        accessoryBtn.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -20).isActive = true
-        accessoryBtn.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        accessoryBtn.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        accessoryBtn.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive = true
+        accessoryBtn.leftAnchor.constraint(equalTo: userInfoLabel.rightAnchor).isActive = true
+        accessoryBtn.heightAnchor.constraint(equalToConstant: 150).isActive = true
         accessoryBtn.setTitle("❯", for: .normal)
         accessoryBtn.setTitleColor(.systemBlue, for: .normal)
         
