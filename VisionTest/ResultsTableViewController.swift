@@ -1,14 +1,17 @@
 
 
 import UIKit
+import CoreData
 
 class ResultsTableViewController: UITableViewController {
     
-    var state = String()
-    var changedUser = Int(0)
-    var currentUser = User()
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var state = String()//смотреть из какого контроллера пришел запрос
+    var changedUser = Int(0)//можно поменять юзера у которого смотреть результат
+    var currentUser: User?
     let cellID = "cellID"
-    var resultsMiopiaArray = [MiopiaTestResult]()
+    var resultsMiopiaArray: [MiopiaTestResult]?
+//    var resultsMiopiaArray = User.
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,10 +31,13 @@ class ResultsTableViewController: UITableViewController {
         do {
             let resultUser = try context.fetch(User.fetchRequest())
             let currentUserCD = try context.fetch(CurrentUser.fetchRequest())
+            _ = try context.fetch(MiopiaTestResult.fetchRequest())
             if changedUser == 0{
                 if resultUser.count > 0{
                     changedUser = Int((currentUserCD.last as! CurrentUser).currentUser)
                     currentUser = (resultUser[changedUser] as! User)
+                    resultsMiopiaArray = (currentUser?.relationship?.allObjects as! [MiopiaTestResult])
+//                    print(resultsMiopiaArray?.last?.dateTest)
                 }
             }else{
                 currentUser = (resultUser[changedUser] as! User)
@@ -54,7 +60,7 @@ class ResultsTableViewController: UITableViewController {
         case 0:
             return 1
         case 1:
-        return 3//resultsMiopiaArray.count
+            return resultsMiopiaArray?.count ?? 3
         default:
             break
         }
@@ -64,7 +70,9 @@ class ResultsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
         if indexPath.section == 0{
             let dataImg = UIImage(named: "placeholder")?.pngData()
-            cell.imageView?.image = UIImage(data: currentUser.photo ?? dataImg!)
+            cell.imageView?.image = UIImage(data: currentUser?.photo ?? dataImg!)
+        }else if indexPath.section == 1{
+            cell.textLabel?.text = "date test:\(String(describing: resultsMiopiaArray?[indexPath.row].dateTest))"
         }
         return cell
     }
@@ -83,8 +91,6 @@ class ResultsTableViewController: UITableViewController {
         return " "
     }
     
-    
-    
     @objc func navBarAction(){
         let usersVC = UsersArrayTableViewController()
         usersVC.state = state
@@ -93,7 +99,6 @@ class ResultsTableViewController: UITableViewController {
         }
         self.navigationController?.pushViewController(usersVC, animated: false)
     }
-    
     
     override func viewWillDisappear(_ animated: Bool) {
         super .viewWillAppear(false)

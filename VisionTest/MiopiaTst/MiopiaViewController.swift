@@ -4,7 +4,7 @@ import UIKit
 import CoreData
 
 class MiopiaViewController: UIViewController {
-        
+    
     let helpSymbolView = UIView()//для символа
     let helpWorkView = UIView()//для кнопок
     let deviceNameLabel = UILabel()
@@ -38,6 +38,8 @@ class MiopiaViewController: UIViewController {
     var superWrong = Float(0)//счетчик неправильных нажатий итогового принятия решения
     var visualAcuity = Float()//острота зрения
     
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -55,7 +57,7 @@ class MiopiaViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(false)
         // MARK: - CoreData
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
         do {
             let resultSettings = try context.fetch(SettingsApp.fetchRequest())
             
@@ -124,14 +126,15 @@ class MiopiaViewController: UIViewController {
     
     func addButton(){
         
-        let butonsSymbolArray = ["→","←","↑","↓"]
-        let buttonArray = [rightButton, leftButton, topButton, bottomButton]
+        let butonsSymbolArray = ["→","←","↑","↓","❌"]
+        let buttonArray = [rightButton, leftButton, topButton, bottomButton,centralButton]
         
         for i in (0...buttonArray.count-1){
             helpWorkView.addSubview(buttonArray[i])
             buttonArray[i].translatesAutoresizingMaskIntoConstraints = false
-            buttonArray[i].heightAnchor.constraint(equalTo: helpWorkView.heightAnchor, multiplier: 1/3).isActive = true
-            buttonArray[i].widthAnchor.constraint(equalTo: helpWorkView.widthAnchor, multiplier: 1/3).isActive = true
+            if i < 4 {
+                buttonArray[i].heightAnchor.constraint(equalTo: helpWorkView.heightAnchor, multiplier: 1/3).isActive = true
+                buttonArray[i].widthAnchor.constraint(equalTo: helpWorkView.widthAnchor, multiplier: 1/3).isActive = true}
             buttonArray[i].layer.cornerRadius = 20
             buttonArray[i].layer.backgroundColor = UIColor.white.cgColor
             buttonArray[i].layer.borderColor = UIColor.blue.cgColor
@@ -140,6 +143,7 @@ class MiopiaViewController: UIViewController {
             buttonArray[i].addTarget(self, action: #selector(buttonAction(sender:)), for: .touchUpInside)
             buttonArray[i].setTitle(butonsSymbolArray[i], for: .normal)
             buttonArray[i].setTitleColor(.darkGray, for: .normal)
+            
             
         }
         topButton.topAnchor.constraint(equalTo: helpWorkView.topAnchor, constant: 5).isActive = true
@@ -150,6 +154,15 @@ class MiopiaViewController: UIViewController {
         leftButton.centerYAnchor.constraint(equalTo: helpWorkView.centerYAnchor).isActive = true
         rightButton.rightAnchor.constraint(equalTo: helpWorkView.rightAnchor, constant: -5).isActive = true
         rightButton.centerYAnchor.constraint(equalTo: helpWorkView.centerYAnchor).isActive = true
+        
+        
+        
+        centralButton.widthAnchor.constraint(equalTo: helpWorkView.widthAnchor, multiplier: 1/4).isActive = true
+        centralButton.heightAnchor.constraint(equalTo: helpWorkView.heightAnchor, multiplier: 1/4).isActive = true
+        centralButton.centerYAnchor.constraint(equalTo: helpWorkView.centerYAnchor).isActive = true
+        centralButton.centerXAnchor.constraint(equalTo: helpWorkView.centerXAnchor).isActive = true
+        centralButton.removeTarget(self, action: #selector(buttonAction(sender:)), for: .touchUpInside)
+        centralButton.addTarget(self, action: #selector(centralButtonAction), for: .touchUpInside)
     }
     
     func addDeviceNameLabel() {
@@ -208,51 +221,128 @@ class MiopiaViewController: UIViewController {
             addLandoltSnellenView(addingView: currentView, koef: koeficient)
         }else{//если не угадал символ
             
-            wrongCounter += 1
-            if wrongCounter == 2{
-                wrongCounter = 0
+//            wrongCounter += 1
+//            if wrongCounter == 2{
+//                wrongCounter = 0
+//
+//                superWrong += 1
+//                print(superWrong)
+//                if superWrong == 2{
+//                    let alertContr = UIAlertController(title: "тест завершен", message: "острота зрения равна:\((counter-1)/10)", preferredStyle: .alert)
+//                    let alertAct = UIAlertAction(title: "ok", style: .default) { (action) in
+//                        self.counter = 1
+//                        self.wrongCounter = 0
+//                        self.superWrong = 0
+//                        self.currentView.removeFromSuperview()
+//                        self.currentView = self.workViewArray.randomElement()!
+//
+//                        let koeficient = self.koef*self.counter
+//
+//                        self.addLandoltSnellenView(addingView: self.currentView, koef: koeficient)
+//                    }
+//                    alertContr.addAction(alertAct)
+//                    self.present(alertContr, animated: true, completion: nil)
+//                }else{
+//                    currentView.removeFromSuperview()
+//                    currentView = workViewArray.randomElement()!
+//
+//                    if counter > 1{
+//                        counter -= 1
+//                    }
+//
+//                    let koeficient = koef*counter
+//
+//                    addLandoltSnellenView(addingView: currentView, koef: koeficient)
+//                }
+//
+//            }else{
+//                currentView.removeFromSuperview()
+//                currentView = workViewArray.randomElement()!
+//
+//                let koeficient = koef*counter
+//
+//                addLandoltSnellenView(addingView: currentView, koef: koeficient)
+//            }
+            wrongAnswer()
+        }
+        
+    }
+    
+    @objc func centralButtonAction(){
+        saveResult()
+        wrongCounter = 1
+        superWrong = 1
+        wrongAnswer()
+    }
+    
+    func saveResult(){
+        do{
+            let resultUser = try context.fetch(User.fetchRequest())
+            let resCurrentUser = try context.fetch(CurrentUser.fetchRequest())
+            if resCurrentUser.count > 0{
+                let curUserNum = (resCurrentUser.last as! CurrentUser).currentUser
+                let curUser = (resultUser[Int(curUserNum)] as! User)
+                let result = MiopiaTestResult(context: context)
                 
-                superWrong += 1
-                print(superWrong)
-                if superWrong == 2{
-                    let alertContr = UIAlertController(title: "тест завершен", message: "острота зрения равна:\(counter/10)", preferredStyle: .alert)
-                    let alertAct = UIAlertAction(title: "ok", style: .default) { (action) in
-                        self.counter = 1
-                        self.wrongCounter = 0
-                        self.superWrong = 0
-                        self.currentView.removeFromSuperview()
-                        self.currentView = self.workViewArray.randomElement()!
-                        
-                        let koeficient = self.koef*self.counter
-                        
-                        self.addLandoltSnellenView(addingView: self.currentView, koef: koeficient)
-                    }
-                    alertContr.addAction(alertAct)
-                    self.present(alertContr, animated: true, completion: nil)
-                }else{
-                    currentView.removeFromSuperview()
-                    currentView = workViewArray.randomElement()!
+                result.distance = distance
+                result.result = (counter-1)/10
+                result.dateTest = Date()
+                
+                curUser.addToRelationship(result)
+                
+                try context.save()
+            }
+            
+        }catch let error as NSError {
+            print(error)
+        }
+    }
+    
+    func wrongAnswer(){
+        wrongCounter += 1
+        if wrongCounter == 2{
+            wrongCounter = 0
+            
+            superWrong += 1
+            print(superWrong)
+            if superWrong == 2{
+                let alertContr = UIAlertController(title: "тест завершен", message: "острота зрения равна:\((counter-1)/10)", preferredStyle: .alert)
+                let alertAct = UIAlertAction(title: "ok", style: .default) { (action) in
+                    self.counter = 1
+                    self.wrongCounter = 0
+                    self.superWrong = 0
+                    self.currentView.removeFromSuperview()
+                    self.currentView = self.workViewArray.randomElement()!
                     
-                    if counter > 1{
-                        counter -= 1
-                    }
+                    let koeficient = self.koef*self.counter
                     
-                    let koeficient = koef*counter
-                    
-                    addLandoltSnellenView(addingView: currentView, koef: koeficient)
+                    self.addLandoltSnellenView(addingView: self.currentView, koef: koeficient)
                 }
-                
+                alertContr.addAction(alertAct)
+                self.present(alertContr, animated: true, completion: nil)
             }else{
                 currentView.removeFromSuperview()
                 currentView = workViewArray.randomElement()!
+                
+                if counter > 1{
+                    counter -= 1
+                }
                 
                 let koeficient = koef*counter
                 
                 addLandoltSnellenView(addingView: currentView, koef: koeficient)
             }
             
+        }else{
+            currentView.removeFromSuperview()
+            currentView = workViewArray.randomElement()!
+            
+            let koeficient = koef*counter
+            
+            addLandoltSnellenView(addingView: currentView, koef: koeficient)
         }
         
     }
+    
     
 }
