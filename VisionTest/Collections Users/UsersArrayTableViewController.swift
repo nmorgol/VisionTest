@@ -61,7 +61,7 @@ class UsersArrayTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if state == "Main"{
+        
             do {
                 let result = try context.fetch(CurrentUser.fetchRequest())
                 
@@ -84,11 +84,7 @@ class UsersArrayTableViewController: UITableViewController {
             let curUser = indexPath.row
             complition?(curUser)
             self.navigationController?.popViewController(animated: false)
-        }else if state == "Hyperopia"{
-            let curUser = indexPath.row
-            complition?(curUser)
-            self.navigationController?.popViewController(animated: false)
-        }
+        
         
         
     }

@@ -38,6 +38,9 @@ class MiopiaViewController: UIViewController {
     var superWrong = Float(0)//счетчик неправильных нажатий итогового принятия решения
     var visualAcuity = Float()//острота зрения
     
+    var currentEye = ""
+    
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
@@ -74,6 +77,7 @@ class MiopiaViewController: UIViewController {
             else{
                 viewArray = [rightLandoltView, leftLandoltView, topLandoltView, bottomLandoltView]
             }
+            
         } catch let error as NSError {
             print(error)
         }
@@ -89,6 +93,8 @@ class MiopiaViewController: UIViewController {
         addDeviceNameLabel()
         addDistanceLabel()
         addLandoltSnellenView(addingView: currentView, koef: koef)
+        
+        startAlert()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -220,59 +226,19 @@ class MiopiaViewController: UIViewController {
             
             addLandoltSnellenView(addingView: currentView, koef: koeficient)
         }else{//если не угадал символ
-            
-//            wrongCounter += 1
-//            if wrongCounter == 2{
-//                wrongCounter = 0
-//
-//                superWrong += 1
-//                print(superWrong)
-//                if superWrong == 2{
-//                    let alertContr = UIAlertController(title: "тест завершен", message: "острота зрения равна:\((counter-1)/10)", preferredStyle: .alert)
-//                    let alertAct = UIAlertAction(title: "ok", style: .default) { (action) in
-//                        self.counter = 1
-//                        self.wrongCounter = 0
-//                        self.superWrong = 0
-//                        self.currentView.removeFromSuperview()
-//                        self.currentView = self.workViewArray.randomElement()!
-//
-//                        let koeficient = self.koef*self.counter
-//
-//                        self.addLandoltSnellenView(addingView: self.currentView, koef: koeficient)
-//                    }
-//                    alertContr.addAction(alertAct)
-//                    self.present(alertContr, animated: true, completion: nil)
-//                }else{
-//                    currentView.removeFromSuperview()
-//                    currentView = workViewArray.randomElement()!
-//
-//                    if counter > 1{
-//                        counter -= 1
-//                    }
-//
-//                    let koeficient = koef*counter
-//
-//                    addLandoltSnellenView(addingView: currentView, koef: koeficient)
-//                }
-//
-//            }else{
-//                currentView.removeFromSuperview()
-//                currentView = workViewArray.randomElement()!
-//
-//                let koeficient = koef*counter
-//
-//                addLandoltSnellenView(addingView: currentView, koef: koeficient)
-//            }
+            saveResult()
             wrongAnswer()
+            
         }
         
     }
     
     @objc func centralButtonAction(){
         saveResult()
-        wrongCounter = 1
-        superWrong = 1
+        wrongCounter = 1//для срабатывания метода wrongAnswer()
+        superWrong = 1//для срабатывания метода wrongAnswer()
         wrongAnswer()
+        
     }
     
     func saveResult(){
@@ -284,9 +250,11 @@ class MiopiaViewController: UIViewController {
                 let curUser = (resultUser[Int(curUserNum)] as! User)
                 let result = MiopiaTestResult(context: context)
                 
+                
                 result.distance = distance
                 result.result = (counter-1)/10
                 result.dateTest = Date()
+                result.testingEye = currentEye
                 
                 curUser.addToRelationship(result)
                 
@@ -306,17 +274,20 @@ class MiopiaViewController: UIViewController {
             superWrong += 1
             print(superWrong)
             if superWrong == 2{
+                self.currentView.removeFromSuperview()
                 let alertContr = UIAlertController(title: "тест завершен", message: "острота зрения равна:\((counter-1)/10)", preferredStyle: .alert)
                 let alertAct = UIAlertAction(title: "ok", style: .default) { (action) in
                     self.counter = 1
                     self.wrongCounter = 0
                     self.superWrong = 0
-                    self.currentView.removeFromSuperview()
+                    
                     self.currentView = self.workViewArray.randomElement()!
                     
                     let koeficient = self.koef*self.counter
                     
                     self.addLandoltSnellenView(addingView: self.currentView, koef: koeficient)
+                    
+                    self.startAlert()
                 }
                 alertContr.addAction(alertAct)
                 self.present(alertContr, animated: true, completion: nil)
@@ -344,5 +315,25 @@ class MiopiaViewController: UIViewController {
         
     }
     
+    func startAlert(){
+        if currentEye == "rightEye"{
+            currentEye = "leftEye"
+            
+        }else if currentEye == "leftEye"{
+            currentEye = "rightEye"
+            
+        }else{
+            currentEye = "leftEye"
+        }
+        createStartAlert()
+    }
     
+    func createStartAlert(){
+        let alert = UIAlertController(title: "", message: "Закройте \(currentEye)", preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "ok", style: .default) { (action) in
+            print("ok")
+        }
+        alert.addAction(alertAction)
+        self.present(alert, animated: true, completion: nil)
+    }
 }

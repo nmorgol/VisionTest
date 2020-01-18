@@ -11,9 +11,8 @@
     <entity name="MiopiaTestResult" representedClassName=".MiopiaTestResult" syncable="YES" codeGenerationType="class">
         <attribute name="dateTest" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="distance" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="leftEye" optional="YES" attributeType="String"/>
         <attribute name="result" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="rightEye" optional="YES" attributeType="String"/>
+        <attribute name="testingEye" optional="YES" attributeType="String"/>
         <relationship name="relationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="relationship" inverseEntity="User"/>
     </entity>
     <entity name="SettingsApp" representedClassName=".SettingsApp" syncable="YES" codeGenerationType="class">
@@ -31,10 +30,10 @@
         <relationship name="relationship1" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HyperopiaTestResult" inverseName="relationship" inverseEntity="HyperopiaTestResult"/>
     </entity>
     <elements>
+        <element name="CurrentUserApp" positionX="-8048.11328125" positionY="-3296.42578125" width="128" height="58"/>
         <element name="HyperopiaTestResult" positionX="-7639.7109375" positionY="-3528.6484375" width="128" height="88"/>
-        <element name="MiopiaTestResult" positionX="-8012.640625" positionY="-3513.578125" width="128" height="133"/>
+        <element name="MiopiaTestResult" positionX="-8012.640625" positionY="-3513.578125" width="128" height="118"/>
         <element name="SettingsApp" positionX="-7825.8125" positionY="-3313.87890625" width="128" height="118"/>
         <element name="User" positionX="-7828.15625" positionY="-3513.53125" width="144.93359375" height="73"/>
-        <element name="CurrentUserApp" positionX="-8048.11328125" positionY="-3296.42578125" width="128" height="58"/>
     </elements>
 </model>

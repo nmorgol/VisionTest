@@ -9,7 +9,9 @@ class ResultsTableViewController: UITableViewController {
     var state = String()//смотреть из какого контроллера пришел запрос
     var changedUser = Int(0)//можно поменять юзера у которого смотреть результат
     var currentUser: User?
-    let cellID = "cellID"
+//    let cellID = "cellID"
+    let resultCellID = "ResultCell"
+    let userCellID = "UserCell"//ячейка из настроек -- пользователь
     var resultsMiopiaArray: [MiopiaTestResult]?
 //    var resultsMiopiaArray = User.
     
@@ -17,7 +19,12 @@ class ResultsTableViewController: UITableViewController {
         super.viewDidLoad()
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(navBarAction))
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
+        
+        
+//        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
+        self.tableView.register(CurrentUserTableViewCell.self, forCellReuseIdentifier: userCellID)
+        self.tableView.register(ResultsTableViewCell.self, forCellReuseIdentifier: resultCellID)
+        
         tableView.tableFooterView = UIView()
     }
     
@@ -37,7 +44,9 @@ class ResultsTableViewController: UITableViewController {
                     changedUser = Int((currentUserCD.last as! CurrentUser).currentUser)
                     currentUser = (resultUser[changedUser] as! User)
                     resultsMiopiaArray = (currentUser?.relationship?.allObjects as! [MiopiaTestResult])
-//                    print(resultsMiopiaArray?.last?.dateTest)
+                    
+                    resultsMiopiaArray = resultsMiopiaArray?.sorted(by: { $0.dateTest!.compare($1.dateTest!) == .orderedDescending })
+                    
                 }
             }else{
                 currentUser = (resultUser[changedUser] as! User)
@@ -46,6 +55,7 @@ class ResultsTableViewController: UITableViewController {
         } catch let error as NSError {
             print(error)
         }
+        tableView.reloadData()
     }
     
     // MARK: - Table view data source
@@ -67,12 +77,42 @@ class ResultsTableViewController: UITableViewController {
         return 0
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
+        var cell = UITableViewCell()
+        
+        //let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
         if indexPath.section == 0{
+            let cell1 = tableView.dequeueReusableCell(withIdentifier: userCellID, for: indexPath) as! CurrentUserTableViewCell
+            
             let dataImg = UIImage(named: "placeholder")?.pngData()
-            cell.imageView?.image = UIImage(data: currentUser?.photo ?? dataImg!)
+            
+            cell1.userPhotoImageView.image = UIImage(data: currentUser?.photo ?? dataImg!)
+            cell1.userNameLabel.text = currentUser?.name ?? " "
+            cell1.userInfoLabel.text = currentUser?.info ?? " "
+            cell1.isUserInteractionEnabled = false
+            
+            cell = cell1
+            return cell
+            
         }else if indexPath.section == 1{
-            cell.textLabel?.text = "date test:\(String(describing: resultsMiopiaArray?[indexPath.row].dateTest))"
+
+            let cell2 = tableView.dequeueReusableCell(withIdentifier: resultCellID, for: indexPath) as! ResultsTableViewCell
+            
+            let currentDate = Date()
+            let formatter = DateFormatter()
+            let recieveDate = resultsMiopiaArray?[indexPath.row].dateTest
+            formatter.dateFormat = "dd.MM.yyyy"
+            let result = formatter.string(from: recieveDate ?? currentDate)
+            
+            cell2.eyeLabel.text = resultsMiopiaArray?[indexPath.row].testingEye
+            cell2.distanceTestLabel.text = "Distance test: \(resultsMiopiaArray?[indexPath.row].distance ?? 0)"
+            cell2.dateTestLabel.text = "Date test:" + "" + result
+            cell2.testResultLabel.text = "Test result:\(resultsMiopiaArray?[indexPath.row].result ?? 0)"
+            
+            cell2.layer.cornerRadius = 20
+            cell2.clipsToBounds = true
+            
+            cell = cell2
+            return cell
         }
         return cell
     }
@@ -89,6 +129,20 @@ class ResultsTableViewController: UITableViewController {
             break
         }
         return " "
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        var height = CGFloat()
+        if  indexPath.section == 0{
+            height = 150
+        } else {
+            height = 100
+        }
+        return height
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 20
     }
     
     @objc func navBarAction(){
