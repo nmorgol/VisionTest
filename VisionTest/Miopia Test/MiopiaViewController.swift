@@ -27,6 +27,8 @@ class MiopiaViewController: UIViewController {
     let topLandoltView = LandoltTopUIView()
     let bottomLandoltView = LandoltBottomUIView()
     
+    let microphoneView = MicrophoneView()
+    
     var viewArray = [UIView]()
     var workViewArray = [UIView]()
     var currentView = UIView()
@@ -94,7 +96,11 @@ class MiopiaViewController: UIViewController {
         addDistanceLabel()
         addLandoltSnellenView(addingView: currentView, koef: koef)
         
+        
+        
         startAlert()
+        
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -119,6 +125,15 @@ class MiopiaViewController: UIViewController {
         helpSymbolView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         helpSymbolView.heightAnchor.constraint(equalTo: helpSymbolView.widthAnchor).isActive = true
         
+    }
+    
+    func addMicrophoneView(){
+        self.view.addSubview(microphoneView)
+        microphoneView.translatesAutoresizingMaskIntoConstraints = false
+        microphoneView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        microphoneView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        microphoneView.heightAnchor.constraint(equalTo: microphoneView.widthAnchor).isActive = true
+        microphoneView.backgroundColor = .white
     }
     
     func addHelpWorkView() {

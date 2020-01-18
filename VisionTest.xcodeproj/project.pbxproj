@@ -10,6 +10,7 @@
 		EB16C35123CC6D85006E9C4D /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB16C35023CC6D85006E9C4D /* InfoViewController.swift */; };
 		EB16C35423CF48B3006E9C4D /* ExtensionUIImageDataSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB16C35323CF48B3006E9C4D /* ExtensionUIImageDataSize.swift */; };
 		EB1F611B23C25D6C00E96024 /* HyperopiaSpeechViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1F611A23C25D6C00E96024 /* HyperopiaSpeechViewController.swift */; };
+		EB2CF9AC23D2EA98006336E8 /* MicrophoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2CF9AB23D2EA98006336E8 /* MicrophoneView.swift */; };
 		EB2D59C623AF9EE100D42A7D /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D59C523AF9EE100D42A7D /* SettingsTableViewCell.swift */; };
 		EB2D59C823AFA6F600D42A7D /* SymbolTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D59C723AFA6F600D42A7D /* SymbolTableViewCell.swift */; };
 		EB2D59CA23B08C1900D42A7D /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D59C923B08C1900D42A7D /* UserViewController.swift */; };
@@ -63,6 +64,7 @@
 		EB16C35023CC6D85006E9C4D /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		EB16C35323CF48B3006E9C4D /* ExtensionUIImageDataSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIImageDataSize.swift; sourceTree = "<group>"; };
 		EB1F611A23C25D6C00E96024 /* HyperopiaSpeechViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HyperopiaSpeechViewController.swift; sourceTree = "<group>"; };
+		EB2CF9AB23D2EA98006336E8 /* MicrophoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneView.swift; sourceTree = "<group>"; };
 		EB2D59C523AF9EE100D42A7D /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		EB2D59C723AFA6F600D42A7D /* SymbolTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolTableViewCell.swift; sourceTree = "<group>"; };
 		EB2D59C923B08C1900D42A7D /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			children = (
 				EB359752239634FE001C2240 /* LandoltView */,
 				EB49208A239832670062D974 /* SnellenView */,
+				EB2CF9AB23D2EA98006336E8 /* MicrophoneView.swift */,
 			);
 			path = "Landolt Snellen views";
 			sourceTree = "<group>";
@@ -150,6 +153,14 @@
 				EB38F4772393EA3700D30348 /* MiopiaViewController.swift */,
 			);
 			path = "Miopia Test";
+			sourceTree = "<group>";
+		};
+		EB2CF9AA23D2EA21006336E8 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				EB16C35223CDEB6A006E9C4D /* Landolt Snellen views */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		EB359752239634FE001C2240 /* LandoltView */ = {
@@ -192,8 +203,8 @@
 				EB551CC223D1C0E10020A46D /* Results Test */,
 				EB951CA423BA10E700C2DD7B /* Collections Users */,
 				EB3A772223AF4627006AEE70 /* Setting */,
-				EB16C35223CDEB6A006E9C4D /* Landolt Snellen views */,
 				EB492093239BB5770062D974 /* Extension */,
+				EB2CF9AA23D2EA21006336E8 /* Views */,
 				EB38F44D2393A93400D30348 /* Assets.xcassets */,
 				EB38F4552393A93400D30348 /* Info.plist */,
 				EB38F4482393A93000D30348 /* VisionTest.xcdatamodeld */,
@@ -415,6 +426,7 @@
 			files = (
 				EB16C35423CF48B3006E9C4D /* ExtensionUIImageDataSize.swift in Sources */,
 				EBE633E0239D5E6A00FDCA38 /* UserTableViewCell.swift in Sources */,
+				EB2CF9AC23D2EA98006336E8 /* MicrophoneView.swift in Sources */,
 				EB551CC423D1C1240020A46D /* ResultsTableViewCell.swift in Sources */,
 				EBF48D92239656EB00CB3418 /* LandoltBottomUIView.swift in Sources */,
 				EB38F484239553BE00D30348 /* PurchasesTableViewCell.swift in Sources */,
