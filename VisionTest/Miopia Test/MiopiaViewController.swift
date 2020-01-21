@@ -27,7 +27,7 @@ class MiopiaViewController: UIViewController {
     let topLandoltView = LandoltTopUIView()
     let bottomLandoltView = LandoltBottomUIView()
     
-    let microphoneView = MicrophoneView()
+//    let microphoneView = MicrophoneView()
     
     var viewArray = [UIView]()
     var workViewArray = [UIView]()
@@ -96,10 +96,7 @@ class MiopiaViewController: UIViewController {
         addDistanceLabel()
         addLandoltSnellenView(addingView: currentView, koef: koef)
         
-        
-        
         startAlert()
-        
         
     }
     
@@ -127,14 +124,6 @@ class MiopiaViewController: UIViewController {
         
     }
     
-    func addMicrophoneView(){
-        self.view.addSubview(microphoneView)
-        microphoneView.translatesAutoresizingMaskIntoConstraints = false
-        microphoneView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        microphoneView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        microphoneView.heightAnchor.constraint(equalTo: microphoneView.widthAnchor).isActive = true
-        microphoneView.backgroundColor = .white
-    }
     
     func addHelpWorkView() {
         self.view.addSubview(helpWorkView)
@@ -165,7 +154,6 @@ class MiopiaViewController: UIViewController {
             buttonArray[i].setTitle(butonsSymbolArray[i], for: .normal)
             buttonArray[i].setTitleColor(.darkGray, for: .normal)
             
-            
         }
         topButton.topAnchor.constraint(equalTo: helpWorkView.topAnchor, constant: 5).isActive = true
         topButton.centerXAnchor.constraint(equalTo: helpWorkView.centerXAnchor).isActive = true
@@ -175,8 +163,6 @@ class MiopiaViewController: UIViewController {
         leftButton.centerYAnchor.constraint(equalTo: helpWorkView.centerYAnchor).isActive = true
         rightButton.rightAnchor.constraint(equalTo: helpWorkView.rightAnchor, constant: -5).isActive = true
         rightButton.centerYAnchor.constraint(equalTo: helpWorkView.centerYAnchor).isActive = true
-        
-        
         
         centralButton.widthAnchor.constraint(equalTo: helpWorkView.widthAnchor, multiplier: 1/4).isActive = true
         centralButton.heightAnchor.constraint(equalTo: helpWorkView.heightAnchor, multiplier: 1/4).isActive = true
@@ -229,7 +215,6 @@ class MiopiaViewController: UIViewController {
                 helpInt = i
             }
         }
-        
         if sender.tag == helpInt {//если угадал символ
             currentView.removeFromSuperview()
             currentView = workViewArray.randomElement()!
@@ -243,9 +228,7 @@ class MiopiaViewController: UIViewController {
         }else{//если не угадал символ
             saveResult()
             wrongAnswer()
-            
         }
-        
     }
     
     @objc func centralButtonAction(){
@@ -253,7 +236,6 @@ class MiopiaViewController: UIViewController {
         wrongCounter = 1//для срабатывания метода wrongAnswer()
         superWrong = 1//для срабатывания метода wrongAnswer()
         wrongAnswer()
-        
     }
     
     func saveResult(){
@@ -264,7 +246,6 @@ class MiopiaViewController: UIViewController {
                 let curUserNum = (resCurrentUser.last as! CurrentUser).currentUser
                 let curUser = (resultUser[Int(curUserNum)] as! User)
                 let result = MiopiaTestResult(context: context)
-                
                 
                 result.distance = distance
                 result.result = (counter-1)/10

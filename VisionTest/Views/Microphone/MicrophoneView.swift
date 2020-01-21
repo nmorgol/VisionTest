@@ -12,6 +12,8 @@ class MicrophoneView: UIView {
         let bottomSuppor = UIBezierPath()
         let verticalSupport = UIBezierPath()
         let mainSupport = UIBezierPath()
+       
+        
         
         mainMicrophone.move(to: CGPoint(x: self.frame.width*0.3, y: self.frame.width*0.5))
         mainMicrophone.addLine(to: CGPoint(x: self.frame.width*0.3, y: self.frame.height*0.25))
@@ -80,5 +82,9 @@ class MicrophoneView: UIView {
         mainSupport.close()
         UIColor.red.setFill()
         mainSupport.fill()
+        
+        
+        
+        
     }
 }

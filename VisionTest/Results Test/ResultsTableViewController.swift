@@ -13,6 +13,7 @@ class ResultsTableViewController: UITableViewController {
     let resultCellID = "ResultCell"
     let userCellID = "UserCell"//ячейка из настроек -- пользователь
     var resultsMiopiaArray: [MiopiaTestResult]?
+    var resultsHyperopiaArray: [HyperopiaTestResult]?
 //    var resultsMiopiaArray = User.
     
     override func viewDidLoad() {
@@ -28,34 +29,14 @@ class ResultsTableViewController: UITableViewController {
         tableView.tableFooterView = UIView()
     }
     
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(false)
         
         self.tabBarController?.tabBar.isHidden = true
         
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        
-        do {
-            let resultUser = try context.fetch(User.fetchRequest())
-            let currentUserCD = try context.fetch(CurrentUser.fetchRequest())
-            _ = try context.fetch(MiopiaTestResult.fetchRequest())
-            if changedUser == 0{
-                if resultUser.count > 0{
-                    changedUser = Int((currentUserCD.last as! CurrentUser).currentUser)
-                    currentUser = (resultUser[changedUser] as! User)
-                    resultsMiopiaArray = (currentUser?.relationship?.allObjects as! [MiopiaTestResult])
-                    
-                    resultsMiopiaArray = resultsMiopiaArray?.sorted(by: { $0.dateTest!.compare($1.dateTest!) == .orderedDescending })
-                    
-                }
-            }else{
-                currentUser = (resultUser[changedUser] as! User)
-            }
-            
-        } catch let error as NSError {
-            print(error)
-        }
-        tableView.reloadData()
+        recieveTestsResults()
     }
     
     // MARK: - Table view data source
@@ -150,6 +131,7 @@ class ResultsTableViewController: UITableViewController {
         usersVC.state = state
         usersVC.complition = {currUser in
             self.changedUser = currUser
+            self.recieveTestsResults()
         }
         self.navigationController?.pushViewController(usersVC, animated: false)
     }
@@ -157,6 +139,44 @@ class ResultsTableViewController: UITableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super .viewWillAppear(false)
         self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    fileprivate func recieveTestsResults() {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
+        do {
+            let resultUser = try context.fetch(User.fetchRequest())
+            let currentUserCD = try context.fetch(CurrentUser.fetchRequest())
+//            _ = try context.fetch(MiopiaTestResult.fetchRequest())
+            if changedUser == 0{
+                if resultUser.count > 0{
+                    changedUser = Int((currentUserCD.last as! CurrentUser).currentUser)
+                    currentUser = (resultUser[changedUser] as! User)
+                    if state == "Miopia"{
+                        resultsMiopiaArray = (currentUser?.relationship?.allObjects as! [MiopiaTestResult])
+                        resultsMiopiaArray = resultsMiopiaArray?.sorted(by: { $0.dateTest!.compare($1.dateTest!) == .orderedDescending })
+                    }else if state == "Hyperopia"{
+                        resultsHyperopiaArray = (currentUser?.relationship1?.allObjects as! [HyperopiaTestResult])
+                        resultsHyperopiaArray = resultsHyperopiaArray?.sorted(by: { $0.dateTest!.compare($1.dateTest!) == .orderedDescending })
+                    }
+                    
+                }
+            }else{
+                currentUser = (resultUser[changedUser] as! User)
+                
+                if state == "Miopia"{
+                    resultsMiopiaArray = (currentUser?.relationship?.allObjects as! [MiopiaTestResult])
+                    resultsMiopiaArray = resultsMiopiaArray?.sorted(by: { $0.dateTest!.compare($1.dateTest!) == .orderedDescending })
+                }else if state == "Hyperopia"{
+                    resultsHyperopiaArray = (currentUser?.relationship1?.allObjects as! [HyperopiaTestResult])
+                    resultsHyperopiaArray = resultsHyperopiaArray?.sorted(by: { $0.dateTest!.compare($1.dateTest!) == .orderedDescending })
+                }
+            }
+            
+        } catch let error as NSError {
+            print(error)
+        }
+        tableView.reloadData()
     }
     
 }

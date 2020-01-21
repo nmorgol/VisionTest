@@ -19,6 +19,19 @@ class HyperopiaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.title = "Hyperopia test"
+        self.navigationItem.title = "Hyperopia test"
+        self.view.backgroundColor = .white
+        
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
+        fontSize = 17
+        
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super .viewWillAppear(false)
+        
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
         do {
@@ -31,25 +44,15 @@ class HyperopiaViewController: UIViewController {
             print(error)
         }
         
-        self.title = "Hyperopia test"
-        self.navigationItem.title = "Hyperopia test"
-        self.view.backgroundColor = .white
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
-        fontSize = 17
         
-        ifSpeechBoolIsTrue(speechB: speechBool)
-    }
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super .viewWillAppear(false)
-        if speechBool == true{
+        if speechBool == true && currentText != ""{
             if compareString(str1: currentText, str2: textForRec) == true{
                 fontSize -= 3
             } else {fontSize += 3}
             ifSpeechBoolIsTrue(speechB: speechBool)
         }
+        ifSpeechBoolIsTrue(speechB: speechBool)
     }
     
     override func viewWillLayoutSubviews() {

@@ -36,6 +36,7 @@
 		EB8C340623B9E90500AFA10A /* ExtensionUIImageOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8C340523B9E90500AFA10A /* ExtensionUIImageOrientation.swift */; };
 		EBD11F6C23BB42BE00AA9FF1 /* UsersArrayTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD11F6B23BB42BE00AA9FF1 /* UsersArrayTableViewController.swift */; };
 		EBD11F6E23BB489800AA9FF1 /* UserArrayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD11F6D23BB489800AA9FF1 /* UserArrayTableViewCell.swift */; };
+		EBE5DF9B23D32BAB005801DF /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE5DF9A23D32BAB005801DF /* CircleView.swift */; };
 		EBE633DE239D4A2A00FDCA38 /* ResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE633DD239D4A2A00FDCA38 /* ResultsTableViewController.swift */; };
 		EBE633E0239D5E6A00FDCA38 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE633DF239D5E6A00FDCA38 /* UserTableViewCell.swift */; };
 		EBF48D8E23964E8700CB3418 /* LandoltLeftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF48D8D23964E8700CB3418 /* LandoltLeftUIView.swift */; };
@@ -96,6 +97,7 @@
 		EB8C340523B9E90500AFA10A /* ExtensionUIImageOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIImageOrientation.swift; sourceTree = "<group>"; };
 		EBD11F6B23BB42BE00AA9FF1 /* UsersArrayTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersArrayTableViewController.swift; sourceTree = "<group>"; };
 		EBD11F6D23BB489800AA9FF1 /* UserArrayTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserArrayTableViewCell.swift; sourceTree = "<group>"; };
+		EBE5DF9A23D32BAB005801DF /* CircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		EBE633DD239D4A2A00FDCA38 /* ResultsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsTableViewController.swift; sourceTree = "<group>"; };
 		EBE633DF239D5E6A00FDCA38 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		EBF48D8D23964E8700CB3418 /* LandoltLeftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandoltLeftUIView.swift; sourceTree = "<group>"; };
@@ -133,7 +135,6 @@
 			children = (
 				EB359752239634FE001C2240 /* LandoltView */,
 				EB49208A239832670062D974 /* SnellenView */,
-				EB2CF9AB23D2EA98006336E8 /* MicrophoneView.swift */,
 			);
 			path = "Landolt Snellen views";
 			sourceTree = "<group>";
@@ -158,6 +159,7 @@
 		EB2CF9AA23D2EA21006336E8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EBE5DF9923D32B6E005801DF /* Microphone */,
 				EB16C35223CDEB6A006E9C4D /* Landolt Snellen views */,
 			);
 			path = Views;
@@ -292,6 +294,15 @@
 				EBD11F6D23BB489800AA9FF1 /* UserArrayTableViewCell.swift */,
 			);
 			path = "Collections Users";
+			sourceTree = "<group>";
+		};
+		EBE5DF9923D32B6E005801DF /* Microphone */ = {
+			isa = PBXGroup;
+			children = (
+				EB2CF9AB23D2EA98006336E8 /* MicrophoneView.swift */,
+				EBE5DF9A23D32BAB005801DF /* CircleView.swift */,
+			);
+			path = Microphone;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -437,6 +448,7 @@
 				EB2D59C623AF9EE100D42A7D /* SettingsTableViewCell.swift in Sources */,
 				EB359751239634ED001C2240 /* LandoltRightUIView.swift in Sources */,
 				EBD11F6C23BB42BE00AA9FF1 /* UsersArrayTableViewController.swift in Sources */,
+				EBE5DF9B23D32BAB005801DF /* CircleView.swift in Sources */,
 				EB2D59CA23B08C1900D42A7D /* UserViewController.swift in Sources */,
 				EBF48D8E23964E8700CB3418 /* LandoltLeftUIView.swift in Sources */,
 				EB38F44A2393A93000D30348 /* VisionTest.xcdatamodeld in Sources */,
