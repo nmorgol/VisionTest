@@ -60,8 +60,10 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     let phoneImageView = UIImageView()
     
     var distance = Float()
+    var startBool = false//для анимации
     
-    //var observ: NSKeyValueObservation?
+    var timer: Timer!
+    var timerCounter = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,11 +77,14 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         self.prepareVisionRequest()
         
         self.session?.startRunning()
+        inputText = String(Int.random(in: 100...999))
         
+        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
     }
     
     override func viewWillLayoutSubviews() {
         super .viewWillLayoutSubviews()
+
         addWordLabel()
         addReciveTextLabel()
         addAuthorizedLabel()
@@ -91,7 +96,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     override func viewDidAppear(_ animated: Bool) {
         super .viewDidAppear(false)
         
-        //        timer = Timer.scheduledTimer(timeInterval: TimeInterval((0.3)/Double(animateCounter)), target: self, selector: #selector(animatedMicrophone), userInfo: nil, repeats: true)
+        
         animatedMicrophone()
         speechRecognizer.delegate = self
         
@@ -118,7 +123,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                 }
             }
         }
-        recordButtonTapped()
+        //recordButtonTapped()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -155,6 +160,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
             var isFinal = false
             
+
             if let result = result {
                 // Update the text view with the results.
                 //                self.textView.text = result.bestTranscription.formattedString
@@ -164,10 +170,14 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                 
                 self.currentText = result.bestTranscription.formattedString
                 //                    print(self.currentText + "-" + self.wordLabel.text!)
-                if Array(self.currentText).count >= Array(self.inputText).count{
-                    
-                    self.stopRecognition()
-                }
+//                if Array(self.currentText).count >= Array(self.inputText).count{
+//                    if self.compareString(str1: self.currentText, str2: self.inputText) == true{
+//
+//                        self.inputText = String(Int.random(in: 100...999))
+//
+//                    }
+//                    //self.stopRecognition()
+//                }
             }
             
             if error != nil || isFinal {
@@ -203,18 +213,23 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         }
     }
     
-    func recordButtonTapped() {
+    @objc func recordButtonTapped() {
         if audioEngine.isRunning {
             audioEngine.stop()
             recognitionRequest?.endAudio()
             audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
-        } else {
+            
             do {
                 try startRecording()
                 
             } catch {
             }
-            
+//        } else {
+//            do {
+//                try startRecording()
+//
+//            } catch {
+//            }
         }
     }
     
@@ -539,9 +554,12 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                     //let dist = self.converPointToDistance(points: rez)
                     // self.label.text = "\(dist)"+"см."
                     self.distance = Float(self.converPointToDistance(points: rez))
-                    print(self.distance)
-                    if self.distance<20{
-                        self.animatedPhone()
+                    //print(self.distance)
+                    if rez > 140 && self.startBool == false{
+                        print(self.startBool)
+                        self.animatedPhoneNear()
+                    }else if rez < 50 && self.startBool == false{
+                        self.animatedPhoneFar()
                     }
                 }
             })
@@ -696,7 +714,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         }
     }
     
-    @objc func animatedPhone(){
+    @objc func animatedPhoneFar(){
         self.addPhoneImageView()
         UIImageView.animate(withDuration: 1, animations: {
             
@@ -704,7 +722,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         }) { (_) in
             
             UIImageView.animate(withDuration: 1, animations: {
-                
+
                 self.phoneImageView.transform = CGAffineTransform.init(scaleX: 0.5, y: 0.5)
             }) { (_) in
                 self.phoneImageView.removeFromSuperview()
@@ -712,6 +730,80 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         }
     }
     
+    @objc func animatedPhoneNear(){
+        startBool = true
+        //print(1111111)
+        self.addPhoneImageView()
+        UIImageView.animate(withDuration: 3, animations: {
+            
+            self.phoneImageView.transform = CGAffineTransform.init(scaleX: 0.5, y: 0.5)
+        }) { (_) in
+            
+//            UIImageView.animate(withDuration: 1, animations: {
+//
+//                self.phoneImageView.transform = CGAffineTransform.init(scaleX: 2, y: 2)
+//            }) { (_) in
+                self.phoneImageView.removeFromSuperview()
+            self.startBool = false
+           // }
+        }
+    }
+    
+    func compareString(str1: String, str2: String) -> Bool {
+        var boolCompare = false
+        let second1 = Array(str1)
+        let second2 = Array(str2)
+        
+        
+        for i in 0...second2.count-1{
+            if (second2[i]==second1[0]) && ((second2.count-i) >= (second1.count)){
+                for j in 0...second1.count-1{
+                    if second2[i+j] == second1[j]{
+                        boolCompare = true
+                    }else{
+                        boolCompare = false
+                    }
+                }
+            }
+        }
+        return boolCompare
+    }
+    
+    @objc func timerAction() {
+        
+        if timerCounter == 0 || timerCounter%10 == 0{
+            inputText = String(Int.random(in: 100...999))
+            print(inputText)
+            
+            wordLabel.text = inputText
+            if audioEngine.isRunning {
+            audioEngine.stop()
+            recognitionRequest?.endAudio()
+            audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+            }else{
+                do {
+                    try startRecording()
+                } catch {
+                    print(0000000)
+                }
+            }
+            
+            
+        }else if ((timerCounter - 1)%10 == 0) && (timerCounter != 1) {
+            if audioEngine.isRunning {
+            audioEngine.stop()
+            recognitionRequest?.endAudio()
+            audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+            }else{
+                do {
+                    try startRecording()
+                } catch {
+                    print(0000000)
+                }
+            }
+        }
+        timerCounter += 1
+    }
     
 }
 

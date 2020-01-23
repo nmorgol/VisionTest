@@ -12,7 +12,7 @@ class UsersArrayTableViewController: UITableViewController {
     var usersArray = [User]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let cellID = "UsersArrayCell"
-    
+    var userPhotoArray = [UIImage]()
     
     
     override func viewDidLoad() {
@@ -24,7 +24,12 @@ class UsersArrayTableViewController: UITableViewController {
         } catch let error as NSError {
             print(error)
         }
-        print(usersArray.count)
+//        print(usersArray.count)
+        for i in 0...usersArray.count-1{//чтобы не тупила при прокрутке
+            let imgPng = UIImage(named: "placeholder")?.pngData()
+            let image = UIImage(data: usersArray[i].photo ?? imgPng!)
+            userPhotoArray.append(image ?? UIImage(named: "placeholder")!)
+        }
         self.tableView.register(UserArrayTableViewCell.self, forCellReuseIdentifier: cellID)
     }
     
@@ -53,9 +58,10 @@ class UsersArrayTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! UserArrayTableViewCell
 //        cell.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/5).isActive = true
-        let dataPh = UIImage(named: "placeholder")?.pngData()
+//        let dataPh = UIImage(named: "placeholder")?.pngData()
 //        cell.userPhotoImageView.image = UIImage(data: usersArray[indexPath.row].photo ?? dataPh!)
-        cell.userPhotoImageView.image = UIImage(data: usersArray[indexPath.row].photo ?? dataPh!, scale: 0.000001 )
+//        cell.userPhotoImageView.image = UIImage(data: usersArray[indexPath.row].photo ?? dataPh!, scale: 0.000001 )
+        cell.userPhotoImageView.image = userPhotoArray[indexPath.row]
         cell.userNameLabel.text = usersArray[indexPath.row].name
         return cell
     }
