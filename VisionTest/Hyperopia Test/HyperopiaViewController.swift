@@ -111,7 +111,7 @@ class HyperopiaViewController: UIViewController {
             
             let vc = HyperopiaSpeechViewController()
             //vc.inputText = textForRec
-            vc.fontSize = fontSize
+            //vc.fontSize = fontSize
             self.navigationController?.pushViewController(vc, animated: false)
             vc.comletion = {text in
                 self.currentText = text

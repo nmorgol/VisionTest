@@ -13,11 +13,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
         self.window = UIWindow(frame: UIScreen.main.bounds)
         
-        let miopiaVC = MiopiaViewController()
-        let hyperopiaVC = HyperopiaViewController()
+        //let miopiaVC = MiopiaViewController()
+        let hyperopiaVC = StartHyperopiaViewController()
         let settingsVC = SettingsTableViewController()
         
-        let miopiaNavVC = UINavigationController(rootViewController: miopiaVC)
+        let miopiaStartVC = StartMiopiaViewController()
+//        let miopiaNavVC = UINavigationController(rootViewController: miopiaVC)
+        let miopiaNavVC = UINavigationController(rootViewController: miopiaStartVC)
         let hyperopiaNavVC = UINavigationController(rootViewController: hyperopiaVC)
         let settingsNavVC = UINavigationController(rootViewController: settingsVC)
         

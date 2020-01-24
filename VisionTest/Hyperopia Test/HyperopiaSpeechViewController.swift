@@ -47,7 +47,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     var wordLabel = UILabel()
     var reciveTextLabel = UILabel()
     var authorizedLabel = UILabel()
-    var fontSize = Float()
+    var fontSize = 17
     
     var inputText = String()
     
@@ -72,19 +72,32 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         self.navigationItem.title = "Hyperopia test speech"
         self.view.backgroundColor = .white
         
+        //        self.session = self.setupAVCaptureSession()
+        //
+        //        self.prepareVisionRequest()
+        //
+        //        self.session?.startRunning()
+        //inputText = String(Int.random(in: 100...999))
+        
+        //        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super .viewWillAppear(false)
+        
         self.session = self.setupAVCaptureSession()
         
         self.prepareVisionRequest()
         
         self.session?.startRunning()
-        inputText = String(Int.random(in: 100...999))
         
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+        
     }
+    
     
     override func viewWillLayoutSubviews() {
         super .viewWillLayoutSubviews()
-
+        
         addWordLabel()
         addReciveTextLabel()
         addAuthorizedLabel()
@@ -123,12 +136,14 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                 }
             }
         }
-        //recordButtonTapped()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super .viewWillDisappear(true)
         self.navigationController?.popViewController(animated: true)
+        timer.invalidate()
+        self.session?.stopRunning()
     }
     
     // MARK: Speech
@@ -160,7 +175,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
             var isFinal = false
             
-
+            
             if let result = result {
                 // Update the text view with the results.
                 //                self.textView.text = result.bestTranscription.formattedString
@@ -170,14 +185,14 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                 
                 self.currentText = result.bestTranscription.formattedString
                 //                    print(self.currentText + "-" + self.wordLabel.text!)
-//                if Array(self.currentText).count >= Array(self.inputText).count{
-//                    if self.compareString(str1: self.currentText, str2: self.inputText) == true{
-//
-//                        self.inputText = String(Int.random(in: 100...999))
-//
-//                    }
-//                    //self.stopRecognition()
-//                }
+                //                if Array(self.currentText).count >= Array(self.inputText).count{
+                //                    if self.compareString(str1: self.currentText, str2: self.inputText) == true{
+                //
+                //                        self.inputText = String(Int.random(in: 100...999))
+                //
+                //                    }
+                //                    //self.stopRecognition()
+                //                }
             }
             
             if error != nil || isFinal {
@@ -224,12 +239,12 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                 
             } catch {
             }
-//        } else {
-//            do {
-//                try startRecording()
-//
-//            } catch {
-//            }
+            //        } else {
+            //            do {
+            //                try startRecording()
+            //
+            //            } catch {
+            //            }
         }
     }
     
@@ -541,7 +556,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                 }
                 
                 
-                // Perform all UI updates (drawing) on the main queue, not the background queue on which this handler is being called.
+                // MARK: Perform all UI updates (drawing) on the main queue, not the background queue on which this handler is being called.
                 DispatchQueue.main.async {
                     //                    self.drawFaceObservations(results)
                     let deviceCoef = UIDevice.deviceСoefficient
@@ -554,7 +569,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                     //let dist = self.converPointToDistance(points: rez)
                     // self.label.text = "\(dist)"+"см."
                     self.distance = Float(self.converPointToDistance(points: rez))
-                    //print(self.distance)
+                    //                    print(self.distance)
                     if rez > 140 && self.startBool == false{
                         print(self.startBool)
                         self.animatedPhoneNear()
@@ -722,7 +737,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         }) { (_) in
             
             UIImageView.animate(withDuration: 1, animations: {
-
+                
                 self.phoneImageView.transform = CGAffineTransform.init(scaleX: 0.5, y: 0.5)
             }) { (_) in
                 self.phoneImageView.removeFromSuperview()
@@ -732,20 +747,20 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     
     @objc func animatedPhoneNear(){
         startBool = true
-        //print(1111111)
+        print(startBool)
         self.addPhoneImageView()
         UIImageView.animate(withDuration: 3, animations: {
             
-            self.phoneImageView.transform = CGAffineTransform.init(scaleX: 0.5, y: 0.5)
+            self.phoneImageView.transform = CGAffineTransform.init(scaleX: -0.5, y: -0.5)
         }) { (_) in
             
-//            UIImageView.animate(withDuration: 1, animations: {
-//
-//                self.phoneImageView.transform = CGAffineTransform.init(scaleX: 2, y: 2)
-//            }) { (_) in
-                self.phoneImageView.removeFromSuperview()
+            //            UIImageView.animate(withDuration: 1, animations: {
+            //
+            //                self.phoneImageView.transform = CGAffineTransform.init(scaleX: 2, y: 2)
+            //            }) { (_) in
+            self.phoneImageView.removeFromSuperview()
             self.startBool = false
-           // }
+            // }
         }
     }
     
@@ -754,14 +769,17 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         let second1 = Array(str1)
         let second2 = Array(str2)
         
-        
-        for i in 0...second2.count-1{
-            if (second2[i]==second1[0]) && ((second2.count-i) >= (second1.count)){
-                for j in 0...second1.count-1{
-                    if second2[i+j] == second1[j]{
-                        boolCompare = true
-                    }else{
-                        boolCompare = false
+        if second2.count == 0 {//пришел как-то 0 и краш
+            boolCompare = false
+        }else{
+            for i in 0...second2.count-1{
+                if (second2[i]==second1[0]) && ((second2.count-i) >= (second1.count)){
+                    for j in 0...second1.count-1{
+                        if second2[i+j] == second1[j]{
+                            boolCompare = true
+                        }else{
+                            boolCompare = false
+                        }
                     }
                 }
             }
@@ -776,31 +794,41 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
             print(inputText)
             
             wordLabel.text = inputText
+            
             if audioEngine.isRunning {
-            audioEngine.stop()
-            recognitionRequest?.endAudio()
-            audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+                audioEngine.stop()
+                recognitionRequest?.endAudio()
+                audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
             }else{
                 do {
                     try startRecording()
                 } catch {
-                    print(0000000)
+                    
                 }
             }
             
+        }else if ((timerCounter + 1)%10 == 0)  {
             
-        }else if ((timerCounter - 1)%10 == 0) && (timerCounter != 1) {
             if audioEngine.isRunning {
-            audioEngine.stop()
-            recognitionRequest?.endAudio()
-            audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+                audioEngine.stop()
+                recognitionRequest?.endAudio()
+                audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
             }else{
                 do {
                     try startRecording()
                 } catch {
-                    print(0000000)
+                    
                 }
             }
+            if reciveTextLabel.text != nil{
+                if compareString(str1: inputText, str2: reciveTextLabel.text!) == true{
+                    fontSize -= 1
+                    print("огонь")
+                }
+            }
+            recognitionTask?.cancel()
+            self.recognitionTask = nil
+            reciveTextLabel.text = ""
         }
         timerCounter += 1
     }

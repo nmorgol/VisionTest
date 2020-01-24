@@ -123,9 +123,9 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     @objc func savePhotoAction(){
 //        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let lowImage = resultImageView.image?.jpeg(.lowest)
-        print(lowImage?.count)
-        let photoPNG = resultImageView.image?.pngData()
-        print(photoPNG?.count)
+//        print(lowImage?.count)
+//        let photoPNG = resultImageView.image?.pngData()
+//        print(photoPNG?.count)
         let data:Data = lowImage ?? (UIImage(named: "placeholder")?.pngData())!
 //        do {
 //            let result = try context.fetch(User.fetchRequest())
