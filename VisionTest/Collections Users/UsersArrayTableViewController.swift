@@ -25,11 +25,14 @@ class UsersArrayTableViewController: UITableViewController {
             print(error)
         }
 //        print(usersArray.count)
-        for i in 0...usersArray.count-1{//чтобы не тупила при прокрутке
-            let imgPng = UIImage(named: "placeholder")?.pngData()
-            let image = UIImage(data: usersArray[i].photo ?? imgPng!)
-            userPhotoArray.append(image ?? UIImage(named: "placeholder")!)
+        if usersArray.count > 0{
+            for i in 0...usersArray.count-1{//чтобы не тупила при прокрутке
+                let imgPng = UIImage(named: "placeholder")?.pngData()
+                let image = UIImage(data: usersArray[i].photo ?? imgPng!)
+                userPhotoArray.append(image ?? UIImage(named: "placeholder")!)
+            }
         }
+        
         self.tableView.register(UserArrayTableViewCell.self, forCellReuseIdentifier: cellID)
     }
     

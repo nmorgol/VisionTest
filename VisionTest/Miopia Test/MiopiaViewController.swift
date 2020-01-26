@@ -4,7 +4,7 @@ import UIKit
 import CoreData
 
 class MiopiaViewController: UIViewController {
-    
+    let startLabel = UILabel()
     let helpSymbolView = UIView()//для символа
     let helpWorkView = UIView()//для кнопок
     let deviceNameLabel = UILabel()
@@ -42,6 +42,7 @@ class MiopiaViewController: UIViewController {
     
     var currentEye = ""
     
+    var disapearTrue = true//подпорка для того чтобы не отрабатывал метод self.navigationController?.popViewController(animated: false)
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -54,15 +55,19 @@ class MiopiaViewController: UIViewController {
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
         
-        viewArray = [rightLandoltView, leftLandoltView, topLandoltView, bottomLandoltView]
         
-        koef = ((UIDevice.modelWidth)/70)*5/0.5 //(70) - 70мм для (5) - расстояние 5м , а 0.5 - расстояние теста == 0.5м итого размер символа должен быть 7мм
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(false)
-        // MARK: - CoreData
         
+        disapearTrue = true // для того чтобы можно было зайти в результ VC
+        
+        viewArray = [rightLandoltView, leftLandoltView, topLandoltView, bottomLandoltView]
+        
+        koef = ((UIDevice.modelWidth)/70)*5/0.5 //(70) - 70мм для (5) - расстояние 5м , а 0.5 - расстояние теста == 0.5м итого размер символа должен быть 7мм
+        // MARK: - CoreData
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         do {
             let resultSettings = try context.fetch(SettingsApp.fetchRequest())
             
@@ -73,7 +78,10 @@ class MiopiaViewController: UIViewController {
                 }else if (resultSettings.last as! SettingsApp).symbolTest == "Landolt"{
                     viewArray = [rightLandoltView, leftLandoltView, topLandoltView, bottomLandoltView]
                 }
-                
+//                if (resultSettings.last as! SettingsApp).avtoDetectDistance == true {
+//                    let vc = MiopiaAvtoDistanceViewController()
+//                    self.navigationController?.pushViewController(vc, animated: false)
+//                }
                 koef = ((UIDevice.modelWidth)/70)*5/(resultSettings.last as! SettingsApp).distanceTest //70 - ширина символа в мм на расст 5м, 5  - это и есть 5 метров
             }
             else{
@@ -95,23 +103,64 @@ class MiopiaViewController: UIViewController {
         addDeviceNameLabel()
         addDistanceLabel()
         addLandoltSnellenView(addingView: currentView, koef: koef)
+        addStartLabel()
         
-        startAlert()
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super .viewDidAppear(false)
+//        startAlert()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super .viewWillDisappear(true)
+        
         currentView.removeFromSuperview()
         //        koef = (UIDevice.modelWidth)/50
         counter = Float(1)//сбросили счетчик - при следующ загрузке вью размер символа будет начальным
+        if disapearTrue{
+            self.navigationController?.popViewController(animated: false)
+        }
+        
     }
-    //метод self.navigationItem.leftBarButtonItem
-    @objc func actionResults() {
+    
+    @objc func actionResults() {//метод self.navigationItem.leftBarButtonItem
+        
+        disapearTrue = false
         let resultVC = ResultsTableViewController()
         resultVC.title = "Miopia test results"
         resultVC.state = "Miopia"
         self.navigationController?.pushViewController(resultVC, animated: true)
+    }
+    
+    func addStartLabel(){
+        self.view.addSubview(startLabel)
+        startLabel.translatesAutoresizingMaskIntoConstraints = false
+        startLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        startLabel.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        //startLabel.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
+        startLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        
+        startLabel.text = "Коснитесь экрана для начала теста"
+        startLabel.textAlignment = .center
+        startLabel.numberOfLines = 0
+        startLabel.textColor = .systemBlue
+        startLabel.font = .systemFont(ofSize: 30)
+        startLabel.backgroundColor = .white
+        startLabel.alpha = 0.8
+        startLabel.isUserInteractionEnabled = true
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(tapGestureRecognizer:)))
+        startLabel.addGestureRecognizer(tap)
+        
+        topButton.isEnabled = false
+        bottomButton.isEnabled = false
+        leftButton.isEnabled = false
+        rightButton.isEnabled = false
+        centralButton.isEnabled = false
+        
+        
     }
     
     func addHelpSymbolView() {
@@ -236,6 +285,17 @@ class MiopiaViewController: UIViewController {
         wrongCounter = 1//для срабатывания метода wrongAnswer()
         superWrong = 1//для срабатывания метода wrongAnswer()
         wrongAnswer()
+    }
+    
+    @objc func tapAction(tapGestureRecognizer: UITapGestureRecognizer){
+        startLabel.removeFromSuperview()
+        topButton.isEnabled = true
+        bottomButton.isEnabled = true
+        leftButton.isEnabled = true
+        rightButton.isEnabled = true
+        centralButton.isEnabled = true
+        
+        startAlert()
     }
     
     func saveResult(){

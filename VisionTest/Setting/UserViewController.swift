@@ -23,6 +23,9 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        userTextView.delegate = self
+        userTextField.delegate = self
+        
         self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonAction)), UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(organizeButtonAction))]
         
         do {
@@ -215,4 +218,30 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     }
     
     
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        
+        if userTextView.isFirstResponder{
+            userTextField.frame.origin.y -= 200
+            userTextView.frame.origin.y -= 200
+            
+            photoButton.frame.origin.y -= 500
+        }
+        
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if userTextView.isFirstResponder{
+            userTextField.frame.origin.y += 200
+            userTextView.frame.origin.y += 200
+            photoButton.frame.origin.y += 500
+            userTextView.resignFirstResponder()
+            
+        }
+        
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        userTextField.resignFirstResponder()
+        return true
+    }
 }

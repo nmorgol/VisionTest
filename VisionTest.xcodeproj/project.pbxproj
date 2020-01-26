@@ -14,6 +14,7 @@
 		EB2D59C623AF9EE100D42A7D /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D59C523AF9EE100D42A7D /* SettingsTableViewCell.swift */; };
 		EB2D59C823AFA6F600D42A7D /* SymbolTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D59C723AFA6F600D42A7D /* SymbolTableViewCell.swift */; };
 		EB2D59CA23B08C1900D42A7D /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D59C923B08C1900D42A7D /* UserViewController.swift */; };
+		EB3193DD23DC359800D97FB0 /* MiopiaAvtoDistanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3193DC23DC359800D97FB0 /* MiopiaAvtoDistanceViewController.swift */; };
 		EB359751239634ED001C2240 /* LandoltRightUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB359750239634ED001C2240 /* LandoltRightUIView.swift */; };
 		EB38F4452393A93000D30348 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB38F4442393A93000D30348 /* AppDelegate.swift */; };
 		EB38F44A2393A93000D30348 /* VisionTest.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EB38F4482393A93000D30348 /* VisionTest.xcdatamodeld */; };
@@ -71,6 +72,7 @@
 		EB2D59C523AF9EE100D42A7D /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		EB2D59C723AFA6F600D42A7D /* SymbolTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolTableViewCell.swift; sourceTree = "<group>"; };
 		EB2D59C923B08C1900D42A7D /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
+		EB3193DC23DC359800D97FB0 /* MiopiaAvtoDistanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiopiaAvtoDistanceViewController.swift; sourceTree = "<group>"; };
 		EB359750239634ED001C2240 /* LandoltRightUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandoltRightUIView.swift; sourceTree = "<group>"; };
 		EB38F4412393A93000D30348 /* VisionTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisionTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB38F4442393A93000D30348 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 			children = (
 				EBE5DF9C23DAF6FF005801DF /* StartMiopiaViewController.swift */,
 				EB38F4772393EA3700D30348 /* MiopiaViewController.swift */,
+				EB3193DC23DC359800D97FB0 /* MiopiaAvtoDistanceViewController.swift */,
 			);
 			path = "Miopia Test";
 			sourceTree = "<group>";
@@ -473,6 +476,7 @@
 				EB492090239A419E0062D974 /* SnellenTopView.swift in Sources */,
 				EB551CC623D1C14F0020A46D /* CurrentUserTableViewCell.swift in Sources */,
 				EB38F4782393EA3700D30348 /* MiopiaViewController.swift in Sources */,
+				EB3193DD23DC359800D97FB0 /* MiopiaAvtoDistanceViewController.swift in Sources */,
 				EB4FB53623A506D0002C0735 /* CameraViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

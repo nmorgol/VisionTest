@@ -16,11 +16,14 @@ class HyperopiaViewController: UIViewController {
     
     let textForRec = "Взлететь вверх"
     
+    
+    var disapearTrue = true //подпорка для того чтобы не отрабатывал метод self.navigationController?.popViewController(animated:false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Hyperopia test"
-        self.navigationItem.title = "Hyperopia test"
+//        self.title = "Hyperopia test"
+//        self.navigationItem.title = "Hyperopia test"
         self.view.backgroundColor = .white
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
@@ -31,6 +34,7 @@ class HyperopiaViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(false)
+        disapearTrue = true
         
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
@@ -45,24 +49,23 @@ class HyperopiaViewController: UIViewController {
         }
         
         
-        
-        if speechBool == true && currentText != ""{
-            if compareString(str1: currentText, str2: textForRec) == true{
-                fontSize -= 3
-            } else {fontSize += 3}
-            ifSpeechBoolIsTrue(speechB: speechBool)
-        }
-        ifSpeechBoolIsTrue(speechB: speechBool)
     }
     
     override func viewWillLayoutSubviews() {
         super .viewWillLayoutSubviews()
         addWordLabel()
     }
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        super .viewWillDisappear(true)
+        if disapearTrue {
+                self.navigationController?.popViewController(animated: false)
+        }
+        
+    }
     
     
     @objc func actionResults() {
+        disapearTrue = false
         let resultVC = ResultsTableViewController()
         resultVC.title = "Hyperopia test results"
         resultVC.state = "Hyperopia"
@@ -83,27 +86,10 @@ class HyperopiaViewController: UIViewController {
         wordLabel.textAlignment = .center
         wordLabel.font = .boldSystemFont(ofSize: CGFloat(fontSize))
         
-        //        wordLabel.addObserver(self, forKeyPath: "text", options: [.old, .new], context: nil)
+        
     }
     
-    func compareString(str1: String, str2: String) -> Bool {
-        var boolCompare = false
-        let second1 = Array(str1)
-        let second2 = Array(str2)
-        for i in 0...second2.count-1{
-            if (second2[i]==second1[0]) && ((second2.count-i) >= (second1.count)){
-                for j in 0...second1.count-1{
-                    if second2[i+j] == second1[j]{
-                        boolCompare = true
-                    }else{
-                        boolCompare = false
-                    }
-                }
-            }
-        }
-        return boolCompare
-    }
-    
+
     
     
     func ifSpeechBoolIsTrue(speechB: Bool) {
@@ -117,6 +103,9 @@ class HyperopiaViewController: UIViewController {
                 self.currentText = text
                 print(self.currentText)
             }
+        }else{
+            let vc = HyperopiaViewController()
+            self.navigationController?.pushViewController(vc, animated: false)
         }
     }
 }
