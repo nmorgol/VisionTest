@@ -4,7 +4,7 @@ import UIKit
 
 class StartMiopiaViewController: UIViewController {
 
-    var distanceBool = false
+    var speechBool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,12 +24,12 @@ class StartMiopiaViewController: UIViewController {
             let resultSettings = try context.fetch(SettingsApp.fetchRequest())
             
             if resultSettings.count > 0 {
-                distanceBool = (resultSettings.last as! SettingsApp).avtoDetectDistance
+                speechBool = (resultSettings.last as! SettingsApp).speechRecognize
             }
         } catch let error as NSError {
             print(error)
         }
-        ifDistanceBoolIsTrue(distanceB: distanceBool)
+        ifDistanceBoolIsTrue(distanceB: speechBool)
         
         
     }

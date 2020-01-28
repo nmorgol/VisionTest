@@ -52,7 +52,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     
     var inputText = String()
     
-    var comletion: ((String)->())?
+    var comletion: ((String)->())?//вроде как можно удалить уже
     
     let microphoneView = MicrophoneView()
     let circleView = CircleView()
@@ -75,22 +75,13 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         self.navigationItem.title = "Hyperopia test speech"
         self.view.backgroundColor = .white
         
-        //        self.session = self.setupAVCaptureSession()
-        //
-        //        self.prepareVisionRequest()
-        //
-        //        self.session?.startRunning()
-        //inputText = String(Int.random(in: 100...999))
         
-        //        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
     }
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(false)
         
         disapearTrue = true
         
-//        self.navigationController?.navigationBar.isHidden = true
-        //print("левая кнопка \( self.navigationItem.leftBarButtonItem?.action)")
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
         
         self.session = self.setupAVCaptureSession()
@@ -111,8 +102,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         addReciveTextLabel()
         addAuthorizedLabel()
         addMicrophonesView()
-        //addPhoneImageView()
-        //print(fontSize)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -844,11 +834,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         self.session?.stopRunning()
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.pushViewController(resultVC, animated: true)
-        //self.present(resultVC, animated: false, completion: nil)
-//        self.present(resultVC, animated: false) {
-//            self.timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.timerAction), userInfo: nil, repeats: true)
-//
-//        }
+       
     }
     
 }

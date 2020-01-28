@@ -137,8 +137,9 @@ class ResultsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete{
+            print(state)
+            
             if state == "Miopia"{
-                
                 
                 for i in 0...resultsMiopiaArray!.count-1{//надо будет что-то с "!" делать потом
                     
@@ -157,10 +158,9 @@ class ResultsTableViewController: UITableViewController {
                                         //resultsMiopiaArray?.remove(at: i)
                                     }else if state == "Hyperopia"{
                                         resultsHyperopiaArray = (currentUser?.relationship1?.allObjects as! [HyperopiaTestResult])
-                                        
                                     }
-                                    
                                 }
+                                
                             }else{
                                 currentUser = (resultUser[changedUser] as! User)
                                 
@@ -183,13 +183,18 @@ class ResultsTableViewController: UITableViewController {
                         }
                     }
                 }
+                print(sortedMiopiaArray!.count)
+                sortedMiopiaArray!.remove(at: indexPath.row)
+                print(sortedMiopiaArray!.count)
+                tableView.deleteRows(at: [indexPath], with: .left)
+                recieveTestsResults()
             }
         }
-        print(sortedMiopiaArray!.count)
-        sortedMiopiaArray!.remove(at: indexPath.row)
-        print(sortedMiopiaArray!.count)
-        tableView.deleteRows(at: [indexPath], with: .left)
-        recieveTestsResults()
+//        print(sortedMiopiaArray!.count)
+//        sortedMiopiaArray!.remove(at: indexPath.row)
+//        print(sortedMiopiaArray!.count)
+//        tableView.deleteRows(at: [indexPath], with: .left)
+//        recieveTestsResults()
     }
     
     
