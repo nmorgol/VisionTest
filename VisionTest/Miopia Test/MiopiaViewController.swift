@@ -310,7 +310,11 @@ class MiopiaViewController: UIViewController {
                 result.distance = distance
                 result.result = (counter-1)/10
                 result.dateTest = Date()
-                result.testingEye = currentEye
+                if currentEye == "Left eye"{
+                    result.testingEye = "Right eye"
+                }else if currentEye == "Right eye"{
+                    result.testingEye = "Left eye"
+                }
                 
                 curUser.addToRelationship(result)
                 
@@ -372,14 +376,14 @@ class MiopiaViewController: UIViewController {
     }
     
     func startAlert(){
-        if currentEye == "rightEye"{
-            currentEye = "leftEye"
+        if currentEye == "Right eye"{
+            currentEye = "Left eye"
             
-        }else if currentEye == "leftEye"{
-            currentEye = "rightEye"
+        }else if currentEye == "Left eye"{
+            currentEye = "Right eye"
             
         }else{
-            currentEye = "leftEye"
+            currentEye = "Left eye"
         }
         createStartAlert()
     }

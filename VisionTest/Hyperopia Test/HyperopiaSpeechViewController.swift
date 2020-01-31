@@ -17,6 +17,8 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     private let audioEngine = AVAudioEngine()
     
     
+    
+    
     // AVCapture variables to hold sequence data
     var session: AVCaptureSession?
     var previewLayer: AVCaptureVideoPreviewLayer?
@@ -144,8 +146,17 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                 self.navigationController?.popViewController(animated: false)
         }
         timer.invalidate()
+        
         self.session?.stopRunning()
+        
         self.navigationController?.navigationBar.isHidden = false
+        
+        disableAVSession()
+        
+        self.audioEngine.stop()
+        let inputNode = audioEngine.inputNode
+        inputNode.removeTap(onBus: 0)
+
     }
     
     // MARK: Speech
@@ -157,7 +168,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         
         // Configure the audio session for the app.
         let audioSession = AVAudioSession.sharedInstance()
-        try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+        try audioSession.setCategory(.playAndRecord, mode: .voiceChat, options: .allowBluetooth)
         try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         let inputNode = audioEngine.inputNode
         
@@ -753,23 +764,44 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     
     func compareString(str1: String, str2: String) -> Bool {
         var boolCompare = false
-        let second1 = Array(str1)
+        //let second1 = Array(str1)
         let second2 = Array(str2)
         
         if second2.count == 0 {//пришел как-то 0 и краш
             boolCompare = false
         }else{
-            for i in 0...second2.count-1{
-                if (second2[i]==second1[0]) && ((second2.count-i) >= (second1.count)){
-                    for j in 0...second1.count-1{
-                        if second2[i+j] == second1[j]{
-                            boolCompare = true
-                        }else{
-                            boolCompare = false
+            if str2.contains(str1){
+                boolCompare = true
+            }else if (str2.lowercased()).contains("стоп"){
+                timer.invalidate()
+                let allert = UIAlertController(title: "Внимание", message: "тест окончен по слову СТОП", preferredStyle: .alert)
+                self.present(allert, animated: false, completion: nil)
+                DispatchQueue.global(qos: .userInteractive).async {
+                    [unowned self] in
+                    if self.audioEngine.isRunning {
+                        self.audioEngine.stop()
+                        self.recognitionRequest?.endAudio()
+                        self.audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+                    }else{
+                        do {
+                            try self.startRecording()
+                        } catch {
+                            
                         }
                     }
                 }
             }
+//            for i in 0...second2.count-1{
+//                if (second2[i]==second1[0]) && ((second2.count-i) >= (second1.count)){
+//                    for j in 0...second1.count-1{
+//                        if second2[i+j] == second1[j]{
+//                            boolCompare = true
+//                        }else{
+//                            boolCompare = false
+//                        }
+//                    }
+//                }
+//            }
         }
         return boolCompare
     }
@@ -781,8 +813,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
             print(inputText)
             
             wordLabel.text = inputText
-            //wordLabel.font = .boldSystemFont(ofSize: (CGFloat(fontSize/(timerCounter+1))))
-            //print(wordLabel.font)
+            
             if audioEngine.isRunning {
                 audioEngine.stop()
                 recognitionRequest?.endAudio()
@@ -796,18 +827,31 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
             }
             
         }else if ((timerCounter + 1)%10 == 0)  {
-            
-            if audioEngine.isRunning {
-                audioEngine.stop()
-                recognitionRequest?.endAudio()
-                audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
-            }else{
-                do {
-                    try startRecording()
-                } catch {
-                    
+            DispatchQueue.global(qos: .userInteractive).async {
+                [unowned self] in
+                if self.audioEngine.isRunning {
+                    self.audioEngine.stop()
+                    self.recognitionRequest?.endAudio()
+                    self.audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+                }else{
+                    do {
+                        try self.startRecording()
+                    } catch {
+                        
+                    }
                 }
             }
+//            if audioEngine.isRunning {
+//                audioEngine.stop()
+//                recognitionRequest?.endAudio()
+//                audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+//            }else{
+//                do {
+//                    try startRecording()
+//                } catch {
+//
+//                }
+//            }
             if reciveTextLabel.text != nil{
                 if compareString(str1: inputText, str2: reciveTextLabel.text!) == true{
                     
@@ -816,10 +860,15 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                     print("огонь")
                 }
             }
-            recognitionTask?.cancel()
-            self.recognitionTask = nil
+            DispatchQueue.global(qos: .userInteractive).async {
+                [unowned self] in
+                self.recognitionTask?.cancel()
+                self.recognitionTask = nil
+            }
+//            recognitionTask?.cancel()
+//            recognitionTask = nil
             reciveTextLabel.text = ""
-            //reciveTextLabel.font = .boldSystemFont(ofSize: 17)
+            
             inputText = ""
         }
         timerCounter += 1
@@ -837,5 +886,12 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
        
     }
     
+    private func disableAVSession() {
+        do {
+            try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+        } catch {
+            print("audioSession properties weren't disable.")
+        }
+    }
 }
 

@@ -3,10 +3,11 @@
 import UIKit
 import Speech
 import AVKit
+import AVFoundation
 import Vision
 
 class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, AVSpeechSynthesizerDelegate {
-
+    
     private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "ru_Ru"))!
     
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
@@ -44,7 +45,7 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
     var disapearTrue = true //подпорка для того чтобы не отрабатывал метод self.navigationController?.popViewController(animated:false)
     var distanceBool = false
     
-    let startLabel = UILabel()
+    let startView = UIView()
     let helpSymbolView = UIView()//для символа
     let helpWorkView = UIView()//для кнопок
     
@@ -60,18 +61,21 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
     let topLandoltView = LandoltTopUIView()
     let bottomLandoltView = LandoltBottomUIView()
     
-    let topButton = UIButton()
-    let bottomButton = UIButton()
-    let rightButton = UIButton()
-    let leftButton = UIButton()
-    let centralButton = UIButton()
+    //    let topButton = UIButton()
+    //    let bottomButton = UIButton()
+    //    let rightButton = UIButton()
+    //    let leftButton = UIButton()
+    //    let centralButton = UIButton()
+    
+    let progress = UIProgressView()
     
     var viewArray = [UIView]()
     var workViewArray = [UIView]()
     var currentView = UIView()
     
     var koef = Float()//коэфициент рассчета размера символа
-    var counter = Float(1)//счетчик нажатий
+    var counterTestTimer = Float(0)//счетчик таймера основной
+    var counterTestCicle = Float(1)//счетчик циклов теста - для +- koef
     
     var wrongCounter = Float(0)//считаем неправильные результаты
     var superWrong = Float(0)//счетчик неправильных нажатий итогового принятия решения
@@ -79,19 +83,25 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
     
     var currentEye = ""
     
+    var recieveText = ""//текст из яблок
+    var testingText = [String]()//текст c которым сравнивать recieveText = ""//текст из яблок
     
     var synthesizer = AVSpeechSynthesizer()
     
-    var timer: Timer!
+    var timer = Timer()
     var startTimerCounter = 5//время до старта
     
     // MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         synthesizer.delegate = self
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
+//        let settingsImage = UIImage(named: "Results")
+        
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settingsIcon"), style: .plain, target: self, action: #selector(actionResults))
         
     }
     // MARK: viewWillAppear
@@ -105,7 +115,8 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         
         addHelpSymbolView()
         addHelpWorkView()
-
+        addProgressView()
+        
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
         do {
@@ -138,14 +149,14 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         
         workViewArray = viewArray
         currentView = workViewArray.randomElement()!
-        addLandoltSnellenView(addingView: currentView, koef: koef)
+        //addLandoltSnellenView(addingView: currentView, koef: koef)
         
         if distanceBool{
             self.session = self.setupAVCaptureSession()
             self.prepareVisionRequest()
             self.session?.startRunning()
         }
-        addButton()
+        //addButton()
         
         addStartLabel()
         //addDistLabel()//потом убрать
@@ -153,6 +164,8 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
     // MARK: viewDidAppear
     override func viewDidAppear(_ animated: Bool) {
         super .viewDidAppear(false)
+        
+        
         
         //animatedMicrophone()
         speechRecognizer.delegate = self
@@ -178,7 +191,7 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
                     
                 default:
                     print("denied")
-                   
+                    
                 }
             }
         }
@@ -188,11 +201,28 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
     // MARK: viewWillDisappear
     override func viewWillDisappear(_ animated: Bool) {
         super .viewWillDisappear(false)
-         //self.navigationController?.navigationBar.isHidden = false
+        //self.navigationController?.navigationBar.isHidden = false
         if disapearTrue {
             self.navigationController?.popViewController(animated: false)
         }
         self.session?.stopRunning()
+        
+        disableAVSession()
+        if timer.isValid{
+            timer.invalidate()
+        }
+        if audioEngine.isRunning {
+            audioEngine.stop()
+            recognitionRequest?.endAudio()
+            audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+            
+        }
+        
+        recognitionTask?.cancel()
+        self.recognitionTask = nil
+        recieveText = ""
+        testingText = []
+        
     }
     
     @objc func actionResults() {//метод self.navigationItem.leftBarButtonItem
@@ -212,7 +242,7 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         
         // Configure the audio session for the app.
         let audioSession = AVAudioSession.sharedInstance()
-        try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+        try audioSession.setCategory(.playAndRecord, mode: .voiceChat, options: .allowBluetooth)
         try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         let inputNode = audioEngine.inputNode
         
@@ -237,7 +267,7 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
                 // Update the text view with the results.
                 //                self.textView.text = result.bestTranscription.formattedString
                 //self.reciveTextLabel.text = result.bestTranscription.formattedString
-                
+                self.recieveText = result.bestTranscription.formattedString
                 isFinal = result.isFinal
                 
                 //self.currentText = result.bestTranscription.formattedString
@@ -246,7 +276,9 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
             
             if error != nil || isFinal {
                 // Stop recognizing speech if there is a problem.
+                
                 self.audioEngine.stop()
+                inputNode.reset()
                 inputNode.removeTap(onBus: 0)
                 
                 self.recognitionRequest = nil
@@ -637,28 +669,30 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
     // MARK: View
     
     func addStartLabel(){
-        self.view.addSubview(startLabel)
-        startLabel.translatesAutoresizingMaskIntoConstraints = false
-        startLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        startLabel.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        self.view.addSubview(startView)
+        startView.translatesAutoresizingMaskIntoConstraints = false
+        startView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        startView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         //startLabel.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
-        startLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        startView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
-        startLabel.text = "Коснитесь экрана для начала теста"
-        startLabel.textAlignment = .center
-        startLabel.numberOfLines = 0
-        startLabel.textColor = .systemBlue
-        startLabel.font = .systemFont(ofSize: 30)
-        startLabel.backgroundColor = .white
-        startLabel.alpha = 0.8
-        startLabel.isUserInteractionEnabled = true
+//        startLabel.text = "Коснитесь экрана для начала теста"
+//        startLabel.textAlignment = .center
+//        startLabel.numberOfLines = 0
+//        startLabel.textColor = .systemBlue
+//        startLabel.font = .systemFont(ofSize: 30)
+        startView.backgroundColor = .white
+        startView.alpha = 0.8
+        startView.isUserInteractionEnabled = true
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(tapGestureRecognizer:)))
-        startLabel.addGestureRecognizer(tap)
+        startView.addGestureRecognizer(tap)
+        
+        
         
     }
     
-    func addDistLabel() {
+    func addDistLabel() {//потом убрать
         view.addSubview(distLabel)
         distLabel.translatesAutoresizingMaskIntoConstraints = false
         distLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
@@ -680,7 +714,15 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         helpSymbolView.heightAnchor.constraint(equalTo: helpSymbolView.widthAnchor).isActive = true
         
     }
-    
+    func addProgressView() {
+        view.addSubview(progress)
+        progress.translatesAutoresizingMaskIntoConstraints = false
+        progress.topAnchor.constraint(equalTo: helpSymbolView.bottomAnchor).isActive = true
+        progress.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 4/5).isActive = true
+        progress.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        progress.progressViewStyle = .default
+        
+    }
     
     func addHelpWorkView() {
         self.view.addSubview(helpWorkView)
@@ -700,53 +742,10 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         addingView.heightAnchor.constraint(equalTo: helpSymbolView.heightAnchor, multiplier: CGFloat(1/koef)).isActive = true
     }
     
-    func addButton(){
-        
-        let butonsSymbolArray = ["→","←","↑","↓","❌"]
-        let buttonArray = [rightButton, leftButton, topButton, bottomButton,centralButton]
-        
-        for i in (0...buttonArray.count-1){
-            helpWorkView.addSubview(buttonArray[i])
-            buttonArray[i].translatesAutoresizingMaskIntoConstraints = false
-            if i < 4 {
-                buttonArray[i].heightAnchor.constraint(equalTo: helpWorkView.heightAnchor, multiplier: 1/3).isActive = true
-                buttonArray[i].widthAnchor.constraint(equalTo: helpWorkView.widthAnchor, multiplier: 1/3).isActive = true}
-            buttonArray[i].layer.cornerRadius = 20
-            buttonArray[i].layer.backgroundColor = UIColor.white.cgColor
-            buttonArray[i].layer.borderColor = UIColor.blue.cgColor
-            buttonArray[i].layer.borderWidth = 1
-            buttonArray[i].tag = i
-            //buttonArray[i].addTarget(self, action: #selector(buttonAction(sender:)), for: .touchUpInside)
-            buttonArray[i].setTitle(butonsSymbolArray[i], for: .normal)
-            buttonArray[i].setTitleColor(.darkGray, for: .normal)
-            
-        }
-        topButton.topAnchor.constraint(equalTo: helpWorkView.topAnchor, constant: 5).isActive = true
-        topButton.centerXAnchor.constraint(equalTo: helpWorkView.centerXAnchor).isActive = true
-        bottomButton.bottomAnchor.constraint(equalTo: helpWorkView.bottomAnchor, constant: -5).isActive = true
-        bottomButton.centerXAnchor.constraint(equalTo: helpWorkView.centerXAnchor).isActive = true
-        leftButton.leftAnchor.constraint(equalTo: helpWorkView.leftAnchor, constant: 5).isActive = true
-        leftButton.centerYAnchor.constraint(equalTo: helpWorkView.centerYAnchor).isActive = true
-        rightButton.rightAnchor.constraint(equalTo: helpWorkView.rightAnchor, constant: -5).isActive = true
-        rightButton.centerYAnchor.constraint(equalTo: helpWorkView.centerYAnchor).isActive = true
-        
-        centralButton.widthAnchor.constraint(equalTo: helpWorkView.widthAnchor, multiplier: 1/4).isActive = true
-        centralButton.heightAnchor.constraint(equalTo: helpWorkView.heightAnchor, multiplier: 1/4).isActive = true
-        centralButton.centerYAnchor.constraint(equalTo: helpWorkView.centerYAnchor).isActive = true
-        centralButton.centerXAnchor.constraint(equalTo: helpWorkView.centerXAnchor).isActive = true
-        //centralButton.removeTarget(self, action: #selector(buttonAction(sender:)), for: .touchUpInside)
-        //centralButton.addTarget(self, action: #selector(centralButtonAction), for: .touchUpInside)
-    }
+
     
     @objc func tapAction(tapGestureRecognizer: UITapGestureRecognizer){
-        //startLabel.removeFromSuperview()
-//        topButton.isEnabled = true
-//        bottomButton.isEnabled = true
-//        leftButton.isEnabled = true
-//        rightButton.isEnabled = true
-//        centralButton.isEnabled = true
         
-        //startAlert()
         
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(startTimerAction), userInfo: nil, repeats: true)
         // MARK: session?.startRunning()
@@ -759,29 +758,199 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
     @objc func startTimerAction(){
         if startTimerCounter > 0{
             
+            let system: SystemSoundID = 1057 //1057 1112
+            
+            AudioServicesPlaySystemSound (system)
+            
             startTimerCounter -= 1
-            startLabel.text = "\(startTimerCounter)"
+            //startView.text = "\(startTimerCounter)"
             if startTimerCounter <= 0 {
-                startLabel.removeFromSuperview()
+                startView.removeFromSuperview()
                 timer.invalidate()
                 currentView.removeFromSuperview()
                 koef = ((UIDevice.modelWidth)/70)*5/distance
-                print(distance)
+                print("расстояние измеряно",distance)
                 self.session?.stopRunning()
-                addLandoltSnellenView(addingView: currentView, koef: koef)
-                beginSynthesizer()
+                //addLandoltSnellenView(addingView: currentView, koef: koef)
+                do {
+                    try beginSynthesizer()
+                } catch {
+                    
+                }
             }
         }
     }
     
-    func beginSynthesizer(){
+    @objc func beginSynthesizer() throws {
+        //let synthesizer = AVSpeechSynthesizer()
         var textUteranse = String()
-        textUteranse = "Закройте левый глаз"
+        textUteranse = "Расстояние равно \(distance).    Закройте левый глаз"
         let utteranceSp = AVSpeechUtterance(string: textUteranse)
-        utteranceSp.voice = AVSpeechSynthesisVoice(language: "ru_Ru")
+        utteranceSp.voice = AVSpeechSynthesisVoice(language: "ru")
         utteranceSp.rate = 0.5
+        let audioSession = AVAudioSession.sharedInstance()
+        try audioSession.setCategory(.playback, mode: .spokenAudio, options: .duckOthers)
         
         synthesizer.speak(utteranceSp)
+    }
+    //когда говорилка закончила говорить
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(testTimerAction), userInfo: nil, repeats: true)
+    }
+    
+    @objc func testTimerAction(){
+        
+        progress.setProgress(0.1*Float(Int(counterTestTimer)%10), animated: false)
+        
+        //старт распознавания 4 цикла сменысимвола
+        if counterTestTimer == 0 || Int(counterTestTimer)%40 == 0{
+            if audioEngine.isRunning {
+                audioEngine.stop()
+                recognitionRequest?.endAudio()
+                audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+            }else{
+                do {
+                    try startRecording()
+                } catch let error {
+                    print("косяк какой-то \(error)")
+                }
+            }
+        }
+        
+
+        
+        //меняем символ
+        if counterTestTimer == 0 || Int(counterTestTimer)%10 == 0 {
+            
+            progress.setProgress(0, animated: false)
+            
+            currentView.removeFromSuperview()
+            
+            if workViewArray.count > 0{
+                
+                currentView = workViewArray.randomElement()!
+                var indexDel = Int()
+                for i in 0 ... workViewArray.count-1 {
+                    
+                    if currentView.isEqual(workViewArray[i]){
+                        
+                        indexDel = i
+                    }
+                }
+                workViewArray.remove(at: indexDel)
+                
+                for i in 0 ... viewArray.count-1{
+                    if currentView.isEqual(viewArray[i]){
+                        switch i {
+                        case 0:
+                            testingText.append("право")
+                        case 1:
+                            testingText.append("лево")
+                        case 2:
+                            testingText.append("верх")
+                        case 3:
+                            testingText.append("низ")
+                        default:
+                            return
+                        }
+                    }
+                }
+            }
+            if workViewArray.count == 0{
+                workViewArray = viewArray
+            }
+            let koeficient = koef*counterTestCicle
+            addLandoltSnellenView(addingView: currentView, koef: koeficient)
+        }
+        
+        if Int(counterTestTimer+1)%40 == 0{
+            print("recieveText",recieveText)
+            print("testingText",testingText)
+
+            let recivTextTest = recieveText
+            
+            DispatchQueue.global(qos: .userInteractive).async {
+                [unowned self] in
+                if self.audioEngine.isRunning {
+                    self.audioEngine.stop()
+                    self.recognitionRequest?.endAudio()
+                    self.audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+                }else{
+                    do {
+                        try self.startRecording()
+                    } catch {
+                        
+                    }
+                }
+            }
+            
+           compareString(origText: testingText, reciveText: recivTextTest)
+            
+            recieveText = ""
+            testingText = []
+            DispatchQueue.global(qos: .userInteractive).async {
+                [unowned self] in
+                self.recognitionTask?.cancel()
+                self.recognitionTask = nil
+            }
+//            self.recognitionRequest = nil
+//            self.recognitionTask?.finish()
+        }
+        
+        counterTestTimer += 1
+    }
+    
+    
+    func compareString(origText: [String], reciveText: String){
+        let splitArray = (reciveText.lowercased()).components(separatedBy: " ")
+        var counterTrue = 0
+        for i in 0...splitArray.count-1{
+            if origText[i] == "право"{
+                if splitArray[i].contains("прав"){
+                    print("право")
+                    counterTrue += 1
+                }
+            }else if origText[i] == "лево"{
+                if splitArray[i].contains("лев"){
+                    print("лево")
+                    counterTrue += 1
+                }
+            }else if origText[i] == "верх"{
+                if splitArray[i].contains("верх"){
+                    print("верх")
+                    counterTrue += 1
+                }
+            }else if origText[i] == "низ"{
+                if splitArray[i].contains("низ"){
+                    print("низ")
+                    counterTrue += 1
+                }
+            }
+        }
+        if counterTrue >= 3{
+            counterTestCicle += 1
+            
+        }
+        print(counterTestCicle)
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    private func disableAVSession() {//возможно не нужна
+        
+        let system: SystemSoundID = 1200
+        AudioServicesPlaySystemSound (system)
+        do {
+            try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+        } catch {
+            print("audioSession properties weren't disable.")
+        }
     }
     
 }

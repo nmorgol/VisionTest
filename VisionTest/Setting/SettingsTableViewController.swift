@@ -61,6 +61,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         do {
             let resultUser = try context.fetch(User.fetchRequest())
             let resCurrentUser = try context.fetch(CurrentUser.fetchRequest())
+            let settings = try context.fetch(SettingsApp.fetchRequest())
             
             if resCurrentUser.count > 0 {
                 let curUser = (resCurrentUser.last as! CurrentUser).currentUser
@@ -73,6 +74,14 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
                 userInfoText = "info"
                 photo = image!
             }//надо переделать
+            if settings.count > 0 {
+                distanceTest = (settings.last as! SettingsApp).distanceTest
+                timeToStart = (settings.last as! SettingsApp).timeBeforeTest
+                avtoDetectDistBool = (settings.last as! SettingsApp).avtoDetectDistance
+                speechRecognBool = (settings.last as! SettingsApp).speechRecognize
+                symbolTest = (settings.last as! SettingsApp).symbolTest ?? "Snellen"
+            }
+            
         } catch let error as NSError {
             print(error)
         }
@@ -133,11 +142,13 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
                 
                 cell2.settingLabel.text = otstup + "AvtoDetectDistance"
                 cell2.settingSwitch.addTarget(self, action: #selector(avtodetectSwitchAction(paramSwitch:)), for: .valueChanged)
+                cell2.settingSwitch.isOn = avtoDetectDistBool
                 cell2.accessoryType = .detailButton
                 
             }else{
                 cell2.settingLabel.text = otstup + "SpeechRecognition"
                 cell2.settingSwitch.addTarget(self, action: #selector(speechSwitchAction(paramSwitch:)), for: .valueChanged)
+                cell2.settingSwitch.isOn = speechRecognBool
                 cell2.accessoryType = .detailButton
             }
 //            cell2.accessoryType = .detailButton
