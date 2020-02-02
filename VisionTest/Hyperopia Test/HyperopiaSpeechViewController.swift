@@ -49,6 +49,8 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     var wordLabel = UILabel()
     var reciveTextLabel = UILabel()
     var authorizedLabel = UILabel()
+    var eyeLabel = UILabel()
+    
     var startFontCounter = 1//счетчик уменьшения размера шрифта
     var fontSize = Float(40)//методом подбора = острота зрения 0.1
     
@@ -104,6 +106,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         addReciveTextLabel()
         addAuthorizedLabel()
         addMicrophonesView()
+        addEyeLabel()
         
     }
     
@@ -658,6 +661,21 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         //        wordLabel.addObserver(self, forKeyPath: "text", options: [.old, .new], context: nil)
     }
     
+    func addEyeLabel(){
+        view.addSubview(eyeLabel)
+        eyeLabel.translatesAutoresizingMaskIntoConstraints = false
+        eyeLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
+        eyeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        //eyeLabel.centerYAnchor.constraint(lessThanOrEqualTo: view.centerYAnchor).isActive = true
+        eyeLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 4/5).isActive = true
+        eyeLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/10).isActive = true
+        eyeLabel.font = .boldSystemFont(ofSize: 30)
+        eyeLabel.text = "Закройте левый глаз"
+        eyeLabel.textColor = .blue
+        eyeLabel.textAlignment = .center
+        eyeLabel.numberOfLines = 0
+    }
+    
     func addAuthorizedLabel() {
         view.addSubview(authorizedLabel)
         authorizedLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -775,7 +793,12 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
             }else if (str2.lowercased()).contains("стоп"){
                 timer.invalidate()
                 let allert = UIAlertController(title: "Внимание", message: "тест окончен по слову СТОП", preferredStyle: .alert)
+                let allertAction = UIAlertAction(title: "ok", style: .default) { (action) in
+                    print("allertAction")
+                }
+                allert.addAction(allertAction)
                 self.present(allert, animated: false, completion: nil)
+                
                 DispatchQueue.global(qos: .userInteractive).async {
                     [unowned self] in
                     if self.audioEngine.isRunning {

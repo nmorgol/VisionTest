@@ -113,7 +113,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         deletePhotoButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         
         deletePhotoButton.setTitleColor(.black, for: .normal)
-        deletePhotoButton.setTitle("Delete Photo", for: .normal)
+        deletePhotoButton.setTitle("Crop Photo", for: .normal)
         deletePhotoButton.layer.cornerRadius = 20
         deletePhotoButton.layer.borderWidth = 0.3
         

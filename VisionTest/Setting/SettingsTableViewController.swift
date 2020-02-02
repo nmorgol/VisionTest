@@ -29,6 +29,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     var labelTextField = UITextField()
     var coverView = UIView()
     var settingTextLabelTag = Int()
+    let labelForTextField = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -306,10 +307,15 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         self.tabBarController?.tabBar.isHidden = true
     }
     
+    @objc func removeCoverImage(recognizer: UITapGestureRecognizer){
+        userInfoImageView.removeFromSuperview()
+        self.navigationController?.navigationBar.isHidden = false
+        self.tabBarController?.tabBar.isHidden = false
+    }
 
+    
     @objc func segmetAction() {
         tableView.reloadData()
-        
         
     }
     
@@ -363,6 +369,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     @objc func labelDistTextAction(_ sender: UILabel){
         self.view.addSubview(coverView)
         coverView.addSubview(labelTextField)
+        coverView.addSubview(labelForTextField)
         
         coverView.translatesAutoresizingMaskIntoConstraints = false
         coverView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
@@ -379,6 +386,18 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         labelTextField.centerYAnchor.constraint(equalTo: coverView.centerYAnchor).isActive = true
         labelTextField.backgroundColor = .systemGray4
         labelTextField.keyboardType = .decimalPad
+        labelTextField.textAlignment = .center
+        labelTextField.becomeFirstResponder()
+        
+        labelForTextField.translatesAutoresizingMaskIntoConstraints = false
+        labelForTextField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 3/4).isActive = true
+        labelForTextField.heightAnchor.constraint(equalTo: labelTextField.widthAnchor, multiplier: 1/3).isActive = true
+        labelForTextField.centerXAnchor.constraint(equalTo: coverView.centerXAnchor).isActive = true
+        labelForTextField.bottomAnchor.constraint(equalTo: labelTextField.topAnchor).isActive = true
+        labelForTextField.backgroundColor = .clear
+        labelForTextField.text = "Установите расстояние для теста - м."
+        labelForTextField.font = .systemFont(ofSize: 13)
+        labelForTextField.textAlignment = .center
         
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(resingFirstREspDist))
@@ -404,6 +423,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     @objc func labelTimeTextAction(_ sender: UILabel){
         self.view.addSubview(coverView)
         coverView.addSubview(labelTextField)
+        coverView.addSubview(labelForTextField)
         
         coverView.translatesAutoresizingMaskIntoConstraints = false
         coverView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
@@ -420,6 +440,20 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         labelTextField.centerYAnchor.constraint(equalTo: coverView.centerYAnchor).isActive = true
         labelTextField.backgroundColor = .systemGray4
         labelTextField.keyboardType = .decimalPad
+        labelTextField.textAlignment = .center
+        
+        labelTextField.becomeFirstResponder()
+        
+        labelForTextField.translatesAutoresizingMaskIntoConstraints = false
+        labelForTextField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 3/4).isActive = true
+        labelForTextField.heightAnchor.constraint(equalTo: labelTextField.widthAnchor, multiplier: 1/3).isActive = true
+        labelForTextField.centerXAnchor.constraint(equalTo: coverView.centerXAnchor).isActive = true
+        labelForTextField.bottomAnchor.constraint(equalTo: labelTextField.topAnchor).isActive = true
+        labelForTextField.backgroundColor = .clear
+        labelForTextField.text = "Установите время до начала теста - сек."
+        labelForTextField.font = .systemFont(ofSize: 13)
+        
+        labelForTextField.textAlignment = .center
         
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(resingFirstREspTime))
@@ -433,16 +467,17 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         timeToStart = Float(labelTextField.text!) ?? (0)
         labelTextField.text = ""
         labelTextField.resignFirstResponder()
+        labelForTextField.removeFromSuperview()
         labelTextField.removeFromSuperview()
         coverView.removeFromSuperview()
         tableView.reloadData()
     }
     
-    @objc func removeCoverImage(recognizer: UITapGestureRecognizer){
-        userInfoImageView.removeFromSuperview()
-        self.navigationController?.navigationBar.isHidden = false
-        self.tabBarController?.tabBar.isHidden = false
-    }
+//    @objc func removeCoverImage(recognizer: UITapGestureRecognizer){
+//        userInfoImageView.removeFromSuperview()
+//        self.navigationController?.navigationBar.isHidden = false
+//        self.tabBarController?.tabBar.isHidden = false
+//    }
     
 //    @objc func infoButtonAction(){
 //        let infoVC = InfoViewController()

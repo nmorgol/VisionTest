@@ -12,10 +12,10 @@ class ResultsTableViewController: UITableViewController {
 //    let cellID = "cellID"
     let resultCellID = "ResultCell"
     let userCellID = "UserCell"//ячейка из настроек -- пользователь
-    var resultsMiopiaArray: [MiopiaTestResult]?
+    var resultsMiopiaArray: [MiopiaTestResult]?//результаты из CoreData но они не сортированы
     var resultsHyperopiaArray: [HyperopiaTestResult]?
     
-    var sortedMiopiaArray: [MiopiaTestResult]?
+    var sortedMiopiaArray: [MiopiaTestResult]?//отсортированные массивы по дате тестов
     var sortedHyperopiaArray: [HyperopiaTestResult]?
 //    var resultsMiopiaArray = User.
     
@@ -54,7 +54,7 @@ class ResultsTableViewController: UITableViewController {
         case 0:
             return 1
         case 1:
-            return sortedMiopiaArray?.count ?? 3
+            return sortedMiopiaArray?.count ?? 0
         default:
             break
         }
@@ -156,9 +156,10 @@ class ResultsTableViewController: UITableViewController {
                                         resultsMiopiaArray = (currentUser?.relationship?.allObjects as! [MiopiaTestResult])
                                         context.delete(resultsMiopiaArray![i] as NSManagedObject)
                                         //resultsMiopiaArray?.remove(at: i)
-                                    }else if state == "Hyperopia"{
-                                        resultsHyperopiaArray = (currentUser?.relationship1?.allObjects as! [HyperopiaTestResult])
                                     }
+//                                    else if state == "Hyperopia"{
+//                                        resultsHyperopiaArray = (currentUser?.relationship1?.allObjects as! [HyperopiaTestResult])
+//                                    }
                                 }
                                 
                             }else{
@@ -167,15 +168,13 @@ class ResultsTableViewController: UITableViewController {
                                 if state == "Miopia"{
                                     resultsMiopiaArray = (currentUser?.relationship?.allObjects as! [MiopiaTestResult])
                                     context.delete(resultsMiopiaArray![i] as NSManagedObject)
-                                }else if state == "Hyperopia"{
-                                    resultsHyperopiaArray = (currentUser?.relationship1?.allObjects as! [HyperopiaTestResult])
-                                    sortedHyperopiaArray = resultsHyperopiaArray?.sorted(by: { $0.dateTest!.compare($1.dateTest!) == .orderedDescending })
                                 }
+//                                else if state == "Hyperopia"{
+//                                    resultsHyperopiaArray = (currentUser?.relationship1?.allObjects as! [HyperopiaTestResult])
+//                                    sortedHyperopiaArray = resultsHyperopiaArray?.sorted(by: { $0.dateTest!.compare($1.dateTest!) == .orderedDescending })
+//                                }
                             }
-//                            for res in result{
-//                                context.delete(res as! NSManagedObject)
-//                            }
-
+                            
                             try? context.save()
                             
                         } catch let error as NSError {
@@ -190,11 +189,6 @@ class ResultsTableViewController: UITableViewController {
                 recieveTestsResults()
             }
         }
-//        print(sortedMiopiaArray!.count)
-//        sortedMiopiaArray!.remove(at: indexPath.row)
-//        print(sortedMiopiaArray!.count)
-//        tableView.deleteRows(at: [indexPath], with: .left)
-//        recieveTestsResults()
     }
     
     

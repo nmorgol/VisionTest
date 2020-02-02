@@ -37,19 +37,20 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
     private var trackingRequests: [VNTrackObjectRequest]?
     
     lazy var sequenceRequestHandler = VNSequenceRequestHandler()
-    
-    
-    
     let distLabel = UILabel()//временный ярлык - потом удалить
     
     var disapearTrue = true //подпорка для того чтобы не отрабатывал метод self.navigationController?.popViewController(animated:false)
     var distanceBool = false
     
-    let startView = UIView()
+    let startLabel = UILabel()
+    var tap = UITapGestureRecognizer()//target: self, action: #selector(tapAction(tapGestureRecognizer:)))
+    let startTimerLabel = UILabel()
     let helpSymbolView = UIView()//для символа
     let helpWorkView = UIView()//для кнопок
     
     var distance = Float(0.5)//расстояние для первого запуска
+    var speechRecogn = false
+    var avtoDetectDist = false
     
     let rightSnellenView = SnellenRightView()
     let leftSnellenView = SnellenLeftView()
@@ -60,12 +61,6 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
     let leftLandoltView = LandoltLeftUIView()
     let topLandoltView = LandoltTopUIView()
     let bottomLandoltView = LandoltBottomUIView()
-    
-    //    let topButton = UIButton()
-    //    let bottomButton = UIButton()
-    //    let rightButton = UIButton()
-    //    let leftButton = UIButton()
-    //    let centralButton = UIButton()
     
     let progress = UIProgressView()
     
@@ -98,11 +93,10 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         synthesizer.delegate = self
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
-//        let settingsImage = UIImage(named: "Results")
         
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settingsIcon"), style: .plain, target: self, action: #selector(actionResults))
-        
+        tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(tapGestureRecognizer:)))
+
+
     }
     // MARK: viewWillAppear
     override func viewWillAppear(_ animated: Bool) {
@@ -111,7 +105,6 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         
         viewArray = [rightLandoltView, leftLandoltView, topLandoltView, bottomLandoltView]
         koef = ((UIDevice.modelWidth)/70)*5/distance
-        
         
         addHelpSymbolView()
         addHelpWorkView()
@@ -122,10 +115,13 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         do {
             let resultSettings = try context.fetch(SettingsApp.fetchRequest())
             
-            if resultSettings.count > 0 {
-                distanceBool = (resultSettings.last as! SettingsApp).avtoDetectDistance
+//            if resultSettings.count > 0 {
+                //distanceBool = (resultSettings.last as! SettingsApp).avtoDetectDistance
                 if resultSettings.count > 0 {
+                    
                     distance = (resultSettings.last as! SettingsApp).distanceTest
+                    speechRecogn = (resultSettings.last as! SettingsApp).speechRecognize
+                    avtoDetectDist = (resultSettings.last as! SettingsApp).avtoDetectDistance
                     
                     if (resultSettings.last as! SettingsApp).timeBeforeTest > 0 {
                         startTimerCounter = Int((resultSettings.last as! SettingsApp).timeBeforeTest)
@@ -142,32 +138,31 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
                 else{
                     viewArray = [rightLandoltView, leftLandoltView, topLandoltView, bottomLandoltView]
                 }
-            }
+            //}
         } catch let error as NSError {
             print(error)
         }
         
         workViewArray = viewArray
-        currentView = workViewArray.randomElement()!
-        //addLandoltSnellenView(addingView: currentView, koef: koef)
-        
-        if distanceBool{
-            self.session = self.setupAVCaptureSession()
-            self.prepareVisionRequest()
-            self.session?.startRunning()
-        }
-        //addButton()
-        
         addStartLabel()
-        //addDistLabel()//потом убрать
+//        if distanceBool{
+//            self.session = self.setupAVCaptureSession()
+//            self.prepareVisionRequest()
+//            self.session?.startRunning()
+//        }
+        
+    }
+    // MARK:viewWillLayoutSubviews()
+    override func viewWillLayoutSubviews() {
+        super .viewWillLayoutSubviews()
+        
+        //addStartLabel()
+                 
     }
     // MARK: viewDidAppear
     override func viewDidAppear(_ animated: Bool) {
         super .viewDidAppear(false)
         
-        
-        
-        //animatedMicrophone()
         speechRecognizer.delegate = self
         
         // Asynchronously make the authorization request.
@@ -233,6 +228,7 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         resultVC.state = "Miopia"
         self.navigationController?.pushViewController(resultVC, animated: true)
     }
+    
     // MARK: Speech
     private func startRecording() throws {
         
@@ -245,7 +241,6 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         try audioSession.setCategory(.playAndRecord, mode: .voiceChat, options: .allowBluetooth)
         try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         let inputNode = audioEngine.inputNode
-        
         
         // Create and configure the speech recognition request.
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
@@ -262,15 +257,11 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
             var isFinal = false
             
-            
             if let result = result {
                 // Update the text view with the results.
-                //                self.textView.text = result.bestTranscription.formattedString
-                //self.reciveTextLabel.text = result.bestTranscription.formattedString
+                
                 self.recieveText = result.bestTranscription.formattedString
                 isFinal = result.isFinal
-                
-                //self.currentText = result.bestTranscription.formattedString
                 
             }
             
@@ -669,27 +660,35 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
     // MARK: View
     
     func addStartLabel(){
-        self.view.addSubview(startView)
-        startView.translatesAutoresizingMaskIntoConstraints = false
-        startView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        startView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        //startLabel.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
-        startView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        self.view.addSubview(startLabel)
+        startLabel.translatesAutoresizingMaskIntoConstraints = false
+        startLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        startLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 9/10).isActive = true
+        startLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        startLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        startLabel.backgroundColor = .white
+        startLabel.alpha = 1
+        startLabel.isUserInteractionEnabled = true
+        startLabel.numberOfLines = 0
+        var trueDist = "выкл"
+        var trueSpeech = "выкл"
+        var dist = "\(distance)"
+        if avtoDetectDist{
+            trueDist = "вкл"
+            dist = "_"
+        }
+        if speechRecogn{
+            trueSpeech = "вкл"
+        }
         
-//        startLabel.text = "Коснитесь экрана для начала теста"
-//        startLabel.textAlignment = .center
-//        startLabel.numberOfLines = 0
-//        startLabel.textColor = .systemBlue
-//        startLabel.font = .systemFont(ofSize: 30)
-        startView.backgroundColor = .white
-        startView.alpha = 0.8
-        startView.isUserInteractionEnabled = true
+        startLabel.text = "Расстояние установлено: \(dist) м. \n \nРаспознавание речи: \(trueSpeech). \n \nОпределение расстояния: \(trueDist). \n \nВремя до начала теста установлено: \(startTimerCounter) с. \n \nДля изменения настроек перейдите в меню приложения.\n \nДля окончания теста скажите: СТОП \n \nКоснитесь экрана для начала теста.  "
+        startLabel.textAlignment = .left
+        startLabel.font = .systemFont(ofSize: 17)
+        startLabel.textColor = .systemBlue
+
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(tapGestureRecognizer:)))
-        startView.addGestureRecognizer(tap)
-        
-        
-        
+        startLabel.addGestureRecognizer(tap)
+
     }
     
     func addDistLabel() {//потом убрать
@@ -749,13 +748,19 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(startTimerAction), userInfo: nil, repeats: true)
         // MARK: session?.startRunning()
-        self.session = self.setupAVCaptureSession()
-        self.prepareVisionRequest()
-        self.session?.startRunning()
-        
+        if speechRecogn{
+            self.session = self.setupAVCaptureSession()
+            self.prepareVisionRequest()
+            self.session?.startRunning()
+        }
+//        self.session = self.setupAVCaptureSession()
+//        self.prepareVisionRequest()
+//        self.session?.startRunning()
+        startLabel.removeGestureRecognizer(tap)
     }
     
     @objc func startTimerAction(){
+        
         if startTimerCounter > 0{
             
             let system: SystemSoundID = 1057 //1057 1112
@@ -763,9 +768,11 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
             AudioServicesPlaySystemSound (system)
             
             startTimerCounter -= 1
-            //startView.text = "\(startTimerCounter)"
+            startLabel.text = "\(startTimerCounter)"
+            startLabel.font = .boldSystemFont(ofSize: 50)
+            startLabel.textAlignment = .center
             if startTimerCounter <= 0 {
-                startView.removeFromSuperview()
+                
                 timer.invalidate()
                 currentView.removeFromSuperview()
                 koef = ((UIDevice.modelWidth)/70)*5/distance
@@ -782,9 +789,13 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
     }
     
     @objc func beginSynthesizer() throws {
-        //let synthesizer = AVSpeechSynthesizer()
+        
+        let metr = Int(distance)
+        let santi = Int((distance - Float(metr))*100)
+        startLabel.text = "\(metr).\(santi)"
+        
         var textUteranse = String()
-        textUteranse = "Расстояние равно \(distance).    Закройте левый глаз"
+        textUteranse = "Расстояние равно \(metr) метров \(santi) сантиметров.    Закройте левый глаз"
         let utteranceSp = AVSpeechUtterance(string: textUteranse)
         utteranceSp.voice = AVSpeechSynthesisVoice(language: "ru")
         utteranceSp.rate = 0.5
@@ -795,6 +806,10 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
     }
     //когда говорилка закончила говорить
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        
+        startLabel.font = .systemFont(ofSize: 17)
+        startLabel.removeFromSuperview()
+        
         timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(testTimerAction), userInfo: nil, repeats: true)
     }
     
@@ -817,10 +832,10 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
             }
         }
         
-
-        
         //меняем символ
         if counterTestTimer == 0 || Int(counterTestTimer)%10 == 0 {
+            
+            compareStop(reciveText: recieveText)//если пришло слово "СТОП"
             
             progress.setProgress(0, animated: false)
             
@@ -839,7 +854,7 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
                 }
                 workViewArray.remove(at: indexDel)
                 
-                for i in 0 ... viewArray.count-1{
+                for i in 0 ... viewArray.count-1{//создание массива правильных ответов
                     if currentView.isEqual(viewArray[i]){
                         switch i {
                         case 0:
@@ -893,17 +908,49 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
                 self.recognitionTask?.cancel()
                 self.recognitionTask = nil
             }
-//            self.recognitionRequest = nil
-//            self.recognitionTask?.finish()
         }
         
         counterTestTimer += 1
     }
     
+    func compareStop(reciveText: String){//окончание теста по слову "СТОП"
+        if (reciveText.lowercased()).contains("стоп"){
+            timer.invalidate()
+            
+            DispatchQueue.global(qos: .userInteractive).async {
+                [unowned self] in
+                if self.audioEngine.isRunning {
+                    self.audioEngine.stop()
+                    self.recognitionRequest?.endAudio()
+                    self.audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+                }else{
+                    do {
+                        try self.startRecording()
+                    } catch {
+                        
+                    }
+                }
+            }
+            let alert = UIAlertController(title: "Внимание", message: "Приложение остановлено по слову СТОП", preferredStyle: .alert)
+            let alerActon = UIAlertAction(title: "ок", style: .default) { (alert) in
+                print("alerActon")
+            }
+            alert.addAction(alerActon)
+            self.present(alert, animated: false, completion: nil)
+        }
+    }
     
     func compareString(origText: [String], reciveText: String){
-        let splitArray = (reciveText.lowercased()).components(separatedBy: " ")
+        var splitArray = (reciveText.lowercased()).components(separatedBy: " ")
         var counterTrue = 0
+        
+            if splitArray.count > origText.count{//краш когда элементов в массиве из Яблок больше чем в итоговом
+                for _ in 1...(splitArray.count - origText.count){
+                    splitArray.removeLast()
+                }
+                print(splitArray)
+            }
+        
         for i in 0...splitArray.count-1{
             if origText[i] == "право"{
                 if splitArray[i].contains("прав"){

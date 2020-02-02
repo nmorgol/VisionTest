@@ -12,6 +12,8 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     let secondView = UIView()
     let photoButton = UIButton()
     
+    let userInfoImageView = UIImageView()
+    
     var usersArray = [User]()
     var currentUser = Int()
     var imageData = Data()
@@ -28,7 +30,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonAction)), UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(organizeButtonAction))]
         
-        do {
+        do {//получили текущего юзера
             usersArray = try context.fetch(User.fetchRequest())
             let resCurrUser = try context.fetch(CurrentUser.fetchRequest())
             if resCurrUser.count > 0 {
@@ -76,6 +78,9 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         //userImageView.layer.cornerRadius = 50
         
         userImageView.clipsToBounds = true
+        userImageView.isUserInteractionEnabled = true
+        let gestureUserPhotoView = UITapGestureRecognizer(target: self, action: #selector(tapGestureUserInfoAction(tapGestureRecognizer:)))
+        userImageView.addGestureRecognizer(gestureUserPhotoView)
         
         
         firstView.translatesAutoresizingMaskIntoConstraints = false
@@ -211,37 +216,99 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     
     
     @objc func saveEditButtonAction(){
-        usersArray[currentUser].photo = userImageView.image?.jpeg(.lowest)
-        usersArray[currentUser].name = userTextField.text
-        usersArray[currentUser].info = userTextField.text
-        print(currentUser)
+        if usersArray.count == 0{//если нет пользователей
+            let userNew = User(context: context)//добавили нового пользователя
+            userNew.setValue(userImageView.image?.jpeg(.lowest), forKey: "photo")
+            userNew.setValue(userTextField.text, forKey: "name")
+            userNew.setValue(userTextView.text, forKey: "info")
+            
+            let currentUser = CurrentUser(context: context)
+            currentUser.setValue(0, forKey: "currentUser")
+            do {
+                try context.save()
+            }catch let error as NSError{
+                print(error)
+            }
+        }else{
+            usersArray[currentUser].photo = userImageView.image?.jpeg(.lowest)
+            usersArray[currentUser].name = userTextField.text
+            usersArray[currentUser].info = userTextView.text
+            print(currentUser)
+            
+            do {
+                try context.save()
+            }catch let error as NSError{
+                print(error)
+            }
+        }
+        self.navigationItem.rightBarButtonItems?.removeAll()
+        self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonAction)), UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(organizeButtonAction))]
+        
     }
     
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         
         if userTextView.isFirstResponder{
-            userTextField.frame.origin.y -= 200
+            //userTextField.frame.origin.y -= 200
             userTextView.frame.origin.y -= 200
             
             photoButton.frame.origin.y -= 500
         }
-        
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        userTextView.frame.origin.y += 300
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if userTextView.isFirstResponder{
-            userTextField.frame.origin.y += 200
+            //userTextField.frame.origin.y += 200
             userTextView.frame.origin.y += 200
             photoButton.frame.origin.y += 500
             userTextView.resignFirstResponder()
             
+            self.navigationItem.rightBarButtonItems?.removeAll()
+            self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.saveEditButtonAction))]
         }
         
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         userTextField.resignFirstResponder()
+        userTextView.frame.origin.y += 300
+        self.navigationItem.rightBarButtonItems?.removeAll()
+        self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.saveEditButtonAction))]
+        
         return true
+    }
+    
+    @objc func tapGestureUserInfoAction(tapGestureRecognizer: UITapGestureRecognizer){
+        self.view.addSubview(userInfoImageView)
+        userInfoImageView.translatesAutoresizingMaskIntoConstraints = false
+        userInfoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        userInfoImageView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
+        userInfoImageView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor).isActive = true
+        userInfoImageView.image = UIImage(data: imageData)
+        
+        if usersArray.count > 0{
+            userInfoImageView.image = UIImage(data: usersArray[currentUser].photo ?? imageData)
+        }else{
+            userInfoImageView.image = UIImage(data: imageData)
+        }
+        
+        userInfoImageView.contentMode = .scaleAspectFit
+        userInfoImageView.backgroundColor = .white
+        userInfoImageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(removeCoverImage))
+        userInfoImageView.addGestureRecognizer(tap)
+        self.navigationController?.navigationBar.isHidden = true
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    @objc func removeCoverImage(recognizer: UITapGestureRecognizer){
+        userInfoImageView.removeFromSuperview()
+        self.navigationController?.navigationBar.isHidden = false
+        self.tabBarController?.tabBar.isHidden = false
     }
 }
