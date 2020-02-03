@@ -66,6 +66,12 @@ class SymbolTableViewCell: UITableViewCell, UITableViewDelegate{
         symbolSegment.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 2/4).isActive = true
         symbolSegment.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         
+        if currentSymbol == "Snellen"{
+            symbolSegment.selectedSegmentIndex = 1
+        }else{
+            symbolSegment.selectedSegmentIndex = 0
+        }
+        
         symbolSegment.addTarget(self, action: #selector(segmentAction(target:)), for: .valueChanged)
         
         

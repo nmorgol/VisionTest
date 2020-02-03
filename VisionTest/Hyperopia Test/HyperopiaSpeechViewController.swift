@@ -4,6 +4,7 @@ import UIKit
 import Speech
 import AVKit
 import Vision
+import CoreData
 
 
 class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate {
@@ -69,8 +70,12 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     
     var timer: Timer!
     var timerCounter = 0
+    var stopBool = false // для работы таймера от слова СТОП
+    let stopLabel = UILabel()//всплывает по слову СТОП
     
     var disapearTrue = true //подпорка для того чтобы не отрабатывал метод self.navigationController?.popViewController(animated:false
+    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,6 +91,8 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         
         disapearTrue = true
         
+        startFontCounter = 1
+        print(startFontCounter)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
         
         self.session = self.setupAVCaptureSession()
@@ -96,6 +103,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
         
+        addEyeLabel(text: "Закройте левый глаз")
     }
     
     
@@ -106,7 +114,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         addReciveTextLabel()
         addAuthorizedLabel()
         addMicrophonesView()
-        addEyeLabel()
+        
         
     }
     
@@ -146,7 +154,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     override func viewWillDisappear(_ animated: Bool) {
         super .viewWillDisappear(true)
         if disapearTrue {
-                self.navigationController?.popViewController(animated: false)
+            self.navigationController?.popViewController(animated: false)
         }
         timer.invalidate()
         
@@ -154,12 +162,28 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         
         self.navigationController?.navigationBar.isHidden = false
         
-        disableAVSession()
+        DispatchQueue.global(qos: .userInteractive).async {
+            [unowned self] in
+            if self.audioEngine.isRunning {
+                self.audioEngine.stop()
+                self.recognitionRequest?.endAudio()
+                self.audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+                self.recognitionTask?.cancel()
+                self.recognitionTask = nil 
+            }else{
+                do {
+                    try self.startRecording()
+                } catch {
+                    
+                }
+            }
+        }
+        //disableAVSession()
         
-        self.audioEngine.stop()
-        let inputNode = audioEngine.inputNode
-        inputNode.removeTap(onBus: 0)
-
+        //        self.audioEngine.stop()
+        //        let inputNode = audioEngine.inputNode
+        //        inputNode.removeTap(onBus: 0)
+        
     }
     
     // MARK: Speech
@@ -251,12 +275,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         }
     }
     
-    @objc func stopRecognition(){
-        
-        let text = currentText 
-        comletion?(text)
-        navigationController?.popViewController(animated: false)
-    }
+    
     
     // MARK: Vision
     // Ensure that the interface stays locked in Portrait.
@@ -654,14 +673,14 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         
         //reciveTextLabel.text = inputText
         reciveTextLabel.textAlignment = .center
-        reciveTextLabel.font = .boldSystemFont(ofSize: CGFloat(fontSize))
+        reciveTextLabel.font = .boldSystemFont(ofSize: CGFloat(40))
         reciveTextLabel.numberOfLines = 0
         reciveTextLabel.backgroundColor = .lightGray
         
         //        wordLabel.addObserver(self, forKeyPath: "text", options: [.old, .new], context: nil)
     }
     
-    func addEyeLabel(){
+    func addEyeLabel(text: String){
         view.addSubview(eyeLabel)
         eyeLabel.translatesAutoresizingMaskIntoConstraints = false
         eyeLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
@@ -670,7 +689,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         eyeLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 4/5).isActive = true
         eyeLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/10).isActive = true
         eyeLabel.font = .boldSystemFont(ofSize: 30)
-        eyeLabel.text = "Закройте левый глаз"
+        eyeLabel.text = text//"Закройте левый глаз"
         eyeLabel.textColor = .blue
         eyeLabel.textAlignment = .center
         eyeLabel.numberOfLines = 0
@@ -720,6 +739,22 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         phoneImageView.image = UIImage(named: "phoneImage")
     }
     
+    func addStopLabel(){
+        self.view.addSubview(stopLabel)
+        stopLabel.translatesAutoresizingMaskIntoConstraints = false
+        stopLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        stopLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        stopLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 3/4).isActive = true
+        stopLabel.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: 3/4).isActive = true
+        
+        stopLabel.backgroundColor = .white
+        stopLabel.text = "стоп стоп стоп"
+        
+        stopLabel.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(stopLabelGestureAction))
+        stopLabel.addGestureRecognizer(tap)
+       
+    }
     
     @objc func animatedMicrophone() {
         CircleView.animate(withDuration: 0.15/Double(animateCounter), animations: {
@@ -748,12 +783,12 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     @objc func animatedPhoneFar(){
         self.addPhoneImageView()
         UIImageView.animate(withDuration: 1, animations: {
-
+            
             self.phoneImageView.transform = CGAffineTransform.init(scaleX: 3/2, y: 3/2)
         }) { (_) in
-
+            
             UIImageView.animate(withDuration: 1, animations: {
-
+                
                 self.phoneImageView.transform = CGAffineTransform.init(scaleX: 2/3, y: 2/3)
             }) { (_) in
                 self.phoneImageView.removeFromSuperview()
@@ -762,22 +797,22 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     }
     
     @objc func animatedPhoneNear(){
-//        startBool = true
-//        print(startBool)
-//        self.addPhoneImageView()
-//        UIImageView.animate(withDuration: 1, animations: {
-//
-//            self.phoneImageView.transform = CGAffineTransform.init(scaleX: 2/3, y: 2/3)
-//        }) { (_) in
-//
-//            UIImageView.animate(withDuration: 0.01, animations: {
-//
-//                            self.phoneImageView.transform = CGAffineTransform.init(scaleX: 3/2, y: 3/2)
-//                        }) { (_) in
-//            self.phoneImageView.removeFromSuperview()
-//            self.startBool = false
-//             }
-//        }
+        //        startBool = true
+        //        print(startBool)
+        //        self.addPhoneImageView()
+        //        UIImageView.animate(withDuration: 1, animations: {
+        //
+        //            self.phoneImageView.transform = CGAffineTransform.init(scaleX: 2/3, y: 2/3)
+        //        }) { (_) in
+        //
+        //            UIImageView.animate(withDuration: 0.01, animations: {
+        //
+        //                            self.phoneImageView.transform = CGAffineTransform.init(scaleX: 3/2, y: 3/2)
+        //                        }) { (_) in
+        //            self.phoneImageView.removeFromSuperview()
+        //            self.startBool = false
+        //             }
+        //        }
     }
     
     func compareString(str1: String, str2: String) -> Bool {
@@ -790,14 +825,47 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         }else{
             if str2.contains(str1){
                 boolCompare = true
-            }else if (str2.lowercased()).contains("стоп"){
-                timer.invalidate()
-                let allert = UIAlertController(title: "Внимание", message: "тест окончен по слову СТОП", preferredStyle: .alert)
-                let allertAction = UIAlertAction(title: "ok", style: .default) { (action) in
-                    print("allertAction")
+            }
+        }
+        return boolCompare
+    }
+    
+    func compareStop(str2: String) {
+        
+        if (str2.lowercased()).contains("стоп"){
+            
+            stopBool = true
+            saveResult()
+            
+            addStopLabel()
+
+            recognitionRequest = nil
+            reciveTextLabel.text = " "
+
+        }
+        
+    }
+    
+    @objc func timerAction() {
+        if stopBool == false {
+            
+            if timerCounter == 0 || timerCounter%10 == 0{
+                inputText = String(Int.random(in: 100...999))
+                print(inputText)
+                reciveTextLabel.text = ""
+                wordLabel.text = inputText
+                
+                if audioEngine.isRunning {
+                    audioEngine.stop()
+                    recognitionRequest?.endAudio()
+                    audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+                }else{
+                    do {
+                        try startRecording()
+                    } catch {
+                    }
                 }
-                allert.addAction(allertAction)
-                self.present(allert, animated: false, completion: nil)
+            }else if ((timerCounter + 1)%10 == 0)  {
                 
                 DispatchQueue.global(qos: .userInteractive).async {
                     [unowned self] in
@@ -809,92 +877,32 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                         do {
                             try self.startRecording()
                         } catch {
-                            
                         }
                     }
                 }
-            }
-//            for i in 0...second2.count-1{
-//                if (second2[i]==second1[0]) && ((second2.count-i) >= (second1.count)){
-//                    for j in 0...second1.count-1{
-//                        if second2[i+j] == second1[j]{
-//                            boolCompare = true
-//                        }else{
-//                            boolCompare = false
-//                        }
-//                    }
-//                }
-//            }
-        }
-        return boolCompare
-    }
-    
-    @objc func timerAction() {
-        
-        if timerCounter == 0 || timerCounter%10 == 0{
-            inputText = String(Int.random(in: 100...999))
-            print(inputText)
-            
-            wordLabel.text = inputText
-            
-            if audioEngine.isRunning {
-                audioEngine.stop()
-                recognitionRequest?.endAudio()
-                audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
-            }else{
-                do {
-                    try startRecording()
-                } catch {
-                    
-                }
-            }
-            
-        }else if ((timerCounter + 1)%10 == 0)  {
-            DispatchQueue.global(qos: .userInteractive).async {
-                [unowned self] in
-                if self.audioEngine.isRunning {
-                    self.audioEngine.stop()
-                    self.recognitionRequest?.endAudio()
-                    self.audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
-                }else{
-                    do {
-                        try self.startRecording()
-                    } catch {
+                if reciveTextLabel.text != nil{
+                    if compareString(str1: inputText, str2: reciveTextLabel.text!){
                         
+                        startFontCounter += 1
+                        fontSize = Float(40/startFontCounter)
+                        print("огонь")
+                    }
+                    compareStop(str2: reciveTextLabel.text!)
+                    if stopBool == true{
+                        startFontCounter = 1
+                        fontSize = Float(40/startFontCounter)
                     }
                 }
-            }
-//            if audioEngine.isRunning {
-//                audioEngine.stop()
-//                recognitionRequest?.endAudio()
-//                audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
-//            }else{
-//                do {
-//                    try startRecording()
-//                } catch {
-//
-//                }
-//            }
-            if reciveTextLabel.text != nil{
-                if compareString(str1: inputText, str2: reciveTextLabel.text!) == true{
-                    
-                    startFontCounter += 1
-                    fontSize = Float(40/startFontCounter)
-                    print("огонь")
+                DispatchQueue.global(qos: .userInteractive).async {
+                    [unowned self] in
+                    self.recognitionTask?.cancel()
+                    self.recognitionTask = nil
                 }
+                reciveTextLabel.text = ""
+                inputText = ""
             }
-            DispatchQueue.global(qos: .userInteractive).async {
-                [unowned self] in
-                self.recognitionTask?.cancel()
-                self.recognitionTask = nil
-            }
-//            recognitionTask?.cancel()
-//            recognitionTask = nil
-            reciveTextLabel.text = ""
-            
-            inputText = ""
+            timerCounter += 1
         }
-        timerCounter += 1
     }
     
     @objc func actionResults() {
@@ -906,8 +914,50 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         self.session?.stopRunning()
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.pushViewController(resultVC, animated: true)
-       
+        
     }
+    
+    func saveResult(){
+        
+        do{
+            let resultUser = try context.fetch(User.fetchRequest())
+            let resCurrentUser = try context.fetch(CurrentUser.fetchRequest())
+            if resCurrentUser.count > 0{
+                let curUserNum = (resCurrentUser.last as! CurrentUser).currentUser
+                let curUser = (resultUser[Int(curUserNum)] as! User)
+                let result = HyperopiaTestResult(context: context)
+                print("результат", ((startFontCounter-1)/10))
+                result.result = ((Float(startFontCounter)-1.0)/10.0)
+                result.dateTest = Date()
+                if eyeLabel.text == "Закройте правый глаз"{
+                    result.testingEye = "Левый глаз"
+                }else if eyeLabel.text == "Закройте левый глаз"{
+                    result.testingEye = "Правый глаз"
+                }
+                
+                curUser.addToRelationship1(result)
+                
+                try context.save()
+                print(result)
+            }
+            
+        }catch let error as NSError {
+            print(error)
+        }
+    }
+    @objc func stopLabelGestureAction() {
+        stopLabel.removeFromSuperview()
+        stopBool = false
+        startFontCounter = 1
+        
+    }
+    
+    
+    
+    
+    
+    
+    
     
     private func disableAVSession() {
         do {

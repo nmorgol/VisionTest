@@ -9,7 +9,7 @@ class ResultsTableViewController: UITableViewController {
     var state = String()//смотреть из какого контроллера пришел запрос
     var changedUser = Int(0)//можно поменять юзера у которого смотреть результат
     var currentUser: User?
-//    let cellID = "cellID"
+
     let resultCellID = "ResultCell"
     let userCellID = "UserCell"//ячейка из настроек -- пользователь
     var resultsMiopiaArray: [MiopiaTestResult]?//результаты из CoreData но они не сортированы
@@ -17,22 +17,18 @@ class ResultsTableViewController: UITableViewController {
     
     var sortedMiopiaArray: [MiopiaTestResult]?//отсортированные массивы по дате тестов
     var sortedHyperopiaArray: [HyperopiaTestResult]?
-//    var resultsMiopiaArray = User.
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(navBarAction))
         
-        
-//        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
         self.tableView.register(CurrentUserTableViewCell.self, forCellReuseIdentifier: userCellID)
         self.tableView.register(ResultsTableViewCell.self, forCellReuseIdentifier: resultCellID)
         
         tableView.tableFooterView = UIView()
     }
-    
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(false)
@@ -54,7 +50,13 @@ class ResultsTableViewController: UITableViewController {
         case 0:
             return 1
         case 1:
-            return sortedMiopiaArray?.count ?? 0
+            var count = 0
+            if state == "Miopia"{
+                count = sortedMiopiaArray?.count ?? 0
+            }else if state == "Hyperopia"{
+                count = sortedHyperopiaArray?.count ?? 0
+            }
+            return count
         default:
             break
         }
@@ -83,14 +85,27 @@ class ResultsTableViewController: UITableViewController {
             
             let currentDate = Date()
             let formatter = DateFormatter()
-            let recieveDate = sortedMiopiaArray?[indexPath.row].dateTest
-            formatter.dateFormat = "dd.MM.yyyy"
-            let result = formatter.string(from: recieveDate ?? currentDate)
             
-            cell2.eyeLabel.text = sortedMiopiaArray?[indexPath.row].testingEye
-            cell2.distanceTestLabel.text = "Distance test: \(sortedMiopiaArray?[indexPath.row].distance ?? 0)"
-            cell2.dateTestLabel.text = "Date test:" + "" + result
-            cell2.testResultLabel.text = "Test result:\(sortedMiopiaArray?[indexPath.row].result ?? 0)"
+            if state == "Miopia"{
+                let recieveDate = sortedMiopiaArray?[indexPath.row].dateTest
+                formatter.dateFormat = "dd.MM.yyyy"
+                let result = formatter.string(from: recieveDate ?? currentDate)
+                
+                cell2.eyeLabel.text = sortedMiopiaArray?[indexPath.row].testingEye
+                cell2.distanceTestLabel.text = "Distance test: \(sortedMiopiaArray?[indexPath.row].distance ?? 0)"
+                cell2.dateTestLabel.text = "Date test:" + "" + result
+                cell2.testResultLabel.text = "Test result:\(sortedMiopiaArray?[indexPath.row].result ?? 0)"
+            }else if state == "Hyperopia"{
+                let recieveDate = sortedHyperopiaArray?[indexPath.row].dateTest
+                formatter.dateFormat = "dd.MM.yyyy"
+                let result = formatter.string(from: recieveDate ?? currentDate)
+                
+                cell2.eyeLabel.text = sortedHyperopiaArray?[indexPath.row].testingEye
+                //cell2.distanceTestLabel.text = "Distance test: \(sortedMiopiaArray?[indexPath.row].distance ?? 0)"
+                cell2.dateTestLabel.text = "Date test:" + "" + result
+                cell2.testResultLabel.text = "Test result:\(sortedHyperopiaArray?[indexPath.row].result ?? 0)"
+            }
+            
             
             cell2.layer.cornerRadius = 20
             cell2.clipsToBounds = true
@@ -137,7 +152,6 @@ class ResultsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete{
-            print(state)
             
             if state == "Miopia"{
                 
@@ -155,13 +169,8 @@ class ResultsTableViewController: UITableViewController {
                                     if state == "Miopia"{
                                         resultsMiopiaArray = (currentUser?.relationship?.allObjects as! [MiopiaTestResult])
                                         context.delete(resultsMiopiaArray![i] as NSManagedObject)
-                                        //resultsMiopiaArray?.remove(at: i)
                                     }
-//                                    else if state == "Hyperopia"{
-//                                        resultsHyperopiaArray = (currentUser?.relationship1?.allObjects as! [HyperopiaTestResult])
-//                                    }
                                 }
-                                
                             }else{
                                 currentUser = (resultUser[changedUser] as! User)
                                 
@@ -169,12 +178,7 @@ class ResultsTableViewController: UITableViewController {
                                     resultsMiopiaArray = (currentUser?.relationship?.allObjects as! [MiopiaTestResult])
                                     context.delete(resultsMiopiaArray![i] as NSManagedObject)
                                 }
-//                                else if state == "Hyperopia"{
-//                                    resultsHyperopiaArray = (currentUser?.relationship1?.allObjects as! [HyperopiaTestResult])
-//                                    sortedHyperopiaArray = resultsHyperopiaArray?.sorted(by: { $0.dateTest!.compare($1.dateTest!) == .orderedDescending })
-//                                }
                             }
-                            
                             try? context.save()
                             
                         } catch let error as NSError {
@@ -187,11 +191,50 @@ class ResultsTableViewController: UITableViewController {
                 print(sortedMiopiaArray!.count)
                 tableView.deleteRows(at: [indexPath], with: .left)
                 recieveTestsResults()
+            }else if state == "Hyperopia"{
+                
+                for i in 0...resultsHyperopiaArray!.count-1{//надо будет что-то с "!" делать потом
+                    
+                    if (sortedHyperopiaArray![indexPath.row].isEqual(resultsHyperopiaArray![i])){
+                        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+                        do {
+                            let resultUser = try context.fetch(User.fetchRequest())
+                            let currentUserCD = try context.fetch(CurrentUser.fetchRequest())
+                            if changedUser == 0{
+                                if resultUser.count > 0{
+                                    changedUser = Int((currentUserCD.last as! CurrentUser).currentUser)
+                                    currentUser = (resultUser[changedUser] as! User)
+
+                                    if state == "Hyperopia"{
+                                        resultsHyperopiaArray = (currentUser?.relationship1?.allObjects as! [HyperopiaTestResult])
+                                        context.delete(resultsHyperopiaArray![i] as NSManagedObject)
+                                    }
+                                }
+                                
+                            }else{
+                                currentUser = (resultUser[changedUser] as! User)
+                                
+                                if state == "Hyperopia"{
+                                    resultsHyperopiaArray = (currentUser?.relationship1?.allObjects as! [HyperopiaTestResult])
+                                    context.delete(resultsHyperopiaArray![i] as NSManagedObject)
+                                }
+                            }
+                            
+                            try? context.save()
+                            
+                        } catch let error as NSError {
+                            print(error)
+                        }
+                    }
+                }
+                print(sortedHyperopiaArray!.count)
+                sortedHyperopiaArray!.remove(at: indexPath.row)
+                print(sortedHyperopiaArray!.count)
+                tableView.deleteRows(at: [indexPath], with: .left)
+                recieveTestsResults()
             }
         }
     }
-    
-    
     
     @objc func navBarAction(){
         let usersVC = UsersArrayTableViewController()
@@ -226,7 +269,6 @@ class ResultsTableViewController: UITableViewController {
                         resultsHyperopiaArray = (currentUser?.relationship1?.allObjects as! [HyperopiaTestResult])
                         sortedHyperopiaArray = resultsHyperopiaArray?.sorted(by: { $0.dateTest!.compare($1.dateTest!) == .orderedDescending })
                     }
-                    
                 }
             }else{
                 currentUser = (resultUser[changedUser] as! User)
