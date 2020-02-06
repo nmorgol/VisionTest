@@ -93,7 +93,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         
         startFontCounter = 1
         print(startFontCounter)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
         
         self.session = self.setupAVCaptureSession()
         
@@ -781,19 +781,19 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     }
     
     @objc func animatedPhoneFar(){
-        self.addPhoneImageView()
-        UIImageView.animate(withDuration: 1, animations: {
-            
-            self.phoneImageView.transform = CGAffineTransform.init(scaleX: 3/2, y: 3/2)
-        }) { (_) in
-            
-            UIImageView.animate(withDuration: 1, animations: {
-                
-                self.phoneImageView.transform = CGAffineTransform.init(scaleX: 2/3, y: 2/3)
-            }) { (_) in
-                self.phoneImageView.removeFromSuperview()
-            }
-        }
+//        self.addPhoneImageView()
+//        UIImageView.animate(withDuration: 1, animations: {
+//            
+//            self.phoneImageView.transform = CGAffineTransform.init(scaleX: 3/2, y: 3/2)
+//        }) { (_) in
+//            
+//            UIImageView.animate(withDuration: 1, animations: {
+//                
+//                self.phoneImageView.transform = CGAffineTransform.init(scaleX: 2/3, y: 2/3)
+//            }) { (_) in
+//                self.phoneImageView.removeFromSuperview()
+//            }
+//        }
     }
     
     @objc func animatedPhoneNear(){

@@ -41,9 +41,18 @@ class ResultsTableViewCell: UITableViewCell {
         eyeLabel.backgroundColor = .white
         eyeLabel.clipsToBounds = true
         
+        dateTestLabel.translatesAutoresizingMaskIntoConstraints = false
+        dateTestLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        dateTestLabel.topAnchor.constraint(equalTo: eyeLabel.bottomAnchor, constant: 4).isActive = true
+        dateTestLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9).isActive = true
+        dateTestLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        dateTestLabel.layer.cornerRadius = 10
+        dateTestLabel.backgroundColor = .white
+        dateTestLabel.clipsToBounds = true
+        
         testResultLabel.translatesAutoresizingMaskIntoConstraints = false
         testResultLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        testResultLabel.topAnchor.constraint(equalTo: eyeLabel.bottomAnchor, constant: 4).isActive = true
+        testResultLabel.topAnchor.constraint(equalTo: dateTestLabel.bottomAnchor, constant: 4).isActive = true
         testResultLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9).isActive = true
         testResultLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         testResultLabel.layer.cornerRadius = 10
@@ -58,15 +67,6 @@ class ResultsTableViewCell: UITableViewCell {
         distanceTestLabel.layer.cornerRadius = 10
         distanceTestLabel.backgroundColor = .white
         distanceTestLabel.clipsToBounds = true
-        
-        dateTestLabel.translatesAutoresizingMaskIntoConstraints = false
-        dateTestLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        dateTestLabel.topAnchor.constraint(equalTo: distanceTestLabel.bottomAnchor, constant: 4).isActive = true
-        dateTestLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9).isActive = true
-        dateTestLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        dateTestLabel.layer.cornerRadius = 10
-        dateTestLabel.backgroundColor = .white
-        dateTestLabel.clipsToBounds = true
     }
     
     required init?(coder: NSCoder) {

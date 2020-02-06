@@ -21,7 +21,7 @@ class ResultsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.view.backgroundColor = #colorLiteral(red: 0.6561266184, green: 0.9085168242, blue: 0.9700091481, alpha: 1)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(navBarAction))
         
         self.tableView.register(CurrentUserTableViewCell.self, forCellReuseIdentifier: userCellID)
@@ -91,10 +91,12 @@ class ResultsTableViewController: UITableViewController {
                 formatter.dateFormat = "dd.MM.yyyy"
                 let result = formatter.string(from: recieveDate ?? currentDate)
                 
+                
+                
                 cell2.eyeLabel.text = sortedMiopiaArray?[indexPath.row].testingEye
-                cell2.distanceTestLabel.text = "Distance test: \(sortedMiopiaArray?[indexPath.row].distance ?? 0)"
-                cell2.dateTestLabel.text = "Date test:" + "" + result
-                cell2.testResultLabel.text = "Test result:\(sortedMiopiaArray?[indexPath.row].result ?? 0)"
+                cell2.distanceTestLabel.text = "Дистанция теста:" + " " + " \(sortedMiopiaArray?[indexPath.row].distance ?? 0)"
+                cell2.dateTestLabel.text = "Дата теста:" + " " + result
+                cell2.testResultLabel.text = "Результат теста:" + " " + "\(sortedMiopiaArray?[indexPath.row].result ?? 0)"
             }else if state == "Hyperopia"{
                 let recieveDate = sortedHyperopiaArray?[indexPath.row].dateTest
                 formatter.dateFormat = "dd.MM.yyyy"
@@ -102,8 +104,8 @@ class ResultsTableViewController: UITableViewController {
                 
                 cell2.eyeLabel.text = sortedHyperopiaArray?[indexPath.row].testingEye
                 //cell2.distanceTestLabel.text = "Distance test: \(sortedMiopiaArray?[indexPath.row].distance ?? 0)"
-                cell2.dateTestLabel.text = "Date test:" + "" + result
-                cell2.testResultLabel.text = "Test result:\(sortedHyperopiaArray?[indexPath.row].result ?? 0)"
+                cell2.dateTestLabel.text = "Дата теста:" + " " + result
+                cell2.testResultLabel.text = "Результат теста:" + " " + "\(sortedHyperopiaArray?[indexPath.row].result ?? 0)"
             }
             
             
@@ -123,9 +125,9 @@ class ResultsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:
-            return " "
+            return ""
         case 1:
-            return " "
+            return "Результаты теста: "
         default:
             break
         }

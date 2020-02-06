@@ -53,7 +53,7 @@ class MiopiaViewController: UIViewController {
         self.navigationItem.title = "Miopia test"
         self.view.backgroundColor = .white
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
         
         
     }

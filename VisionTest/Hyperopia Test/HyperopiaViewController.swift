@@ -26,7 +26,7 @@ class HyperopiaViewController: UIViewController {
 //        self.navigationItem.title = "Hyperopia test"
         self.view.backgroundColor = .white
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
         fontSize = 17
         
     }

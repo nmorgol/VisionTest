@@ -25,6 +25,8 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.backgroundColor = #colorLiteral(red: 0.6561266184, green: 0.9085168242, blue: 0.9700091481, alpha: 1)
+        
         userTextView.delegate = self
         userTextField.delegate = self
         
@@ -258,7 +260,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        userTextView.frame.origin.y += 300
+        userTextView.frame.origin.y += 200
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -276,7 +278,6 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         userTextField.resignFirstResponder()
-        userTextView.frame.origin.y += 300
         self.navigationItem.rightBarButtonItems?.removeAll()
         self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.saveEditButtonAction))]
         

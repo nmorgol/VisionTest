@@ -12,30 +12,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
             
         application.isIdleTimerDisabled = true
+        
+        
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        
-        //let miopiaVC = MiopiaViewController()
-        let hyperopiaVC = StartHyperopiaViewController()
-        let settingsVC = SettingsTableViewController()
-        
-        let miopiaStartVC = StartMiopiaViewController()
-//        let miopiaNavVC = UINavigationController(rootViewController: miopiaVC)
-        let miopiaNavVC = UINavigationController(rootViewController: miopiaStartVC)
-        let hyperopiaNavVC = UINavigationController(rootViewController: hyperopiaVC)
-        let settingsNavVC = UINavigationController(rootViewController: settingsVC)
-        
-        let tabBar = UITabBarController()
-        
-        tabBar.setViewControllers([miopiaNavVC, hyperopiaNavVC, settingsNavVC], animated: true)
-        
-        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightGray], for: .normal)
-        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.blue], for: .selected)
-        //для того чтобы были видны иконки при первом запуске
-        hyperopiaVC.view.reloadInputViews()
-        settingsVC.view.reloadInputViews()
-        
         window!.overrideUserInterfaceStyle = .light
-        self.window?.rootViewController = tabBar
+        
+        
+        let startVC = StartViewController()
+        let navVC = UINavigationController(rootViewController: startVC)
+        
+        
+//        let hyperopiaVC = StartHyperopiaViewController()
+//        let settingsVC = SettingsTableViewController()
+//
+//        let miopiaStartVC = StartMiopiaViewController()
+//        let miopiaNavVC = UINavigationController(rootViewController: miopiaStartVC)
+//        let hyperopiaNavVC = UINavigationController(rootViewController: hyperopiaVC)
+//        let settingsNavVC = UINavigationController(rootViewController: settingsVC)
+//
+//        let tabBar = UITabBarController()
+//
+//        tabBar.setViewControllers([miopiaNavVC, hyperopiaNavVC, settingsNavVC], animated: true)
+//
+//        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightGray], for: .normal)
+//        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.blue], for: .selected)
+//        //для того чтобы были видны иконки при первом запуске
+//        hyperopiaVC.view.reloadInputViews()
+//        settingsVC.view.reloadInputViews()
+//
+//
+//        self.window?.rootViewController = tabBar
+        
+        self.window?.rootViewController = navVC
+        
         self.window?.backgroundColor = .white
         self.window?.makeKeyAndVisible()
         

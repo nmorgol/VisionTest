@@ -92,7 +92,8 @@ class SymbolTableViewCell: UITableViewCell, UITableViewDelegate{
         symbolView.removeFromSuperview()
         
         symbolView = symbolArray[target.selectedSegmentIndex]
-        
+        let currentSymbolArray = ["Landolt", "Snellen"]
+        currentSymbol = currentSymbolArray[target.selectedSegmentIndex]
         addSubview(symbolView)
         addSubview(symbolSegment)
         
@@ -108,7 +109,49 @@ class SymbolTableViewCell: UITableViewCell, UITableViewDelegate{
         symbolSegment.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 2/4).isActive = true
         symbolSegment.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         
-        
+        actionSave()
     }
-    
+    @objc func actionSave() {
+        
+        let appDelegat = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegat.persistentContainer.viewContext
+        
+        var avtoDetectDistBool = false
+        var speechRecognBool = false
+        var distanceTest = Float(0.5)
+        var timeToStart = Float(0.0)
+        
+        do {
+            let result = try context.fetch(SettingsApp.fetchRequest())
+            
+            if result.count > 0 {
+            
+            avtoDetectDistBool = (result.last as! SettingsApp).avtoDetectDistance
+            speechRecognBool = (result.last as! SettingsApp).speechRecognize
+            distanceTest = (result.last as! SettingsApp).distanceTest
+            timeToStart = (result.last as! SettingsApp).timeBeforeTest
+            
+            for res in result{
+                context.delete(res as! NSManagedObject)
+            }
+
+            try? context.save()
+        }
+        } catch let error as NSError {
+            print(error)
+        }
+        
+        let settingsNew = SettingsApp(context: context)
+        settingsNew.setValue(avtoDetectDistBool, forKey: "avtoDetectDistance")
+        settingsNew.setValue(speechRecognBool, forKey: "speechRecognize")
+        settingsNew.setValue(distanceTest, forKey: "distanceTest")
+        settingsNew.setValue(timeToStart, forKey: "timeBeforeTest")
+        settingsNew.setValue(currentSymbol, forKey: "symbolTest")
+        
+        do {
+            try context.save()
+        }catch let error as NSError{
+            print(error)
+        }
+    }
 }

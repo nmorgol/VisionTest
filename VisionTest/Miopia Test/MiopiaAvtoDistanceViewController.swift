@@ -92,7 +92,7 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         
         synthesizer.delegate = self
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
         
         tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(tapGestureRecognizer:)))
 

@@ -33,11 +33,11 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = #colorLiteral(red: 0.6561266184, green: 0.9085168242, blue: 0.9700091481, alpha: 1)
+//        let tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 2)
+//        self.tabBarItem = tabBarItem
         
-        let tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 2)
-        self.tabBarItem = tabBarItem
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(actionSave))
+        //self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(actionSave))
         
         self.tableView.register(PurchasesTableViewCell.self, forCellReuseIdentifier: purchasesCellID)
         self.tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: settingsCellID)
@@ -56,6 +56,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     }
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(true)
+        
+        self.navigationController?.navigationBar.isHidden = false
         
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let image = UIImage(named: "placeholder")?.pngData()!
@@ -87,6 +89,11 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             print(error)
         }
         tableView.reloadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super .viewWillDisappear(false)
+        self.navigationController?.navigationBar.isHidden = false
     }
     
     // MARK: - Table view data source
@@ -141,13 +148,13 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             let cell2 = tableView.dequeueReusableCell(withIdentifier: purchasesCellID, for: indexPath) as! PurchasesTableViewCell
             if indexPath.row == 0{
                 
-                cell2.settingLabel.text = otstup + "AvtoDetectDistance"
+                cell2.settingLabel.text = otstup + "Auto detect distance"
                 cell2.settingSwitch.addTarget(self, action: #selector(avtodetectSwitchAction(paramSwitch:)), for: .valueChanged)
                 cell2.settingSwitch.isOn = avtoDetectDistBool
                 cell2.accessoryType = .detailButton
                 
             }else{
-                cell2.settingLabel.text = otstup + "SpeechRecognition"
+                cell2.settingLabel.text = otstup + "Speech recognition"
                 cell2.settingSwitch.addTarget(self, action: #selector(speechSwitchAction(paramSwitch:)), for: .valueChanged)
                 cell2.settingSwitch.isOn = speechRecognBool
                 cell2.accessoryType = .detailButton
@@ -165,6 +172,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
                 cell3.deteilLabel.text = "m."
                 cell3.accessoryType = .detailButton
                 cell3.settingTextLabel.text = "\(distanceTest)"
+                cell3.settingTextLabel.textColor = .systemBlue
                 
                 let tap = UITapGestureRecognizer(target: self, action: #selector(labelDistTextAction(_:)))
                 tap.numberOfTapsRequired = 1
@@ -179,6 +187,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
                 cell3.deteilLabel.text = "s."
                 cell3.accessoryType = .detailButton
                 cell3.settingTextLabel.text = "\(timeToStart)"
+                cell3.settingTextLabel.textColor = .systemBlue
                 
                 let tap = UITapGestureRecognizer(target: self, action: #selector(labelTimeTextAction(_:)))
                 tap.numberOfTapsRequired = 1
@@ -210,7 +219,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:
-            return " "
+            return ""
         case 1:
             return "In-app purchases settings"
         case 2:
@@ -303,13 +312,13 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         userInfoImageView.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(removeCoverImage))
         userInfoImageView.addGestureRecognizer(tap)
-        self.navigationController?.navigationBar.isHidden = true
+        //self.navigationController?.navigationBar.isHidden = true
         self.tabBarController?.tabBar.isHidden = true
     }
     
     @objc func removeCoverImage(recognizer: UITapGestureRecognizer){
         userInfoImageView.removeFromSuperview()
-        self.navigationController?.navigationBar.isHidden = false
+        //self.navigationController?.navigationBar.isHidden = false
         self.tabBarController?.tabBar.isHidden = false
     }
 
@@ -331,6 +340,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         }else{
             avtoDetectDistBool = false
         }
+        actionSave()
     }
     
     @objc func speechSwitchAction(paramSwitch: UISwitch){
@@ -364,6 +374,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         }else{
             speechRecognBool = false
         }
+        actionSave()
     }
      
     @objc func labelDistTextAction(_ sender: UILabel){
@@ -418,6 +429,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         labelTextField.removeFromSuperview()
         coverView.removeFromSuperview()
         tableView.reloadData()
+        actionSave()
     }
     
     @objc func labelTimeTextAction(_ sender: UILabel){
@@ -471,18 +483,9 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         labelTextField.removeFromSuperview()
         coverView.removeFromSuperview()
         tableView.reloadData()
+        actionSave()
     }
     
-//    @objc func removeCoverImage(recognizer: UITapGestureRecognizer){
-//        userInfoImageView.removeFromSuperview()
-//        self.navigationController?.navigationBar.isHidden = false
-//        self.tabBarController?.tabBar.isHidden = false
-//    }
-    
-//    @objc func infoButtonAction(){
-//        let infoVC = InfoViewController()
-//        self.navigationController?.pushViewController(infoVC, animated: false)
-//    }
     
     @objc func accessoryButtonAction(title: String){
         let infoVC = InfoViewController()
