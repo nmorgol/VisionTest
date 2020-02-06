@@ -20,7 +20,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         
         addPhotoImageView()
-        addUsePhotoButton()
+//        addUsePhotoButton()
         addDeletePhotoButton()
         addResultImageView()
         displayImagePickerContr()
@@ -86,6 +86,10 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         photoImageView.image = nil
         resultImageView.image = img  //UIImage(cgImage: img!)
         resultImageView.contentMode = .scaleAspectFit
+        
+        addUsePhotoButton()
+        
+        deletePhotoButton.removeFromSuperview()
     }
     
     func addUsePhotoButton(){

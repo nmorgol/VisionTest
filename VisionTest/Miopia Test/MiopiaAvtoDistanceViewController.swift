@@ -90,12 +90,13 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        UIApplication.shared.isIdleTimerDisabled = true
+        
         synthesizer.delegate = self
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
         
         tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(tapGestureRecognizer:)))
-
 
     }
     // MARK: viewWillAppear
@@ -218,6 +219,7 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         recieveText = ""
         testingText = []
         
+        UIApplication.shared.isIdleTimerDisabled = false
     }
     
     @objc func actionResults() {//метод self.navigationItem.leftBarButtonItem

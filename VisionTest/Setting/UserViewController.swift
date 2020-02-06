@@ -260,7 +260,8 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        userTextView.frame.origin.y += 200
+        userTextView.frame.origin.y += 400
+        photoButton.isEnabled = false
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -269,6 +270,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
             userTextView.frame.origin.y += 200
             photoButton.frame.origin.y += 500
             userTextView.resignFirstResponder()
+            //userTextField.resignFirstResponder()
             
             self.navigationItem.rightBarButtonItems?.removeAll()
             self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.saveEditButtonAction))]
@@ -280,6 +282,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         userTextField.resignFirstResponder()
         self.navigationItem.rightBarButtonItems?.removeAll()
         self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.saveEditButtonAction))]
+        photoButton.isEnabled = true
         
         return true
     }
