@@ -17,9 +17,6 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     
     private let audioEngine = AVAudioEngine()
     
-    
-    
-    
     // AVCapture variables to hold sequence data
     var session: AVCaptureSession?
     var previewLayer: AVCaptureVideoPreviewLayer?
@@ -43,10 +40,8 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     lazy var sequenceRequestHandler = VNSequenceRequestHandler()
     
     
-    
-    //let wordArray = ["Верх","Низ","Лево","Право"]
     var currentText = String()
-    //var speechBool = false
+    
     var wordLabel = UILabel()
     var reciveTextLabel = UILabel()
     var authorizedLabel = UILabel()
@@ -84,8 +79,8 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         self.navigationItem.title = "Hyperopia test speech"
         self.view.backgroundColor = .white
         
-        
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(false)
         
@@ -114,7 +109,6 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         addReciveTextLabel()
         addAuthorizedLabel()
         addMicrophonesView()
-        
         
     }
     
@@ -178,11 +172,6 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                 }
             }
         }
-        //disableAVSession()
-        
-        //        self.audioEngine.stop()
-        //        let inputNode = audioEngine.inputNode
-        //        inputNode.removeTap(onBus: 0)
         
     }
     
@@ -274,8 +263,6 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
             
         }
     }
-    
-    
     
     // MARK: Vision
     // Ensure that the interface stays locked in Portrait.
@@ -659,7 +646,6 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         wordLabel.textAlignment = .center
         wordLabel.font = .boldSystemFont(ofSize: CGFloat(fontSize))
         wordLabel.numberOfLines = 0
-        
         
     }
     

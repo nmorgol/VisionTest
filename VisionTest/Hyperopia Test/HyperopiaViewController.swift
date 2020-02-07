@@ -6,8 +6,6 @@ import CoreData
 
 class HyperopiaViewController: UIViewController {
     
-    
-    
     let wordArray = ["Верх","Низ","Лево","Право"]
     var currentText = String()
     var speechBool = false
@@ -22,7 +20,7 @@ class HyperopiaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        self.title = "Hyperopia test"
+        self.title = "Hyperopia test"
 //        self.navigationItem.title = "Hyperopia test"
         self.view.backgroundColor = .white
         
@@ -31,22 +29,21 @@ class HyperopiaViewController: UIViewController {
         
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(false)
         disapearTrue = true
         
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        
-        do {
-            let resultSettings = try context.fetch(SettingsApp.fetchRequest())
-            
-            if resultSettings.count > 0 {
-                speechBool = (resultSettings.last as! SettingsApp).speechRecognize
-            }
-        } catch let error as NSError {
-            print(error)
-        }
+//        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//        
+//        do {
+//            let resultSettings = try context.fetch(SettingsApp.fetchRequest())
+//            
+//            if resultSettings.count > 0 {
+//                speechBool = (resultSettings.last as! SettingsApp).speechRecognize
+//            }
+//        } catch let error as NSError {
+//            print(error)
+//        }
         
         
     }
@@ -89,23 +86,21 @@ class HyperopiaViewController: UIViewController {
         
     }
     
-
     
-    
-    func ifSpeechBoolIsTrue(speechB: Bool) {
-        if speechB == true{
-            
-            let vc = HyperopiaSpeechViewController()
-            //vc.inputText = textForRec
-            //vc.fontSize = fontSize
-            self.navigationController?.pushViewController(vc, animated: false)
-            vc.comletion = {text in
-                self.currentText = text
-                print(self.currentText)
-            }
-        }else{
-            let vc = HyperopiaViewController()
-            self.navigationController?.pushViewController(vc, animated: false)
-        }
-    }
+//    func ifSpeechBoolIsTrue(speechB: Bool) {
+//        if speechB == true{
+//
+//            let vc = HyperopiaSpeechViewController()
+//            //vc.inputText = textForRec
+//            //vc.fontSize = fontSize
+//            self.navigationController?.pushViewController(vc, animated: false)
+//            vc.comletion = {text in
+//                self.currentText = text
+//                print(self.currentText)
+//            }
+//        }else{
+//            let vc = HyperopiaViewController()
+//            self.navigationController?.pushViewController(vc, animated: false)
+//        }
+//    }
 }

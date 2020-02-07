@@ -39,6 +39,8 @@ class StartViewController: UIViewController {
     let informHyperopiaButton = UIButton()
     let hyperopiaResultButton = UIButton()
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -341,6 +343,8 @@ class StartViewController: UIViewController {
         informMyopiaButton.titleLabel?.numberOfLines = 0
         informMyopiaButton.setTitleColor(.systemBlue, for: .normal)
         
+        informMyopiaButton.addTarget(self, action: #selector(infoButtonMyopAction), for: .touchUpInside)
+        
     }
     
     func addHyperopiaViewSubviews() {
@@ -499,6 +503,11 @@ class StartViewController: UIViewController {
         }else{
             self.navigationController?.pushViewController(startVC, animated: false)
         }
+    }
+    
+    @objc func infoButtonMyopAction(){
+        let infoVC = InfoStartViewController()
+        self.navigationController?.pushViewController(infoVC, animated: false)
     }
     
     

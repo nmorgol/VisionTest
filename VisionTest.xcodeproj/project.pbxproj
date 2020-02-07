@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB12A76523EDD494008ED40E /* NormalLightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB12A76423EDD494008ED40E /* NormalLightView.swift */; };
 		EB16C35123CC6D85006E9C4D /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB16C35023CC6D85006E9C4D /* InfoViewController.swift */; };
 		EB16C35423CF48B3006E9C4D /* ExtensionUIImageDataSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB16C35323CF48B3006E9C4D /* ExtensionUIImageDataSize.swift */; };
 		EB1F611B23C25D6C00E96024 /* HyperopiaSpeechViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1F611A23C25D6C00E96024 /* HyperopiaSpeechViewController.swift */; };
@@ -40,6 +41,7 @@
 		EBDC7B4B23EC3E63006192BE /* EyeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDC7B4A23EC3E63006192BE /* EyeView.swift */; };
 		EBDC7B4D23EC3F2B006192BE /* MyopiaLightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDC7B4C23EC3F2B006192BE /* MyopiaLightView.swift */; };
 		EBDC7B4F23EC5DF4006192BE /* HyperopiaLightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDC7B4E23EC5DF4006192BE /* HyperopiaLightView.swift */; };
+		EBDC7B5123EC789C006192BE /* InfoStartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDC7B5023EC789C006192BE /* InfoStartViewController.swift */; };
 		EBE5DF9B23D32BAB005801DF /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE5DF9A23D32BAB005801DF /* CircleView.swift */; };
 		EBE633DE239D4A2A00FDCA38 /* ResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE633DD239D4A2A00FDCA38 /* ResultsTableViewController.swift */; };
 		EBE633E0239D5E6A00FDCA38 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE633DF239D5E6A00FDCA38 /* UserTableViewCell.swift */; };
@@ -67,6 +69,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EB12A76423EDD494008ED40E /* NormalLightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalLightView.swift; sourceTree = "<group>"; };
 		EB16C35023CC6D85006E9C4D /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		EB16C35323CF48B3006E9C4D /* ExtensionUIImageDataSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIImageDataSize.swift; sourceTree = "<group>"; };
 		EB1F611A23C25D6C00E96024 /* HyperopiaSpeechViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HyperopiaSpeechViewController.swift; sourceTree = "<group>"; };
@@ -106,6 +109,7 @@
 		EBDC7B4A23EC3E63006192BE /* EyeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeView.swift; sourceTree = "<group>"; };
 		EBDC7B4C23EC3F2B006192BE /* MyopiaLightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyopiaLightView.swift; sourceTree = "<group>"; };
 		EBDC7B4E23EC5DF4006192BE /* HyperopiaLightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HyperopiaLightView.swift; sourceTree = "<group>"; };
+		EBDC7B5023EC789C006192BE /* InfoStartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoStartViewController.swift; sourceTree = "<group>"; };
 		EBE5DF9A23D32BAB005801DF /* CircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		EBE633DD239D4A2A00FDCA38 /* ResultsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsTableViewController.swift; sourceTree = "<group>"; };
 		EBE633DF239D5E6A00FDCA38 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
@@ -306,6 +310,7 @@
 				EBDC7B4A23EC3E63006192BE /* EyeView.swift */,
 				EBDC7B4C23EC3F2B006192BE /* MyopiaLightView.swift */,
 				EBDC7B4E23EC5DF4006192BE /* HyperopiaLightView.swift */,
+				EB12A76423EDD494008ED40E /* NormalLightView.swift */,
 			);
 			path = Eye;
 			sourceTree = "<group>";
@@ -332,6 +337,7 @@
 			isa = PBXGroup;
 			children = (
 				EBF4868123E9937C003C3004 /* StartViewController.swift */,
+				EBDC7B5023EC789C006192BE /* InfoStartViewController.swift */,
 			);
 			path = "Starting VC";
 			sourceTree = "<group>";
@@ -498,7 +504,9 @@
 				EBF48D90239654AD00CB3418 /* LandoltTopUIView.swift in Sources */,
 				EB16C35123CC6D85006E9C4D /* InfoViewController.swift in Sources */,
 				EB492090239A419E0062D974 /* SnellenTopView.swift in Sources */,
+				EBDC7B5123EC789C006192BE /* InfoStartViewController.swift in Sources */,
 				EB551CC623D1C14F0020A46D /* CurrentUserTableViewCell.swift in Sources */,
+				EB12A76523EDD494008ED40E /* NormalLightView.swift in Sources */,
 				EB38F4782393EA3700D30348 /* MiopiaViewController.swift in Sources */,
 				EB3193DD23DC359800D97FB0 /* MiopiaAvtoDistanceViewController.swift in Sources */,
 				EB4FB53623A506D0002C0735 /* CameraViewController.swift in Sources */,
