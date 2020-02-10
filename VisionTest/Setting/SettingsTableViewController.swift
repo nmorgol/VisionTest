@@ -221,7 +221,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         case 0:
             return ""
         case 1:
-            return "In-app purchases settings"
+            return " "
         case 2:
             return "Myopia settings"
         default:

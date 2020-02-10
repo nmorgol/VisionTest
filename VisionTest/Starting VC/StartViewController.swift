@@ -245,7 +245,7 @@ class StartViewController: UIViewController {
         settingsButton.titleLabel?.textAlignment = .center
         
         settingsButton.setImage(UIImage(named: "settingsIcon"), for: .normal)
-        settingsButton.setTitle("Установите оптимальные настройки приложения", for: .normal)
+        settingsButton.setTitle("Настройки приложения", for: .normal)
         settingsButton.setTitleColor(.systemBlue, for: .normal)
         settingsButton.addTarget(self, action: #selector(settingsViewAction), for: .touchUpInside)
         

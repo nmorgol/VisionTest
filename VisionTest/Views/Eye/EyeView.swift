@@ -28,7 +28,7 @@ class EyeView: UIView {
                       clockwise: false)
         
         
-        outEye.stroke()
+        //outEye.stroke()
         
         outEye.lineWidth = 2
         UIColor.darkGray.setStroke()
