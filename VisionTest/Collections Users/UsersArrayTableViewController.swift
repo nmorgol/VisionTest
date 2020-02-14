@@ -97,8 +97,67 @@ class UsersArrayTableViewController: UITableViewController {
         
         
     }
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
     
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete{
+            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+            do {//удалили пользователя
+                usersArray = try context.fetch(User.fetchRequest())
+                context.delete(usersArray[indexPath.row] as NSManagedObject)
+                
+                
+                
+                try? context.save()
+                usersArray = try context.fetch(User.fetchRequest())
+            } catch let error as NSError {
+                print(error)
+            }
+            tableView.deleteRows(at: [indexPath], with: .left)
+            
+            if usersArray.count == 0{//если пользователей не осталось - создаем нового
+                let userNew = User(context: context)//добавили нового пользователя
+                let imgPng = UIImage(named: "placeholder")?.pngData()
+                userNew.setValue(imgPng, forKey: "photo")
+                userNew.setValue("name", forKey: "name")
+                userNew.setValue(" ", forKey: "info")
+                
+                do {
+                    try context.save()
+                    usersArray = try context.fetch(User.fetchRequest())
+                }catch let error as NSError{
+                    print(error)
+                }
+            }
+            
+            do {//удалили текущего пользователя
+                let result = try context.fetch(CurrentUser.fetchRequest())
+                
+                for res in result{
+                    context.delete(res as! NSManagedObject)
+                }
 
+                try? context.save()
+                
+            } catch let error as NSError {
+                print(error)
+            }
+            let newCurrentUser = CurrentUser(context: context)
+            newCurrentUser.setValue(Float(usersArray.count-1), forKey: "currentUser")
+            do {//создали нового текущего пользователя
+                try context.save()
+            }catch let error as NSError{
+                print(error)
+            }
+            
+            tableView.reloadData()
+        }
+    }
+
+    
+    
     override func viewWillDisappear(_ animated: Bool) {
         super .viewWillAppear(false)
         self.tabBarController?.tabBar.isHidden = false

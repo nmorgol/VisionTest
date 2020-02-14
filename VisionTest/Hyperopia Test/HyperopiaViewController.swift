@@ -6,63 +6,76 @@ import CoreData
 
 class HyperopiaViewController: UIViewController {
     
-    let wordArray = ["Верх","Низ","Лево","Право"]
     var currentText = String()
-    var speechBool = false
+    
     var wordLabel = UILabel()
-    var fontSize = Float()
+    var reciveTextField = UITextField()
+    var authorizedLabel = UILabel()
+    var eyeLabel = UILabel()
+    let progress = UIProgressView()
+    let stopButton = UIButton()
     
-    let textForRec = "Взлететь вверх"
+    var startFontCounter = 1//счетчик уменьшения размера шрифта
+    var fontSize = 47.0//Float(47)//методом подбора = острота зрения 0.1
     
+    var inputText = String()
     
-    var disapearTrue = true //подпорка для того чтобы не отрабатывал метод self.navigationController?.popViewController(animated:false
+    var timer: Timer!
+    var timerCounter = 0
+    var stopBool = false // для работы таймера от слова СТОП
+    let stopLabel = UILabel()//всплывает по слову СТОП
+    
+    var rightRes = Float()
+    var leftRes = Float()
+    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.title = "Hyperopia test"
-//        self.navigationItem.title = "Hyperopia test"
         self.view.backgroundColor = .white
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
-        fontSize = 17
+//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(false)
-        disapearTrue = true
+        //disapearTrue = true
+        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
         
-//        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        addEyeLabel(text: "Закройте левый глаз")
+        
+        addWordLabel()
+        addStopButton()
+        addProgressView()
+        addReciveTextLabel()
+        
+//        let vc = InfoHyperopiaViewController()
 //        
-//        do {
-//            let resultSettings = try context.fetch(SettingsApp.fetchRequest())
-//            
-//            if resultSettings.count > 0 {
-//                speechBool = (resultSettings.last as! SettingsApp).speechRecognize
-//            }
-//        } catch let error as NSError {
-//            print(error)
+//        vc.selectedSegmentIndex = 1
+//        
+//        self.present(vc, animated: true, completion: nil)
+//        reciveTextField.resignFirstResponder()
+//        
+//        
+//        if vc.isBeingDismissed{
+//            reciveTextField.becomeFirstResponder()
 //        }
-        
-        
     }
     
-    override func viewWillLayoutSubviews() {
-        super .viewWillLayoutSubviews()
-        addWordLabel()
-    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super .viewWillDisappear(true)
-        if disapearTrue {
-                self.navigationController?.popViewController(animated: false)
-        }
-        
+
+        timer.invalidate()
     }
     
     
     @objc func actionResults() {
-        disapearTrue = false
+        //disapearTrue = false
         let resultVC = ResultsTableViewController()
         resultVC.title = "Hyperopia test results"
         resultVC.state = "Hyperopia"
@@ -70,37 +83,213 @@ class HyperopiaViewController: UIViewController {
     }
     
     
-    
+    // MARK: View
     func addWordLabel() {
         view.addSubview(wordLabel)
         wordLabel.translatesAutoresizingMaskIntoConstraints = false
         wordLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         wordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        wordLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 4/5).isActive = true
-        wordLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/20).isActive = true
+        wordLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2/5).isActive = true
+        wordLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/15).isActive = true
         
-        wordLabel.text = wordArray.randomElement()
+        wordLabel.text = inputText
         wordLabel.textAlignment = .center
-        wordLabel.font = .boldSystemFont(ofSize: CGFloat(fontSize))
+        //wordLabel.font = .italicSystemFont(ofSize: CGFloat(fontSize))
         
+        wordLabel.numberOfLines = 0
+        
+    }
+    
+    func addStopButton() {
+        view.addSubview(stopButton)
+        stopButton.translatesAutoresizingMaskIntoConstraints = false
+        stopButton.centerYAnchor.constraint(equalTo: wordLabel.centerYAnchor).isActive = true
+        stopButton.leftAnchor.constraint(equalTo: wordLabel.rightAnchor).isActive = true
+        stopButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
+        stopButton.heightAnchor.constraint(equalTo: wordLabel.heightAnchor).isActive = true
+        
+        stopButton.setTitle("❌", for: .normal)
+        stopButton.backgroundColor = .white
+        stopButton.layer.cornerRadius = 10
+        stopButton.layer.shadowOpacity = 0.1
+        stopButton.layer.shadowColor = UIColor.lightGray.cgColor
+        stopButton.addTarget(self, action: #selector(stopButtonAction), for: .touchUpInside)
+    }
+    
+    func addProgressView() {
+        view.addSubview(progress)
+        progress.translatesAutoresizingMaskIntoConstraints = false
+        progress.topAnchor.constraint(equalTo: wordLabel.bottomAnchor).isActive = true
+        progress.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 4/5).isActive = true
+        progress.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        progress.progressViewStyle = .default
+        
+    }
+    
+    func addReciveTextLabel() {
+        view.addSubview(reciveTextField)
+        reciveTextField.translatesAutoresizingMaskIntoConstraints = false
+        reciveTextField.topAnchor.constraint(equalTo: progress.bottomAnchor, constant: 5).isActive = true
+        reciveTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        reciveTextField.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 4/5).isActive = true
+        reciveTextField.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/15).isActive = true
+        
+        reciveTextField.textAlignment = .center
+        reciveTextField.font = .boldSystemFont(ofSize: CGFloat(40))
+        
+        reciveTextField.backgroundColor = .lightGray
+        
+        reciveTextField.keyboardType = .numberPad
+        reciveTextField.becomeFirstResponder()
+    }
+    
+    
+    func addEyeLabel(text: String){
+        view.addSubview(eyeLabel)
+        eyeLabel.translatesAutoresizingMaskIntoConstraints = false
+        eyeLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
+        eyeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        //eyeLabel.centerYAnchor.constraint(lessThanOrEqualTo: view.centerYAnchor).isActive = true
+        eyeLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 4/5).isActive = true
+        eyeLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/10).isActive = true
+        eyeLabel.font = .boldSystemFont(ofSize: 30)
+        eyeLabel.text = text//"Закройте левый глаз"
+        eyeLabel.textColor = .blue
+        eyeLabel.textAlignment = .center
+        eyeLabel.numberOfLines = 0
+    }
+
+    func addStopLabel(){
+        
+        self.view.addSubview(stopLabel)
+        stopLabel.translatesAutoresizingMaskIntoConstraints = false
+        stopLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        stopLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        stopLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 4/4).isActive = true
+        stopLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 3/4).isActive = true
+
+        stopLabel.backgroundColor = .white
+        stopLabel.numberOfLines = 0
+        stopLabel.text = "Тест завершен. \n Результаты: \n - правый глаз \(rightRes) \n - левый глаз \(leftRes)"
+
+        stopLabel.isUserInteractionEnabled = true
+//        let tap = UITapGestureRecognizer(target: self, action: #selector(stopLabelGestureAction))
+//        stopLabel.addGestureRecognizer(tap)
+ 
+    }
+    
+    func compareString(str1: String, str2: String) -> Bool {
+        var boolCompare = false
+        //let second1 = Array(str1)
+        let second2 = Array(str2)
+        
+        if second2.count == 0 {//пришел как-то 0 и краш
+            boolCompare = false
+        }else{
+            if str2.contains(str1){
+                boolCompare = true
+            }
+        }
+        return boolCompare
+    }
+
+    @objc func timerAction() {
+        
+        if stopBool == false {
+            
+            progress.setProgress(0.1*Float(Int(timerCounter)%10) + 0.1, animated: false)
+            
+            if timerCounter == 0 || timerCounter%10 == 0{
+                
+                inputText = String(Int.random(in: 100...999))
+                print(inputText)
+                reciveTextField.text = ""
+                //wordLabel.font = .boldSystemFont(ofSize: CGFloat(fontSize))
+                wordLabel.font = UIFont(name: "HelveticaNeue-Bold", size: CGFloat(fontSize))//вроде шрифт подобрал
+                wordLabel.text = inputText
+                
+                print(fontSize)
+                
+            }else if ((timerCounter + 1)%10 == 0)  {
+                
+                if reciveTextField.text != nil{
+                    if compareString(str1: inputText, str2: reciveTextField.text!){
+                        
+                        startFontCounter += 1
+                        fontSize = (47.0/Double(startFontCounter))
+                        
+                    }
+                }
+                
+                reciveTextField.text = ""
+                inputText = ""
+            }
+            
+            timerCounter += 1
+        }
+    }
+    
+    @objc func stopButtonAction() {
+        if stopButton.currentTitle == "❌"{
+            
+            timer.invalidate()
+            timerCounter = 0
+            
+            saveResult()//надо до сброса счетчика ставить
+            startFontCounter = 1
+            fontSize = 47.0/Double(startFontCounter)
+            stopButton.setTitle( "✅", for: .normal)
+            
+            if eyeLabel.text == "Закройте левый глаз"{
+                rightRes = ((Float(startFontCounter)-1.0)/10.0)
+                eyeLabel.text = "Закройте правый глаз"
+            }else if eyeLabel.text == "Закройте правый глаз"{
+                leftRes = ((Float(startFontCounter)-1.0)/10.0)
+                //eyeLabel.text = "Закройте правый глаз"
+                
+                reciveTextField.resignFirstResponder()
+                addStopLabel()
+            }
+            
+        }else if stopButton.currentTitle == "✅"{
+            stopButton.setTitle( "❌", for: .normal)
+            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+        }
         
     }
     
     
-//    func ifSpeechBoolIsTrue(speechB: Bool) {
-//        if speechB == true{
-//
-//            let vc = HyperopiaSpeechViewController()
-//            //vc.inputText = textForRec
-//            //vc.fontSize = fontSize
-//            self.navigationController?.pushViewController(vc, animated: false)
-//            vc.comletion = {text in
-//                self.currentText = text
-//                print(self.currentText)
-//            }
-//        }else{
-//            let vc = HyperopiaViewController()
-//            self.navigationController?.pushViewController(vc, animated: false)
-//        }
-//    }
+    func saveResult(){
+            
+            do{
+                let resultUser = try context.fetch(User.fetchRequest())
+                let resCurrentUser = try context.fetch(CurrentUser.fetchRequest())
+                if resCurrentUser.count > 0{
+                    let curUserNum = (resCurrentUser.last as! CurrentUser).currentUser
+                    let curUser = (resultUser[Int(curUserNum)] as! User)
+                    let result = HyperopiaTestResult(context: context)
+    //                print("результат", ((startFontCounter-1)/10))
+                    result.result = ((Float(startFontCounter)-1.0)/10.0)
+                    result.dateTest = Date()
+                    if eyeLabel.text == "Закройте правый глаз"{
+                        result.testingEye = "Левый глаз"
+                    }else if eyeLabel.text == "Закройте левый глаз"{
+                        result.testingEye = "Правый глаз"
+                    }
+                    
+                    curUser.addToRelationship1(result)
+                    
+                    try context.save()
+                    print(result)
+                }
+                
+            }catch let error as NSError {
+                print(error)
+            }
+        }
+    
+    
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        reciveTextField.becomeFirstResponder()
+    }
 }

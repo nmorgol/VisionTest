@@ -39,6 +39,8 @@
 		EB87B1A823EEF0B800A74EEF /* SpeakLeftBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87B1A723EEF0B800A74EEF /* SpeakLeftBottomView.swift */; };
 		EB87B1AA23EEF90A00A74EEF /* SpeakRightTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87B1A923EEF90A00A74EEF /* SpeakRightTopView.swift */; };
 		EB87B1AC23EEFD8500A74EEF /* SpeakRightBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87B1AB23EEFD8500A74EEF /* SpeakRightBottomView.swift */; };
+		EB87B1AE23F2CAFC00A74EEF /* Extension String.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87B1AD23F2CAFC00A74EEF /* Extension String.swift */; };
+		EB87B1B223F31BB200A74EEF /* InfoHyperopiaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87B1B123F31BB200A74EEF /* InfoHyperopiaViewController.swift */; };
 		EB8C340623B9E90500AFA10A /* ExtensionUIImageOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8C340523B9E90500AFA10A /* ExtensionUIImageOrientation.swift */; };
 		EBD11F6C23BB42BE00AA9FF1 /* UsersArrayTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD11F6B23BB42BE00AA9FF1 /* UsersArrayTableViewController.swift */; };
 		EBD11F6E23BB489800AA9FF1 /* UserArrayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD11F6D23BB489800AA9FF1 /* UserArrayTableViewCell.swift */; };
@@ -111,6 +113,8 @@
 		EB87B1A723EEF0B800A74EEF /* SpeakLeftBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakLeftBottomView.swift; sourceTree = "<group>"; };
 		EB87B1A923EEF90A00A74EEF /* SpeakRightTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakRightTopView.swift; sourceTree = "<group>"; };
 		EB87B1AB23EEFD8500A74EEF /* SpeakRightBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakRightBottomView.swift; sourceTree = "<group>"; };
+		EB87B1AD23F2CAFC00A74EEF /* Extension String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension String.swift"; sourceTree = "<group>"; };
+		EB87B1B123F31BB200A74EEF /* InfoHyperopiaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoHyperopiaViewController.swift; sourceTree = "<group>"; };
 		EB8C340523B9E90500AFA10A /* ExtensionUIImageOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIImageOrientation.swift; sourceTree = "<group>"; };
 		EBD11F6B23BB42BE00AA9FF1 /* UsersArrayTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersArrayTableViewController.swift; sourceTree = "<group>"; };
 		EBD11F6D23BB489800AA9FF1 /* UserArrayTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserArrayTableViewCell.swift; sourceTree = "<group>"; };
@@ -310,6 +314,7 @@
 				EB492094239BB5BE0062D974 /* ExtensionUIDevice.swift */,
 				EB8C340523B9E90500AFA10A /* ExtensionUIImageOrientation.swift */,
 				EB16C35323CF48B3006E9C4D /* ExtensionUIImageDataSize.swift */,
+				EB87B1AD23F2CAFC00A74EEF /* Extension String.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -358,6 +363,7 @@
 			children = (
 				EBF4868123E9937C003C3004 /* StartViewController.swift */,
 				EBDC7B5023EC789C006192BE /* InfoStartViewController.swift */,
+				EB87B1B123F31BB200A74EEF /* InfoHyperopiaViewController.swift */,
 			);
 			path = "Starting VC";
 			sourceTree = "<group>";
@@ -493,12 +499,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB16C35423CF48B3006E9C4D /* ExtensionUIImageDataSize.swift in Sources */,
+				EB87B1AE23F2CAFC00A74EEF /* Extension String.swift in Sources */,
 				EBE633E0239D5E6A00FDCA38 /* UserTableViewCell.swift in Sources */,
 				EB2CF9AC23D2EA98006336E8 /* MicrophoneView.swift in Sources */,
 				EB87B1A823EEF0B800A74EEF /* SpeakLeftBottomView.swift in Sources */,
 				EB551CC423D1C1240020A46D /* ResultsTableViewCell.swift in Sources */,
 				EB12A76923EEE3E7008ED40E /* SpeakLeftTopView.swift in Sources */,
 				EBF48D92239656EB00CB3418 /* LandoltBottomUIView.swift in Sources */,
+				EB87B1B223F31BB200A74EEF /* InfoHyperopiaViewController.swift in Sources */,
 				EB38F484239553BE00D30348 /* PurchasesTableViewCell.swift in Sources */,
 				EB38F47A2393ECB100D30348 /* HyperopiaViewController.swift in Sources */,
 				EB87B1AA23EEF90A00A74EEF /* SpeakRightTopView.swift in Sources */,

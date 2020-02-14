@@ -78,10 +78,7 @@ class MiopiaViewController: UIViewController {
                 }else if (resultSettings.last as! SettingsApp).symbolTest == "Landolt"{
                     viewArray = [rightLandoltView, leftLandoltView, topLandoltView, bottomLandoltView]
                 }
-//                if (resultSettings.last as! SettingsApp).avtoDetectDistance == true {
-//                    let vc = MiopiaAvtoDistanceViewController()
-//                    self.navigationController?.pushViewController(vc, animated: false)
-//                }
+
                 koef = ((UIDevice.modelWidth)/70)*5/(resultSettings.last as! SettingsApp).distanceTest //70 - ширина символа в мм на расст 5м, 5  - это и есть 5 метров
             }
             else{

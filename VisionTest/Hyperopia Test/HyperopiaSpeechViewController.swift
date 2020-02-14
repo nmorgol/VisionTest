@@ -59,6 +59,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     var animateCounter = Int(1)
     
     let phoneImageView = UIImageView()
+    let progress = UIProgressView()
     
     var distance = Float()
     var startBool = false//для анимации
@@ -87,7 +88,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         disapearTrue = true
         
         startFontCounter = 1
-        print(startFontCounter)
+        
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
         
         self.session = self.setupAVCaptureSession()
@@ -106,6 +107,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         super .viewWillLayoutSubviews()
         
         addWordLabel()
+        addProgressView()
         addReciveTextLabel()
         addAuthorizedLabel()
         addMicrophonesView()
@@ -116,7 +118,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         super .viewDidAppear(false)
         
         
-        animatedMicrophone()
+        //animatedMicrophone()
         speechRecognizer.delegate = self
         
         // Asynchronously make the authorization request.
@@ -568,21 +570,21 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                 // MARK: Perform all UI updates (drawing) on the main queue, not the background queue on which this handler is being called.
                 DispatchQueue.main.async {
                     //                    self.drawFaceObservations(results)
-                    let deviceCoef = UIDevice.deviceСoefficient
-                    
-                    
-                    let left = results.first?.landmarks?.leftPupil?.pointsInImage(imageSize: self.view.frame.size).first?.x
-                    let righ = results.first?.landmarks?.rightPupil?.pointsInImage(imageSize: self.view.frame.size).first?.x
-                    let rez = (Float(righ!) - Float(left!))*deviceCoef
-                    
-                    //let dist = self.converPointToDistance(points: rez)
-                    // self.label.text = "\(dist)"+"см."
-                    self.distance = Float(self.converPointToDistance(points: rez))
-                    //                    print(self.distance)
-                    if rez < 65 && self.startBool == false{
-                        self.animatedPhoneFar()
-                        print("точки \(rez)")
-                    }
+//                    let deviceCoef = UIDevice.deviceСoefficient
+//
+//
+//                    let left = results.first?.landmarks?.leftPupil?.pointsInImage(imageSize: self.view.frame.size).first?.x
+//                    let righ = results.first?.landmarks?.rightPupil?.pointsInImage(imageSize: self.view.frame.size).first?.x
+//                    let rez = (Float(righ!) - Float(left!))*deviceCoef
+//
+//                    //let dist = self.converPointToDistance(points: rez)
+//                    // self.label.text = "\(dist)"+"см."
+//                    self.distance = Float(self.converPointToDistance(points: rez))
+//                    //                    print(self.distance)
+//                    if rez < 65 && self.startBool == false{
+//                        self.animatedPhoneFar()
+//                        print("точки \(rez)")
+//                    }
                 }
             })
             
@@ -644,15 +646,26 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         
         wordLabel.text = inputText
         wordLabel.textAlignment = .center
-        wordLabel.font = .boldSystemFont(ofSize: CGFloat(fontSize))
+        //wordLabel.font = .boldSystemFont(ofSize: CGFloat(fontSize))
+        wordLabel.font = UIFont(name: "HelveticaNeue-Bold", size: CGFloat(fontSize))
         wordLabel.numberOfLines = 0
+        
+    }
+    
+    func addProgressView() {
+        view.addSubview(progress)
+        progress.translatesAutoresizingMaskIntoConstraints = false
+        progress.topAnchor.constraint(equalTo: wordLabel.bottomAnchor).isActive = true
+        progress.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 4/5).isActive = true
+        progress.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        progress.progressViewStyle = .default
         
     }
     
     func addReciveTextLabel() {
         view.addSubview(reciveTextLabel)
         reciveTextLabel.translatesAutoresizingMaskIntoConstraints = false
-        reciveTextLabel.topAnchor.constraint(equalTo: wordLabel.bottomAnchor, constant: 5).isActive = true
+        reciveTextLabel.topAnchor.constraint(equalTo: progress.bottomAnchor, constant: 5).isActive = true
         reciveTextLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         reciveTextLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 4/5).isActive = true
         reciveTextLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/15).isActive = true
@@ -740,6 +753,12 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         let tap = UITapGestureRecognizer(target: self, action: #selector(stopLabelGestureAction))
         stopLabel.addGestureRecognizer(tap)
        
+        if eyeLabel.text == "Закройте правый глаз"{
+            eyeLabel.text = "Закройте левый глаз"
+        }else if eyeLabel.text == "Закройте левый глаз"{
+            eyeLabel.text = "Закройте правый глаз"
+        }
+        
     }
     
     @objc func animatedMicrophone() {
@@ -835,12 +854,14 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     @objc func timerAction() {
         if stopBool == false {
             
+            progress.setProgress(0.1*Float(Int(timerCounter)%10) + 0.1, animated: false)
             if timerCounter == 0 || timerCounter%10 == 0{
+                
                 inputText = String(Int.random(in: 100...999))
                 print(inputText)
                 reciveTextLabel.text = ""
                 wordLabel.text = inputText
-                
+                print(audioEngine.isRunning)
                 if audioEngine.isRunning {
                     audioEngine.stop()
                     recognitionRequest?.endAudio()
@@ -848,12 +869,13 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                 }else{
                     do {
                         try startRecording()
+                        animatedMicrophone()
                     } catch {
                     }
                 }
             }else if ((timerCounter + 1)%10 == 0)  {
                 
-                DispatchQueue.global(qos: .userInteractive).async {
+                DispatchQueue.main.async {
                     [unowned self] in
                     if self.audioEngine.isRunning {
                         self.audioEngine.stop()
@@ -871,7 +893,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                         
                         startFontCounter += 1
                         fontSize = Float(40/startFontCounter)
-                        print("огонь")
+                        
                     }
                     compareStop(str2: reciveTextLabel.text!)
                     if stopBool == true{
@@ -912,7 +934,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                 let curUserNum = (resCurrentUser.last as! CurrentUser).currentUser
                 let curUser = (resultUser[Int(curUserNum)] as! User)
                 let result = HyperopiaTestResult(context: context)
-                print("результат", ((startFontCounter-1)/10))
+//                print("результат", ((startFontCounter-1)/10))
                 result.result = ((Float(startFontCounter)-1.0)/10.0)
                 result.dateTest = Date()
                 if eyeLabel.text == "Закройте правый глаз"{
@@ -931,6 +953,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
             print(error)
         }
     }
+    
     @objc func stopLabelGestureAction() {
         stopLabel.removeFromSuperview()
         stopBool = false

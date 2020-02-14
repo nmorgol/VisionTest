@@ -35,7 +35,7 @@ class SpeakRightBottomView: UIView {
         endAngle: CGFloat.pi*3/2,
         clockwise: true)
         
-        speak.addLine(to: CGPoint(x: self.frame.width*ratio + radius, y: otstup))
+        speak.addLine(to: CGPoint(x: self.frame.width*(1 - ratio) - radius, y: otstup))
         
         speak.addArc(withCenter: CGPoint(x: self.frame.width*(1 - ratio) - radius, y:radius + otstup),
         radius: radius,

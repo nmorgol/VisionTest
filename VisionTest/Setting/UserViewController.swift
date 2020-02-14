@@ -32,6 +32,11 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonAction)), UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(organizeButtonAction))]
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super .viewWillAppear(true)
+        
         do {//получили текущего юзера
             usersArray = try context.fetch(User.fetchRequest())
             let resCurrUser = try context.fetch(CurrentUser.fetchRequest())
@@ -45,16 +50,8 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         setImage()
         addSubView()
         
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super .viewWillAppear(true)
-        self.tabBarController?.tabBar.isHidden = true
-        
-        
         addView()
-//        print(newUserBool)
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -77,10 +74,10 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         userImageView.heightAnchor.constraint(equalTo: userImageView.widthAnchor).isActive = true
         userImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
         userImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        //userImageView.layer.cornerRadius = 50
         
         userImageView.clipsToBounds = true
         userImageView.isUserInteractionEnabled = true
+        
         let gestureUserPhotoView = UITapGestureRecognizer(target: self, action: #selector(tapGestureUserInfoAction(tapGestureRecognizer:)))
         userImageView.addGestureRecognizer(gestureUserPhotoView)
         
@@ -133,31 +130,73 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     }
     
     func setImage(){
-        imageData = UIImage(named: "placeholder")!.pngData()!
-        if usersArray.count > 0{
-            userImageView.image = UIImage(data: usersArray[currentUser].photo ?? imageData)
-        }else{
-            userImageView.image = UIImage(data: imageData)
+        if newUserBool == false{
+            imageData = UIImage(named: "placeholder")!.pngData()!
+            if usersArray.count > 0{
+                userImageView.image = UIImage(data: usersArray[currentUser].photo ?? imageData)
+            }else{
+                userImageView.image = UIImage(data: imageData)
+            }
         }
     }
     
     @objc func addButtonAction(){
-        self.navigationItem.rightBarButtonItems?.removeAll()
-        self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAddButtonAction))]
+
         userImageView.image = UIImage(named: "placeholder")
         userTextView.text = ""
         userTextField.text = ""
         
         newUserBool = true
+        
+        let userNew = User(context: context)//добавили нового пользователя
+        userNew.setValue(userImageView.image?.jpeg(.lowest), forKey: "photo")
+        userNew.setValue(userTextField.text, forKey: "name")
+        userNew.setValue(userTextView.text, forKey: "info")
+        do {
+            try context.save()
+        }catch let error as NSError{
+            print(error)
+        }
+        usersArray.append(userNew)
+        if newUserBool == true{ //если это новый пользователь
+            do {//удаляем текущего пользователя
+                let result = try context.fetch(CurrentUser.fetchRequest())
+                for res in result{
+                    context.delete(res as! NSManagedObject)
+                }
+                try? context.save()
+            } catch let error as NSError {
+                print(error)
+            }
+            
+            var count = Int()
+            do {//получили массив всех юзеров
+                count = try context.fetch(User.fetchRequest()).count//присвоили переменной длину массива
+            }catch let error as NSError {
+                print(error)
+            }
+            currentUser = count - 1
+            let newCurrentUser = CurrentUser(context: context)
+            newCurrentUser.setValue(Float(count-1), forKey: "currentUser")//создали нового текущего пользователя - последний в списке
+            do {
+                try context.save()
+            }catch let error as NSError{
+                print(error)
+            }
+            print(count - 1)
+        }
+        
     }
     
     @objc func photoButtonAction(){
         let cameraVC = CameraViewController()
         cameraVC.comletion = {[unowned self] data in
             self.userImageView.image = UIImage(data: data)
-            if self.navigationItem.rightBarButtonItems?.count ?? 2 > 1 {
-                self.navigationItem.rightBarButtonItems?.removeAll()
-                self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.saveEditButtonAction))]
+            self.usersArray[self.currentUser].photo = data
+            do {
+                try self.context.save()
+            }catch let error as NSError{
+                print(error)
             }
             
         }
@@ -204,7 +243,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
                 print(error)
             }
             let newCurrentUser = CurrentUser(context: context)
-            newCurrentUser.setValue(Float(count - 1), forKey: "currentUser")//создали нового текущего пользователя - последний в списке
+            newCurrentUser.setValue(Float(count), forKey: "currentUser")//создали нового текущего пользователя - последний в списке
             do {
                 try context.save()
             }catch let error as NSError{
@@ -271,17 +310,26 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
             photoButton.frame.origin.y += 500
             userTextView.resignFirstResponder()
             //userTextField.resignFirstResponder()
-            
-            self.navigationItem.rightBarButtonItems?.removeAll()
-            self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.saveEditButtonAction))]
+            usersArray[currentUser].info = userTextView.text
+            do {
+                try context.save()
+            }catch let error as NSError{
+                print(error)
+            }
         }
         
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         userTextField.resignFirstResponder()
-        self.navigationItem.rightBarButtonItems?.removeAll()
-        self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.saveEditButtonAction))]
+//        self.navigationItem.rightBarButtonItems?.removeAll()
+//        self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.saveEditButtonAction))]
+        usersArray[currentUser].name = userTextField.text
+        do {
+            try context.save()
+        }catch let error as NSError{
+            print(error)
+        }
         photoButton.isEnabled = true
         
         return true

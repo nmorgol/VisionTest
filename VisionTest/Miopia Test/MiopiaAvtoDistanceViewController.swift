@@ -628,7 +628,10 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
                     let righ = results.first?.landmarks?.rightPupil?.pointsInImage(imageSize: self.view.frame.size).first?.x
                     let rez = (Float(righ!) - Float(left!))*deviceCoef//(458/326)
                     //self.distLabel.text = "\(31/rez))"
-                    self.distance = (31/rez)
+                    if self.avtoDetectDist == true {
+                        self.distance = (31/rez)
+                    }else{return}
+                    
                     
                 }
             })
@@ -777,6 +780,7 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
                 
                 timer.invalidate()
                 currentView.removeFromSuperview()
+                
                 koef = ((UIDevice.modelWidth)/70)*5/distance
                 print("расстояние измеряно",distance)
                 self.session?.stopRunning()

@@ -45,10 +45,7 @@ class StartViewController: UIViewController {
         super.viewDidLoad()
         
         self.view.backgroundColor = #colorLiteral(red: 0.6561266184, green: 0.9085168242, blue: 0.9700091481, alpha: 1)
-        addUserView()
-        addSettingsView()
-        addMyopiaView()
-        addHyperopiaView()
+        
         
     }
     
@@ -59,18 +56,32 @@ class StartViewController: UIViewController {
         
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let image = UIImage(named: "placeholder")?.pngData()!
+        
         do {
             let resultUser = try context.fetch(User.fetchRequest())
             let resCurrentUser = try context.fetch(CurrentUser.fetchRequest())
             let settings = try context.fetch(SettingsApp.fetchRequest())
             
-            if resCurrentUser.count > 0 {
+            if resultUser.count > 0 {
                 let curUser = (resCurrentUser.last as! CurrentUser).currentUser
+                
                 name = (resultUser[Int(curUser)] as! User).name ?? ""
                 photo = ((resultUser[Int(curUser)] as! User).photo) ?? image!
                 infoText = ((resultUser[Int(curUser)] as! User).info) ?? ""
-            }
-            else{
+            }else{
+                let userNew = User(context: context)//добавили нового пользователя
+                userNew.setValue(image, forKey: "photo")
+                userNew.setValue("name", forKey: "name")
+                userNew.setValue(" ", forKey: "info")
+                
+                let currentUser = CurrentUser(context: context)
+                currentUser.setValue(0, forKey: "currentUser")
+                do {
+                    try context.save()
+                }catch let error as NSError{
+                    print(error)
+                }
+                
                 name = "name"
                 photo = image!
             }//надо переделать
@@ -85,6 +96,11 @@ class StartViewController: UIViewController {
         } catch let error as NSError {
             print(error)
         }
+        
+        addUserView()
+        addSettingsView()
+        addMyopiaView()
+        addHyperopiaView()
         
         addUserSubviews()
         
@@ -127,7 +143,7 @@ class StartViewController: UIViewController {
         myopiaView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         myopiaView.bottomAnchor.constraint(equalTo: settingsView.topAnchor, constant: -5).isActive = true
         
-        myopiaView.backgroundColor = .white
+        myopiaView.backgroundColor = #colorLiteral(red: 0.912041011, green: 0.9828456094, blue: 1, alpha: 1)
         myopiaView.layer.cornerRadius = 30
         
         myopiaView.layer.shadowOpacity = 0.1
@@ -148,7 +164,7 @@ class StartViewController: UIViewController {
         hyperopiaView.leftAnchor.constraint(equalTo: myopiaView.rightAnchor, constant: 5).isActive = true
         hyperopiaView.bottomAnchor.constraint(equalTo: settingsView.topAnchor, constant: -5).isActive = true
         
-        hyperopiaView.backgroundColor = .green
+        hyperopiaView.backgroundColor = #colorLiteral(red: 0.912041011, green: 0.9828456094, blue: 1, alpha: 1)
         hyperopiaView.layer.cornerRadius = 30
         
         hyperopiaView.layer.shadowOpacity = 0.1
@@ -172,7 +188,7 @@ class StartViewController: UIViewController {
         
         settingsView.layer.shadowOpacity = 0.1
         settingsView.layer.shadowColor = UIColor.black.cgColor
-        
+        settingsView.backgroundColor = #colorLiteral(red: 0.912041011, green: 0.9828456094, blue: 1, alpha: 1)
     }
     
     func addUserSubviews(){
@@ -229,13 +245,12 @@ class StartViewController: UIViewController {
         settingsButton.centerYAnchor.constraint(equalTo: settingsView.centerYAnchor).isActive = true
         settingsButton.centerXAnchor.constraint(equalTo: settingsView.centerXAnchor).isActive = true
         settingsButton.widthAnchor.constraint(equalTo: settingsView.widthAnchor, multiplier: 4/5).isActive = true
-        settingsButton.heightAnchor.constraint(equalTo: settingsView.heightAnchor, multiplier: 3/5).isActive = true
+        settingsButton.heightAnchor.constraint(equalTo: settingsView.heightAnchor, multiplier: 5/6).isActive = true
         
          
         settingsButton.backgroundColor = .white
-        settingsButton.layer.cornerRadius = 10
+        settingsButton.layer.cornerRadius = 20
 
-        
         settingsButton.layer.shadowColor = UIColor.gray.cgColor
         settingsButton.layer.shadowOpacity = 0.1
         
@@ -244,7 +259,10 @@ class StartViewController: UIViewController {
         settingsButton.titleLabel?.textColor = .systemBlue
         settingsButton.titleLabel?.textAlignment = .center
         
-        settingsButton.setImage(UIImage(named: "settingsIcon"), for: .normal)
+        
+        settingsButton.setImage("⚙️".image(), for: .normal)
+        
+        
         settingsButton.setTitle("Настройки приложения", for: .normal)
         settingsButton.setTitleColor(.systemBlue, for: .normal)
         settingsButton.addTarget(self, action: #selector(settingsViewAction), for: .touchUpInside)
@@ -295,11 +313,18 @@ class StartViewController: UIViewController {
         let startButton = UIButton()
         startMyopiaView.addSubview(startButton)
         startButton.translatesAutoresizingMaskIntoConstraints = false
-        startButton.widthAnchor.constraint(equalTo: startMyopiaView.widthAnchor, multiplier: 4/5).isActive = true
+        startButton.widthAnchor.constraint(equalTo: startMyopiaView.widthAnchor, multiplier: 5/5).isActive = true
         startButton.heightAnchor.constraint(equalTo: startMyopiaView.heightAnchor, multiplier: 1/3).isActive = true
         startButton.centerXAnchor.constraint(equalTo: startMyopiaView.centerXAnchor).isActive = true
         startButton.bottomAnchor.constraint(equalTo: startMyopiaView.bottomAnchor).isActive = true
         
+        startButton.backgroundColor = .white
+        startButton.layer.cornerRadius = 20
+        
+        startButton.layer.shadowColor = UIColor.gray.cgColor
+        startButton.layer.shadowOpacity = 0.1
+        
+        startButton.setImage("✅".image(), for: .normal)
         startButton.setTitle("Тест на наличие близорукости", for: .normal)
         startButton.titleLabel?.textAlignment = .center
         startButton.titleLabel?.numberOfLines = 0
@@ -314,7 +339,7 @@ class StartViewController: UIViewController {
         myopiaResultButton.topAnchor.constraint(equalTo: startMyopiaView.bottomAnchor, constant: 10).isActive = true
         myopiaResultButton.bottomAnchor.constraint(equalTo: informMyopiaButton.topAnchor, constant: -10).isActive = true
         myopiaResultButton.rightAnchor.constraint(equalTo: startMyopiaView.rightAnchor, constant: 0).isActive = true
-        myopiaResultButton.setImage(UIImage(named: "folder"), for: .normal)
+        myopiaResultButton.setImage("📁".image(), for: .normal)
         myopiaResultButton.setTitle("Результаты теста близорукости", for: .normal)
         
         myopiaResultButton.titleLabel?.numberOfLines = 0
@@ -323,7 +348,7 @@ class StartViewController: UIViewController {
         myopiaResultButton.backgroundColor = .white
         myopiaResultButton.layer.shadowColor = UIColor.gray.cgColor
         myopiaResultButton.layer.shadowOpacity = 0.1
-        myopiaResultButton.layer.cornerRadius = 10
+        myopiaResultButton.layer.cornerRadius = 20
         myopiaResultButton.addTarget(self, action: #selector(myopiaResultButtonAction), for: .touchUpInside)
         
         informMyopiaButton.translatesAutoresizingMaskIntoConstraints = false
@@ -335,10 +360,11 @@ class StartViewController: UIViewController {
         informMyopiaButton.backgroundColor = .white
         informMyopiaButton.layer.cornerRadius = 20
         
-        informMyopiaButton.layer.shadowColor = UIColor.gray.cgColor
+        informMyopiaButton.layer.shadowColor = UIColor.lightGray.cgColor
         informMyopiaButton.layer.shadowOpacity = 0.1
         
-        informMyopiaButton.setTitle("Информация", for: .normal)
+        informMyopiaButton.setImage("ℹ️".image(), for: .normal)
+        informMyopiaButton.setTitle("Информация и инструкции", for: .normal)
         informMyopiaButton.titleLabel?.textAlignment = .center
         informMyopiaButton.titleLabel?.numberOfLines = 0
         informMyopiaButton.setTitleColor(.systemBlue, for: .normal)
@@ -388,14 +414,21 @@ class StartViewController: UIViewController {
         let startButton = UIButton()
         startHyperopiaView.addSubview(startButton)
         startButton.translatesAutoresizingMaskIntoConstraints = false
-        startButton.widthAnchor.constraint(equalTo: startHyperopiaView.widthAnchor, multiplier: 4/5).isActive = true
+        startButton.widthAnchor.constraint(equalTo: startHyperopiaView.widthAnchor, multiplier: 5/5).isActive = true
         startButton.heightAnchor.constraint(equalTo: startHyperopiaView.heightAnchor, multiplier: 1/3).isActive = true
         startButton.centerXAnchor.constraint(equalTo: startHyperopiaView.centerXAnchor).isActive = true
         startButton.bottomAnchor.constraint(equalTo: startHyperopiaView.bottomAnchor).isActive = true
 
+        startButton.setImage("✅".image(), for: .normal)
         startButton.setTitle("Тест на наличие дальнозоркости", for: .normal)
         startButton.titleLabel?.textAlignment = .center
         startButton.titleLabel?.numberOfLines = 0
+        
+        startButton.backgroundColor = .white
+        startButton.layer.cornerRadius = 20
+        
+        startButton.layer.shadowColor = UIColor.lightGray.cgColor
+        startButton.layer.shadowOpacity = 0.1
 
         startButton.setTitleColor(.systemBlue, for: .normal)
         startButton.addTarget(self, action: #selector(startHyperopiaViewAction), for: .touchUpInside)
@@ -405,7 +438,8 @@ class StartViewController: UIViewController {
         hyperopiaResultButton.topAnchor.constraint(equalTo: startHyperopiaView.bottomAnchor, constant: 10).isActive = true
         hyperopiaResultButton.bottomAnchor.constraint(equalTo: informHyperopiaButton.topAnchor, constant: -10).isActive = true
         hyperopiaResultButton.rightAnchor.constraint(equalTo: startHyperopiaView.rightAnchor, constant: 0).isActive = true
-        hyperopiaResultButton.setImage(UIImage(named: "folder"), for: .normal)
+        //hyperopiaResultButton.setImage(UIImage(named: "folder"), for: .normal)
+        hyperopiaResultButton.setImage("📁".image(), for: .normal)
         hyperopiaResultButton.setTitle("Результаты теста дальнозоркости", for: .normal)
         
         hyperopiaResultButton.titleLabel?.numberOfLines = 0
@@ -414,7 +448,7 @@ class StartViewController: UIViewController {
         hyperopiaResultButton.backgroundColor = .white
         hyperopiaResultButton.layer.shadowColor = UIColor.gray.cgColor
         hyperopiaResultButton.layer.shadowOpacity = 0.1
-        hyperopiaResultButton.layer.cornerRadius = 10
+        hyperopiaResultButton.layer.cornerRadius = 20
         hyperopiaResultButton.addTarget(self, action: #selector(hyperopiaResultButtonAction), for: .touchUpInside)
         
         informHyperopiaButton.translatesAutoresizingMaskIntoConstraints = false
@@ -432,8 +466,9 @@ class StartViewController: UIViewController {
         informHyperopiaButton.setTitleColor(.systemBlue, for: .normal)
         informHyperopiaButton.titleLabel?.textAlignment = .center
         informHyperopiaButton.titleLabel?.numberOfLines = 0
-        informHyperopiaButton.setTitle("Информация", for: .normal)
-        
+        informHyperopiaButton.setImage("ℹ️".image(), for: .normal)
+        informHyperopiaButton.setTitle("Информация и инструкции", for: .normal)
+        informHyperopiaButton.addTarget(self, action: #selector(infoButtonHyperAction), for: .touchUpInside)
     }
     
     @objc func leftSwipeAnimate() {
@@ -441,8 +476,8 @@ class StartViewController: UIViewController {
         UIView.animate(withDuration: 0.3, animations: {
             self.hyperopiaView.transform = CGAffineTransform.init(translationX: -(self.hyperopiaView.frame.width+5), y: 0)
             self.myopiaView.transform = CGAffineTransform.init(translationX: -(self.hyperopiaView.frame.width+5), y: 0)
-            self.hyperopiaView.backgroundColor = .white
-            self.myopiaView.backgroundColor = .red
+            self.hyperopiaView.backgroundColor = #colorLiteral(red: 0.912041011, green: 0.9828456094, blue: 1, alpha: 1)
+            //self.myopiaView.backgroundColor = .red
         }) { (_) in
             
             self.hyperopiaView.layer.shadowOpacity = 0.1
@@ -455,8 +490,8 @@ class StartViewController: UIViewController {
         UIView.animate(withDuration: 0.3, animations: {
             self.myopiaView.transform = CGAffineTransform.init(translationX: (0), y: 0)
             self.hyperopiaView.transform = CGAffineTransform.init(translationX: (0), y: 0)
-            self.hyperopiaView.backgroundColor = .green
-            self.myopiaView.backgroundColor = .white
+            //self.hyperopiaView.backgroundColor = .green
+            self.myopiaView.backgroundColor = #colorLiteral(red: 0.912041011, green: 0.9828456094, blue: 1, alpha: 1)
         }) { (_) in
 
         }
@@ -509,6 +544,9 @@ class StartViewController: UIViewController {
         let infoVC = InfoStartViewController()
         self.navigationController?.pushViewController(infoVC, animated: false)
     }
-    
+    @objc func infoButtonHyperAction(){
+        let infoVC = InfoHyperopiaViewController()
+        self.navigationController?.pushViewController(infoVC, animated: false)
+    }
     
 }

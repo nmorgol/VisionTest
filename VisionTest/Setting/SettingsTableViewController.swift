@@ -148,13 +148,17 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             let cell2 = tableView.dequeueReusableCell(withIdentifier: purchasesCellID, for: indexPath) as! PurchasesTableViewCell
             if indexPath.row == 0{
                 
-                cell2.settingLabel.text = otstup + "Auto detect distance"
+                cell2.settingLabel.text = otstup + "Автоопределение расстояния"
+                cell2.settingLabel.numberOfLines = 0
+                cell2.settingLabel.textAlignment = .center
                 cell2.settingSwitch.addTarget(self, action: #selector(avtodetectSwitchAction(paramSwitch:)), for: .valueChanged)
                 cell2.settingSwitch.isOn = avtoDetectDistBool
                 cell2.accessoryType = .detailButton
                 
             }else{
-                cell2.settingLabel.text = otstup + "Speech recognition"
+                cell2.settingLabel.text = otstup + "Распознавание речи"
+                cell2.settingLabel.numberOfLines = 0
+                cell2.settingLabel.textAlignment = .center
                 cell2.settingSwitch.addTarget(self, action: #selector(speechSwitchAction(paramSwitch:)), for: .valueChanged)
                 cell2.settingSwitch.isOn = speechRecognBool
                 cell2.accessoryType = .detailButton
@@ -168,7 +172,9 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             
             if indexPath.row == 0{
                 let cell3 = tableView.dequeueReusableCell(withIdentifier: settingsCellID, for: indexPath) as! SettingsTableViewCell
-                cell3.settingLabel.text = otstup + "Set distance for test "
+                cell3.settingLabel.text = otstup + "Установите дистанцию теста "
+                cell3.settingLabel.numberOfLines = 0
+                cell3.settingLabel.textAlignment = .center
                 cell3.deteilLabel.text = "m."
                 cell3.accessoryType = .detailButton
                 cell3.settingTextLabel.text = "\(distanceTest)"
@@ -183,7 +189,9 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
                 
             }else if indexPath.row == 1{
                 let cell3 = tableView.dequeueReusableCell(withIdentifier: settingsCellID, for: indexPath) as! SettingsTableViewCell
-                cell3.settingLabel.text = otstup + "Set time before start"
+                cell3.settingLabel.text = otstup + "Установите время до старта теста"
+                cell3.settingLabel.numberOfLines = 0
+                cell3.settingLabel.textAlignment = .center
                 cell3.deteilLabel.text = "s."
                 cell3.accessoryType = .detailButton
                 cell3.settingTextLabel.text = "\(timeToStart)"
@@ -199,7 +207,9 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             }else if indexPath.row == 2{
                 let cell3 = tableView.dequeueReusableCell(withIdentifier: symbolCellId, for: indexPath) as! SymbolTableViewCell
                 
-                cell3.settingsLabel.text = otstup + "Set symbol "
+                cell3.settingsLabel.text = otstup + "Выберите символ "
+                cell3.settingsLabel.numberOfLines = 0
+                cell3.settingsLabel.textAlignment = .center
 //                cell3.symbolSegment.selectedSegmentIndex = 0
                 cell3.symbolSegment.addTarget(self, action: #selector(segmetAction), for: .valueChanged)
 
@@ -223,7 +233,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         case 1:
             return " "
         case 2:
-            return "Myopia settings"
+            return " "
         default:
             break
         }

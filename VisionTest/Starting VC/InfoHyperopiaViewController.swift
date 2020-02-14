@@ -2,17 +2,17 @@
 
 import UIKit
 
-class InfoStartViewController: UIViewController {
-
-    let segmentedContr = UISegmentedControl(items: ["Информация","Инструкция"])
+class InfoHyperopiaViewController: UIViewController {
     
+    let segmentedContr = UISegmentedControl(items: ["Информация","Инструкция"])
+    var selectedSegmentIndex = 0
     //информация
     let scrolView = UIScrollView()
     
     let viewForDescrMyopia = UIView()
     let myopiaDescrLabel = UILabel()
     let eyeView = EyeView()
-    let myopiaLight = MyopiaLightView()
+    let hyperopiaLight = HyperopiaLightView()
     
     let attantionView = UIView()
     let ahtungLabel = UILabel()
@@ -20,6 +20,7 @@ class InfoStartViewController: UIViewController {
     let eyeNormView = EyeView()
     let normLight = NormalLightView()
     let landoltAtentionView = LandoltLeftUIView()
+    let phoneImageForTableView = UIImageView()
     
     let viewForTable = UIView()
     let tableDescrLabel = UILabel()
@@ -27,7 +28,7 @@ class InfoStartViewController: UIViewController {
     
     let symbolDescribeView = UIView()
     let firstLabel = UILabel()
-    let landoltView = LandoltLeftUIView()
+    let firstNumberLabel = UILabel()
     let landoltLabel = UILabel()
     let secondLandoltLabel = UILabel()
     let snelenView = SnellenLeftView()
@@ -39,17 +40,21 @@ class InfoStartViewController: UIViewController {
     
     let firstInstrView = UIView()
     let howDoTestLabel = UILabel()
-    let basicMiopScreenImageView = UIImageView()
-    let symbolDiscrLBS = SpeakLeftBottomView()
+    let basicHyperScreenImageView = UIImageView()
+    
+    let closeEyeDiscrLBS = SpeakLeftBottomView()
     let stopBtnDiscrLBS = SpeakLeftBottomView()
-    let actionBtnDiscrLTS = SpeakLeftTopView()
-    let deviceDetectDiscrRTS = SpeakRightTopView()
-    let distanceDiscrRBS = SpeakRightBottomView()
-    let distanceDiscrLabel = UILabel()
-    let deviceDetectLabel = UILabel()
-    let actionBtnLabel = UILabel()
+    let timeProgressDiscrLTS = SpeakLeftTopView()
+    let keyboardDiscrLTS = SpeakLeftTopView()
+    let textFieldDiscrRTS = SpeakRightTopView()
+    let numberDiscrRBS = SpeakRightBottomView()
+    
+    let numberDiscrLabel = UILabel()
+    let textFieldLabel = UILabel()
+    let timeProgressDiscrLabel = UILabel()
+    let keyboardDiscrLabel = UILabel()
     let stopBtnDiscrLabel = UILabel()
-    let symbolDiscrLabel = UILabel()
+    let closeEyeDiscrLabel = UILabel()
     
     let bigLabel = UILabel()
     
@@ -69,23 +74,25 @@ class InfoStartViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.view.backgroundColor = #colorLiteral(red: 0.6561266184, green: 0.9085168242, blue: 0.9700091481, alpha: 1)
         
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(false)
         addSegmContr()
         addScrollView()
-
+        
         addMyopViews()
         
         addAttentionView()
         addTableViews()
-        addSybolDiscrView()
+//        addSybolDiscrView()
+        segmentedContr.selectedSegmentIndex = selectedSegmentIndex
+        segmentContrAction()
     }
-
+    
     func addSegmContr() {
         segmentedContr.selectedSegmentIndex = 0
         
@@ -123,7 +130,7 @@ class InfoStartViewController: UIViewController {
     }
     
     
-     //MARK: описание
+    //MARK: описание
     func addScrollView() {
         
         view.addSubview(scrolView)
@@ -134,7 +141,7 @@ class InfoStartViewController: UIViewController {
         scrolView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         scrolView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
-        scrolView.contentSize = CGSize(width: view.frame.width, height: 2260)
+        scrolView.contentSize = CGSize(width: view.frame.width, height: 1600)
         
     }
     //MARK: окно миопия
@@ -154,7 +161,7 @@ class InfoStartViewController: UIViewController {
         viewForDescrMyopia.layer.shadowColor = UIColor.gray.cgColor
         
         viewForDescrMyopia.addSubview(eyeView)
-        viewForDescrMyopia.addSubview(myopiaLight)
+        viewForDescrMyopia.addSubview(hyperopiaLight)
         
         eyeView.translatesAutoresizingMaskIntoConstraints = false
         eyeView.widthAnchor.constraint(equalToConstant: 200).isActive = true
@@ -163,12 +170,12 @@ class InfoStartViewController: UIViewController {
         eyeView.centerXAnchor.constraint(equalTo: viewForDescrMyopia.centerXAnchor).isActive = true
         eyeView.backgroundColor = .clear
         
-        myopiaLight.translatesAutoresizingMaskIntoConstraints = false
-        myopiaLight.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        myopiaLight.topAnchor.constraint(equalTo: viewForDescrMyopia.topAnchor, constant: 0).isActive = true
-        myopiaLight.heightAnchor.constraint(equalToConstant: 200).isActive = true
-        myopiaLight.centerXAnchor.constraint(equalTo: viewForDescrMyopia.centerXAnchor).isActive = true
-        myopiaLight.backgroundColor = .clear
+        hyperopiaLight.translatesAutoresizingMaskIntoConstraints = false
+        hyperopiaLight.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        hyperopiaLight.topAnchor.constraint(equalTo: viewForDescrMyopia.topAnchor, constant: 0).isActive = true
+        hyperopiaLight.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        hyperopiaLight.centerXAnchor.constraint(equalTo: viewForDescrMyopia.centerXAnchor).isActive = true
+        hyperopiaLight.backgroundColor = .clear
         
         viewForDescrMyopia.addSubview(myopiaDescrLabel)
         
@@ -180,8 +187,8 @@ class InfoStartViewController: UIViewController {
         
         myopiaDescrLabel.numberOfLines = 0
         myopiaDescrLabel.textAlignment = .natural
-        myopiaDescrLabel.text = "   Близорукость, или миопия – самая распространенная причина низкого зрения у человека в наши дни. \n\n   Попадающие в глаз лучи света фокусируются до сетчатки, когда роговица и хрусталик чрезмерно сильно изменяют их ход. \n    Человек плохо видит при миопии из-за несоответствия силы оптики глаза и размера глазного яблока, при котором лучи света формируют изображение раньше, чем они достигнут сетчатки. И когда они все-таки попадают на нее, то картинка становиться размытой."
-
+        myopiaDescrLabel.text = "   Дальнозоркость (гиперметропи́я) — это дефект зрения, при котором хорошо видно лишь расположенные вдали объекты, а близко расположенные объекты видно плохо.\n   Этот дефект заключается в том, что из-за аномалии рефракции изображение фокусируется не на сетчатке глаза, а за сетчаткой. \n   Причинами дальнозоркости могут быть:\n-уменьшенный размер глазного яблока на передне-задней оси\n-уменьшение способности хрусталика изменять кривизну."
+        
         
     }
     //MARK: окно внимание
@@ -201,7 +208,7 @@ class InfoStartViewController: UIViewController {
         
         attantionView.addSubview(eyeNormView)
         attantionView.addSubview(normLight)
-        attantionView.addSubview(landoltAtentionView)
+        attantionView.addSubview(phoneImageForTableView)
         attantionView.addSubview(ahtungLabel)
         
         ahtungLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -239,18 +246,19 @@ class InfoStartViewController: UIViewController {
         distanceLabel.leftAnchor.constraint(equalTo: eyeNormView.leftAnchor, constant: 5).isActive = true
         distanceLabel.backgroundColor = .clear
         
-        distanceLabel.text = "5 м."
-        distanceLabel.font = .boldSystemFont(ofSize: 10)
+        distanceLabel.text = "30 - 40 см."
+        distanceLabel.font = .boldSystemFont(ofSize: 7)
         distanceLabel.textColor = .red
-        distanceLabel.textAlignment = .center
         
-        landoltAtentionView.translatesAutoresizingMaskIntoConstraints = false
-        landoltAtentionView.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        landoltAtentionView.rightAnchor.constraint(equalTo: eyeNormView.leftAnchor, constant: 0).isActive = true
-        landoltAtentionView.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        landoltAtentionView.centerYAnchor.constraint(equalTo: eyeNormView.centerYAnchor).isActive = true
-        landoltAtentionView.backgroundColor = .clear
+        phoneImageForTableView.translatesAutoresizingMaskIntoConstraints = false
+        phoneImageForTableView.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        phoneImageForTableView.rightAnchor.constraint(equalTo: eyeNormView.leftAnchor, constant: 0).isActive = true
+        phoneImageForTableView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        phoneImageForTableView.centerYAnchor.constraint(equalTo: eyeNormView.centerYAnchor).isActive = true
+        phoneImageForTableView.backgroundColor = .clear
         
+        phoneImageForTableView.image = UIImage(named: "hyperopia phone screen")
+        phoneImageForTableView.layer.borderWidth = 1
         
         attantionView.addSubview(attantionLabel)
         
@@ -262,7 +270,7 @@ class InfoStartViewController: UIViewController {
         
         attantionLabel.numberOfLines = 0
         attantionLabel.textAlignment = .natural
-        attantionLabel.text = "   При нормальном зрении точка ясного видения находится как бы в бесконечности. Для человеческого глаза бесконечность начинается на расстоянии 5 метров: при расположении предмета не ближе 5 метров на сетчатке глаза с нормальным зрением собираются параллельные лучи. Именно поэтому проверку остроты зрения осуществляют с такого расстояния."
+        attantionLabel.text = "   Расстояние для проведения теста на наличие дальнозоркости должно составлять 30 - 40 сантиметров."
     }
     //MARK: окно таблицы
     func addTableViews() {
@@ -289,7 +297,7 @@ class InfoStartViewController: UIViewController {
         tableImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
         tableImageView.centerXAnchor.constraint(equalTo: viewForTable.centerXAnchor).isActive = true
         tableImageView.backgroundColor = .clear
-        tableImageView.image = UIImage(named: "eye test tables")
+        tableImageView.image = UIImage(named: "hyptropia table")
         tableImageView.contentMode = .scaleAspectFit
         
         viewForTable.addSubview(tableDescrLabel)
@@ -302,8 +310,7 @@ class InfoStartViewController: UIViewController {
         
         tableDescrLabel.numberOfLines = 0
         tableDescrLabel.textAlignment = .natural
-        tableDescrLabel.text = "   Чтобы определить остроту зрения человека, подбирая контактные линзы, очки или ради профилактики, применяют специальные таблицы, которые бывают разных видов. Но в целом процедура диагностики происходит по одному принципу:\n 1. Человека усаживают напротив таблицы на определенном расстоянии.\n 2. Врач указывает на строку или символ на таблице, просит человека его назвать.\n 3. Если человек хорошо может различить указанный символ, врач указывает на более мелкий шрифт."
-        
+        tableDescrLabel.text = "Тексты для контроля остроты зрения с дистанции наблюдения 30 см используются как традиционное средство контроля зрения вблизи и подбора очков для чтения. Может использоваться в офтальмологических кабинетах при исследовании пресбиопии (дальнозоркости) у пациентов или в магазинах «Оптика» для подбора очков для близи."
         
     }
     //MARK: окно символов в тесте
@@ -332,15 +339,18 @@ class InfoStartViewController: UIViewController {
         
         firstLabel.numberOfLines = 0
         firstLabel.textAlignment = .natural
-        firstLabel.text = "   В приложении (в тесте на наличие близорукости)  используются оптотипы Ландольта (символ 'С') и оптотипы Снеллена (символ 'Ш')."
+        firstLabel.text = "   В приложении (в тесте на наличие дальнозоркости)  используются используются трехзначные числа, например  '923'."
         
-        symbolDescribeView.addSubview(landoltView)
+        symbolDescribeView.addSubview(firstNumberLabel)
         
-        landoltView.translatesAutoresizingMaskIntoConstraints = false
-        landoltView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        landoltView.topAnchor.constraint(equalTo: firstLabel.bottomAnchor, constant: 20).isActive = true
-        landoltView.leftAnchor.constraint(equalTo: symbolDescribeView.leftAnchor, constant: 20).isActive = true
-        landoltView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        firstNumberLabel.translatesAutoresizingMaskIntoConstraints = false
+        firstNumberLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        firstNumberLabel.topAnchor.constraint(equalTo: firstLabel.bottomAnchor, constant: 20).isActive = true
+        firstNumberLabel.leftAnchor.constraint(equalTo: symbolDescribeView.leftAnchor, constant: 20).isActive = true
+        firstNumberLabel.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        firstNumberLabel.text = "\(Int.random(in: 100...999))"
+        firstNumberLabel.textAlignment = .center
+        firstNumberLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 40)
         
         
         symbolDescribeView.addSubview(landoltLabel)
@@ -348,13 +358,12 @@ class InfoStartViewController: UIViewController {
         landoltLabel.translatesAutoresizingMaskIntoConstraints = false
         landoltLabel.rightAnchor.constraint(equalTo: symbolDescribeView.rightAnchor).isActive = true
         landoltLabel.topAnchor.constraint(equalTo: firstLabel.bottomAnchor, constant: 0).isActive = true
-        landoltLabel.leftAnchor.constraint(equalTo: landoltView.rightAnchor, constant: 20).isActive = true
+        landoltLabel.leftAnchor.constraint(equalTo: firstNumberLabel.rightAnchor, constant: 20).isActive = true
         landoltLabel.heightAnchor.constraint(equalToConstant: 210).isActive = true
         
         landoltLabel.numberOfLines = 0
         landoltLabel.textAlignment = .natural
-        landoltLabel.text = "Оптотипы Ландольта по форме представляют собой черные кольца разной величины с разрывами, обращенными в разные стороны, и по распознаванию этого разрыва можно определить минимальный угол разрешения глаза."// Ширина кольца Ландольта и ширина разрыва в 5 раз меньше его наружного диаметра, то есть соотношение этих параметров – 5 : 1 : 1. Направление разрыва кольца может иметь четыре варианта (вверху, внизу, справа и слева)."
-        
+        landoltLabel.text = "Оптотипы Ландольта по форме представляют собой черные кольца разной величины с разрывами, обращенными в разные стороны, и по распознаванию этого разрыва можно определить минимальный угол разрешения глаза."
         
         symbolDescribeView.addSubview(secondLandoltLabel)
         
@@ -423,27 +432,29 @@ class InfoStartViewController: UIViewController {
         firstInstrView.layer.shadowColor = UIColor.gray.cgColor
         
         
-        firstInstrView.addSubview(basicMiopScreenImageView)
+        firstInstrView.addSubview(basicHyperScreenImageView)
         
-        basicMiopScreenImageView.translatesAutoresizingMaskIntoConstraints = false
-        basicMiopScreenImageView.widthAnchor.constraint(equalTo: firstInstrView.widthAnchor, multiplier: 1/2).isActive = true
-        basicMiopScreenImageView.heightAnchor.constraint(equalTo: basicMiopScreenImageView.widthAnchor, multiplier: 2.1).isActive = true
-        basicMiopScreenImageView.centerXAnchor.constraint(equalTo: firstInstrView.centerXAnchor).isActive = true
-        basicMiopScreenImageView.centerYAnchor.constraint(equalTo: firstInstrView.centerYAnchor).isActive = true
-        basicMiopScreenImageView.backgroundColor = .clear
-        basicMiopScreenImageView.image = UIImage(named: "basic miopia test screen")
-        basicMiopScreenImageView.layer.borderWidth = 0.5
+        basicHyperScreenImageView.translatesAutoresizingMaskIntoConstraints = false
+        basicHyperScreenImageView.widthAnchor.constraint(equalTo: firstInstrView.widthAnchor, multiplier: 1/2).isActive = true
+        basicHyperScreenImageView.heightAnchor.constraint(equalTo: basicHyperScreenImageView.widthAnchor, multiplier: 2.1).isActive = true
+        basicHyperScreenImageView.centerXAnchor.constraint(equalTo: firstInstrView.centerXAnchor).isActive = true
+        basicHyperScreenImageView.centerYAnchor.constraint(equalTo: firstInstrView.centerYAnchor).isActive = true
+        basicHyperScreenImageView.backgroundColor = .clear
+        basicHyperScreenImageView.image = UIImage(named: "hyperopia phone screen")
+        basicHyperScreenImageView.layer.borderWidth = 0.5
         
         
-        addSymbolDescrView()
+        addCloseEyeDescrView()
         
         addStopBtnDescrView()
         
-        addActionBtnDescrView()
+        addTimeProgressDescrView()
         
-        addDeviceDescrView()
+        addKeyboardDescrView()
         
-        addDistanceDescrView()
+        addtextFielDescrView()
+        
+        addNumberDescrView()
         
         addHowDoTestLabel()
         
@@ -461,52 +472,52 @@ class InfoStartViewController: UIViewController {
         howDoTestLabel.backgroundColor = .clear
         howDoTestLabel.numberOfLines = 0
         howDoTestLabel.font = .systemFont(ofSize: 15)
-        howDoTestLabel.text = "   Расположите телефон на расстоянии, уcтановленном в настройках приложения. Называйте направления символа вашему ассистенту, который будет нажимать соответствующие кнопки. "
+        howDoTestLabel.text = "   Расположите телефон на расстоянии 30 - 40 сантиметров. На клавиатуре наберите число указанное в центральном окне. "
     }
     
-    fileprivate func addSymbolDescrView() {
-        firstInstrView.addSubview(symbolDiscrLBS)
-        symbolDiscrLBS.radius = 10
-        symbolDiscrLBS.fat = 10
-        symbolDiscrLBS.ratio = 1/2
+    fileprivate func addCloseEyeDescrView() {
+        firstInstrView.addSubview(closeEyeDiscrLBS)
+        closeEyeDiscrLBS.radius = 10
+        closeEyeDiscrLBS.fat = 5
+        closeEyeDiscrLBS.ratio = 1/5
         
-        symbolDiscrLBS.translatesAutoresizingMaskIntoConstraints = false
-        symbolDiscrLBS.rightAnchor.constraint(equalTo: firstInstrView.rightAnchor, constant: -5).isActive = true
-        symbolDiscrLBS.topAnchor.constraint(equalTo: basicMiopScreenImageView.topAnchor, constant: 0).isActive = true
-        symbolDiscrLBS.heightAnchor.constraint(equalTo: basicMiopScreenImageView.heightAnchor, multiplier: 1/3).isActive = true
-        symbolDiscrLBS.leftAnchor.constraint(equalTo: basicMiopScreenImageView.centerXAnchor, constant: 10).isActive = true
-        symbolDiscrLBS.backgroundColor = .clear
+        closeEyeDiscrLBS.translatesAutoresizingMaskIntoConstraints = false
+        closeEyeDiscrLBS.rightAnchor.constraint(equalTo: firstInstrView.rightAnchor, constant: -5).isActive = true
+        closeEyeDiscrLBS.topAnchor.constraint(equalTo: basicHyperScreenImageView.topAnchor, constant: 0).isActive = true
+        closeEyeDiscrLBS.heightAnchor.constraint(equalTo: basicHyperScreenImageView.heightAnchor, multiplier: 2/9).isActive = true
+        closeEyeDiscrLBS.leftAnchor.constraint(equalTo: basicHyperScreenImageView.rightAnchor, constant: -15).isActive = true
+        closeEyeDiscrLBS.backgroundColor = .clear
         
         
-        symbolDiscrLBS.addSubview(symbolDiscrLabel)
-        symbolDiscrLabel.translatesAutoresizingMaskIntoConstraints = false
-        symbolDiscrLabel.rightAnchor.constraint(equalTo: symbolDiscrLBS.rightAnchor, constant: -5).isActive = true
-        symbolDiscrLabel.topAnchor.constraint(equalTo: symbolDiscrLBS.topAnchor, constant: 5).isActive = true
-        symbolDiscrLabel.heightAnchor.constraint(equalTo: symbolDiscrLBS.heightAnchor, multiplier: 10/11).isActive = true
-        symbolDiscrLabel.widthAnchor.constraint(equalTo: symbolDiscrLBS.widthAnchor, multiplier: 1/2, constant: -10).isActive = true
-        symbolDiscrLabel.backgroundColor = .clear
-        symbolDiscrLabel.text = "Оптотипы Ландольта по форме представляют собой черные кольца разной величины с разрывами, обращенными в разные стороны, и по распознаванию этого разрыва можно определить минимальный угол разрешения глаза.  Направление разрыва кольца может иметь четыре варианта (вверху, внизу, справа и слева)"
-        symbolDiscrLabel.font = .systemFont(ofSize: 7)
-        symbolDiscrLabel.numberOfLines = 0
+        closeEyeDiscrLBS.addSubview(closeEyeDiscrLabel)
+        closeEyeDiscrLabel.translatesAutoresizingMaskIntoConstraints = false
+        closeEyeDiscrLabel.rightAnchor.constraint(equalTo: closeEyeDiscrLBS.rightAnchor, constant: -5).isActive = true
+        closeEyeDiscrLabel.topAnchor.constraint(equalTo: closeEyeDiscrLBS.topAnchor, constant: 5).isActive = true
+        closeEyeDiscrLabel.heightAnchor.constraint(equalTo: closeEyeDiscrLBS.heightAnchor, multiplier: 10/11).isActive = true
+        closeEyeDiscrLabel.widthAnchor.constraint(equalTo: closeEyeDiscrLBS.widthAnchor, multiplier: 4/5, constant: -10).isActive = true
+        closeEyeDiscrLabel.backgroundColor = .clear
+        closeEyeDiscrLabel.text = "Указано какой глаз необходимо закрыть для проведения теста."
+        closeEyeDiscrLabel.font = .systemFont(ofSize: 7)
+        closeEyeDiscrLabel.numberOfLines = 0
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
         
-        symbolDiscrLabel.isUserInteractionEnabled = true
+        closeEyeDiscrLabel.isUserInteractionEnabled = true
         
-        symbolDiscrLabel.addGestureRecognizer(tap)
+        closeEyeDiscrLabel.addGestureRecognizer(tap)
     }
     
     fileprivate func addStopBtnDescrView() {
         firstInstrView.addSubview(stopBtnDiscrLBS)
         stopBtnDiscrLBS.radius = 10
-        stopBtnDiscrLBS.fat = 10
-        stopBtnDiscrLBS.ratio = 1/2
+        stopBtnDiscrLBS.fat = 5
+        stopBtnDiscrLBS.ratio = 1/5
         
         stopBtnDiscrLBS.translatesAutoresizingMaskIntoConstraints = false
         stopBtnDiscrLBS.rightAnchor.constraint(equalTo: firstInstrView.rightAnchor, constant: -5).isActive = true
-        stopBtnDiscrLBS.topAnchor.constraint(equalTo: basicMiopScreenImageView.centerYAnchor, constant: 0).isActive = true
-        stopBtnDiscrLBS.heightAnchor.constraint(equalTo: basicMiopScreenImageView.heightAnchor, multiplier: 1/4).isActive = true
-        stopBtnDiscrLBS.leftAnchor.constraint(equalTo: basicMiopScreenImageView.centerXAnchor, constant: 10).isActive = true
+        stopBtnDiscrLBS.bottomAnchor.constraint(equalTo: basicHyperScreenImageView.centerYAnchor, constant: 0).isActive = true
+        stopBtnDiscrLBS.heightAnchor.constraint(equalTo: basicHyperScreenImageView.heightAnchor, multiplier: 1/4).isActive = true
+        stopBtnDiscrLBS.leftAnchor.constraint(equalTo: basicHyperScreenImageView.rightAnchor, constant: -10).isActive = true
         stopBtnDiscrLBS.backgroundColor = .clear
         
         
@@ -515,9 +526,9 @@ class InfoStartViewController: UIViewController {
         stopBtnDiscrLabel.rightAnchor.constraint(equalTo: stopBtnDiscrLBS.rightAnchor, constant: -5).isActive = true
         stopBtnDiscrLabel.topAnchor.constraint(equalTo: stopBtnDiscrLBS.topAnchor, constant: 5).isActive = true
         stopBtnDiscrLabel.heightAnchor.constraint(equalTo: stopBtnDiscrLBS.heightAnchor, multiplier: 10/11).isActive = true
-        stopBtnDiscrLabel.widthAnchor.constraint(equalTo: stopBtnDiscrLBS.widthAnchor, multiplier: 1/2, constant: -10).isActive = true
+        stopBtnDiscrLabel.widthAnchor.constraint(equalTo: stopBtnDiscrLBS.widthAnchor, multiplier: 4/5, constant: -10).isActive = true
         stopBtnDiscrLabel.backgroundColor = .clear
-        stopBtnDiscrLabel.text = "Когда невозможно определить в какую сторону направлен символ - нажмите кнопку с символом '❌'. Тест будет остановлен, результат сохранится. Вам будет предложено пройти тест для другого глаза. Если Вы выйдете до окончания теста - результаты сохранены не будут."
+        stopBtnDiscrLabel.text = "Когда невозможно различить число в центральном окне - нажмите кнопку с символом '❌'. Тест будет остановлен, результат сохранится. Вам будет предложено пройти тест для другого глаза. Если Вы выйдете до окончания теста - результаты сохранены не будут."
         stopBtnDiscrLabel.font = .systemFont(ofSize: 7)
         stopBtnDiscrLabel.numberOfLines = 0
         
@@ -528,115 +539,145 @@ class InfoStartViewController: UIViewController {
     }
     
     
-    fileprivate func addActionBtnDescrView() {
-        firstInstrView.addSubview(actionBtnDiscrLTS)
-        actionBtnDiscrLTS.radius = 10
-        actionBtnDiscrLTS.fat = 10
-        actionBtnDiscrLTS.ratio = 1/2
-        //actionBtnDiscrLTS.fillColor = .red
+    fileprivate func addTimeProgressDescrView() {
+        firstInstrView.addSubview(timeProgressDiscrLTS)
+        timeProgressDiscrLTS.radius = 10
+        timeProgressDiscrLTS.fat = 5
+        timeProgressDiscrLTS.ratio = 1/2
         
-        actionBtnDiscrLTS.translatesAutoresizingMaskIntoConstraints = false
-        actionBtnDiscrLTS.rightAnchor.constraint(equalTo: firstInstrView.rightAnchor, constant: -5).isActive = true
-        actionBtnDiscrLTS.bottomAnchor.constraint(equalTo: basicMiopScreenImageView.bottomAnchor, constant: 50).isActive = true
-        actionBtnDiscrLTS.heightAnchor.constraint(equalTo: basicMiopScreenImageView.heightAnchor, multiplier: 1/4).isActive = true
-        actionBtnDiscrLTS.leftAnchor.constraint(equalTo: basicMiopScreenImageView.centerXAnchor, constant: 10).isActive = true
-        actionBtnDiscrLTS.backgroundColor = .clear
+        timeProgressDiscrLTS.translatesAutoresizingMaskIntoConstraints = false
+        timeProgressDiscrLTS.rightAnchor.constraint(equalTo: firstInstrView.rightAnchor, constant: -5).isActive = true
+        timeProgressDiscrLTS.topAnchor.constraint(equalTo: basicHyperScreenImageView.centerYAnchor, constant: 12).isActive = true
+        timeProgressDiscrLTS.heightAnchor.constraint(equalTo: basicHyperScreenImageView.heightAnchor, multiplier: 1/7).isActive = true
+        timeProgressDiscrLTS.leftAnchor.constraint(equalTo: basicHyperScreenImageView.centerXAnchor, constant: 20).isActive = true
+        timeProgressDiscrLTS.backgroundColor = .clear
         
         
-        actionBtnDiscrLTS.addSubview(actionBtnLabel)
-        actionBtnLabel.translatesAutoresizingMaskIntoConstraints = false
-        actionBtnLabel.rightAnchor.constraint(equalTo: actionBtnDiscrLTS.rightAnchor, constant: -5).isActive = true
-        actionBtnLabel.topAnchor.constraint(equalTo: actionBtnDiscrLTS.topAnchor, constant: 5).isActive = true
-        actionBtnLabel.heightAnchor.constraint(equalTo: actionBtnDiscrLTS.heightAnchor, multiplier: 10/11).isActive = true
-        actionBtnLabel.widthAnchor.constraint(equalTo: actionBtnDiscrLTS.widthAnchor, multiplier: 1/2, constant: -10).isActive = true
-        actionBtnLabel.backgroundColor = .clear
-        actionBtnLabel.text = "Если Вы можете различить в какую сторону направлен символ - нажмите на кнопку, которая соответствует направлению символа. В случае совпадения направления символа и стрелки на кнопке  - появится символ более мелкого размера. "
-        actionBtnLabel.font = .systemFont(ofSize: 7)
-        actionBtnLabel.numberOfLines = 0
+        timeProgressDiscrLTS.addSubview(timeProgressDiscrLabel)
+        timeProgressDiscrLabel.translatesAutoresizingMaskIntoConstraints = false
+        timeProgressDiscrLabel.rightAnchor.constraint(equalTo: timeProgressDiscrLTS.rightAnchor, constant: -5).isActive = true
+        timeProgressDiscrLabel.topAnchor.constraint(equalTo: timeProgressDiscrLTS.topAnchor, constant: 5).isActive = true
+        timeProgressDiscrLabel.heightAnchor.constraint(equalTo: timeProgressDiscrLTS.heightAnchor, multiplier: 10/11).isActive = true
+        timeProgressDiscrLabel.widthAnchor.constraint(equalTo: timeProgressDiscrLTS.widthAnchor, multiplier: 1/2, constant: -10).isActive = true
+        timeProgressDiscrLabel.backgroundColor = .clear
+        timeProgressDiscrLabel.text = "Индикатор оставшегося времени до момента появления нового числа."
+        timeProgressDiscrLabel.font = .systemFont(ofSize: 7)
+        timeProgressDiscrLabel.numberOfLines = 0
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
-        actionBtnLabel.isUserInteractionEnabled = true
-        actionBtnLabel.addGestureRecognizer(tap)
+        timeProgressDiscrLabel.isUserInteractionEnabled = true
+        timeProgressDiscrLabel.addGestureRecognizer(tap)
     }
     
-    fileprivate func addDeviceDescrView() {
-        firstInstrView.addSubview(deviceDetectDiscrRTS)
-        deviceDetectDiscrRTS.radius = 10
-        deviceDetectDiscrRTS.fat = 10
-        deviceDetectDiscrRTS.ratio = 15/100
+    fileprivate func addKeyboardDescrView() {
+        firstInstrView.addSubview(keyboardDiscrLTS)
+        keyboardDiscrLTS.radius = 10
+        keyboardDiscrLTS.fat = 5
+        keyboardDiscrLTS.ratio = 1/2
         
-        deviceDetectDiscrRTS.translatesAutoresizingMaskIntoConstraints = false
-        deviceDetectDiscrRTS.rightAnchor.constraint(equalTo: basicMiopScreenImageView.leftAnchor, constant: 10).isActive = true
-        deviceDetectDiscrRTS.topAnchor.constraint(equalTo: basicMiopScreenImageView.bottomAnchor, constant: -20).isActive = true
-        deviceDetectDiscrRTS.heightAnchor.constraint(equalTo: basicMiopScreenImageView.heightAnchor, multiplier: 1/4).isActive = true
-        deviceDetectDiscrRTS.leftAnchor.constraint(equalTo: firstInstrView.leftAnchor, constant: 5).isActive = true
-        deviceDetectDiscrRTS.backgroundColor = .clear
+        keyboardDiscrLTS.translatesAutoresizingMaskIntoConstraints = false
+        keyboardDiscrLTS.rightAnchor.constraint(equalTo: firstInstrView.rightAnchor, constant: -5).isActive = true
+        keyboardDiscrLTS.topAnchor.constraint(equalTo: timeProgressDiscrLTS.bottomAnchor, constant: 12).isActive = true
+        keyboardDiscrLTS.heightAnchor.constraint(equalTo: basicHyperScreenImageView.heightAnchor, multiplier: 1/5).isActive = true
+        keyboardDiscrLTS.leftAnchor.constraint(equalTo: basicHyperScreenImageView.centerXAnchor, constant: 20).isActive = true
+        keyboardDiscrLTS.backgroundColor = .clear
         
         
-        deviceDetectDiscrRTS.addSubview(deviceDetectLabel)
-        deviceDetectLabel.translatesAutoresizingMaskIntoConstraints = false
-        deviceDetectLabel.leftAnchor.constraint(equalTo: deviceDetectDiscrRTS.leftAnchor, constant: 5).isActive = true
-        deviceDetectLabel.topAnchor.constraint(equalTo: deviceDetectDiscrRTS.topAnchor, constant: 5).isActive = true
-        deviceDetectLabel.heightAnchor.constraint(equalTo: deviceDetectDiscrRTS.heightAnchor, multiplier: 10/11).isActive = true
-        deviceDetectLabel.widthAnchor.constraint(equalTo: deviceDetectDiscrRTS.widthAnchor, multiplier: 85/100, constant: -10).isActive = true
-        deviceDetectLabel.backgroundColor = .clear
-        deviceDetectLabel.text = "Устройство, на котором запущено приложение. В зависимости от ширины экрана устройства происходит расчет размеров символа для определения остроты зрения."
-        deviceDetectLabel.font = .systemFont(ofSize: 7)
-        deviceDetectLabel.numberOfLines = 0
+        keyboardDiscrLTS.addSubview(keyboardDiscrLabel)
+        keyboardDiscrLabel.translatesAutoresizingMaskIntoConstraints = false
+        keyboardDiscrLabel.rightAnchor.constraint(equalTo: keyboardDiscrLTS.rightAnchor, constant: -5).isActive = true
+        keyboardDiscrLabel.topAnchor.constraint(equalTo: keyboardDiscrLTS.topAnchor, constant: 5).isActive = true
+        keyboardDiscrLabel.heightAnchor.constraint(equalTo: keyboardDiscrLTS.heightAnchor, multiplier: 10/11).isActive = true
+        keyboardDiscrLabel.widthAnchor.constraint(equalTo: keyboardDiscrLTS.widthAnchor, multiplier: 1/2, constant: -10).isActive = true
+        keyboardDiscrLabel.backgroundColor = .clear
+        keyboardDiscrLabel.text = "Наберите на клавиатуре число равное числу в центре экрана."
+        keyboardDiscrLabel.font = .systemFont(ofSize: 7)
+        keyboardDiscrLabel.numberOfLines = 0
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
-        deviceDetectLabel.isUserInteractionEnabled = true
-        deviceDetectLabel.addGestureRecognizer(tap)
+        keyboardDiscrLabel.isUserInteractionEnabled = true
+        keyboardDiscrLabel.addGestureRecognizer(tap)
     }
     
-    fileprivate func addDistanceDescrView() {
-        firstInstrView.addSubview(distanceDiscrRBS)
-        distanceDiscrRBS.radius = 10
-        distanceDiscrRBS.fat = 5
-        distanceDiscrRBS.ratio = 1/10
+    fileprivate func addtextFielDescrView() {
+        firstInstrView.addSubview(textFieldDiscrRTS)
+        textFieldDiscrRTS.radius = 10
+        textFieldDiscrRTS.fat = 5
+        textFieldDiscrRTS.ratio = 2/5
         
-        distanceDiscrRBS.translatesAutoresizingMaskIntoConstraints = false
-        distanceDiscrRBS.rightAnchor.constraint(equalTo: basicMiopScreenImageView.leftAnchor, constant: 5).isActive = true
-        distanceDiscrRBS.bottomAnchor.constraint(equalTo: deviceDetectDiscrRTS.topAnchor, constant: -20).isActive = true
-        distanceDiscrRBS.heightAnchor.constraint(equalTo: basicMiopScreenImageView.heightAnchor, multiplier: 1/4).isActive = true
-        distanceDiscrRBS.leftAnchor.constraint(equalTo: firstInstrView.leftAnchor, constant: 5).isActive = true
-        distanceDiscrRBS.backgroundColor = .clear
+        textFieldDiscrRTS.translatesAutoresizingMaskIntoConstraints = false
+        textFieldDiscrRTS.rightAnchor.constraint(equalTo: basicHyperScreenImageView.leftAnchor, constant: 40).isActive = true
+        textFieldDiscrRTS.topAnchor.constraint(equalTo: basicHyperScreenImageView.centerYAnchor, constant: 20).isActive = true
+        textFieldDiscrRTS.heightAnchor.constraint(equalTo: basicHyperScreenImageView.heightAnchor, multiplier: 1/4).isActive = true
+        textFieldDiscrRTS.leftAnchor.constraint(equalTo: firstInstrView.leftAnchor, constant: 5).isActive = true
+        textFieldDiscrRTS.backgroundColor = .clear
         
         
-        distanceDiscrRBS.addSubview(distanceDiscrLabel)
-        distanceDiscrLabel.translatesAutoresizingMaskIntoConstraints = false
-        distanceDiscrLabel.leftAnchor.constraint(equalTo: distanceDiscrRBS.leftAnchor, constant: 5).isActive = true
-        distanceDiscrLabel.topAnchor.constraint(equalTo: distanceDiscrRBS.topAnchor, constant: 5).isActive = true
-        distanceDiscrLabel.heightAnchor.constraint(equalTo: distanceDiscrRBS.heightAnchor, multiplier: 10/11).isActive = true
-        distanceDiscrLabel.widthAnchor.constraint(equalTo: distanceDiscrRBS.widthAnchor, multiplier: 85/100, constant: -10).isActive = true
-        distanceDiscrLabel.backgroundColor = .clear
-        distanceDiscrLabel.text = " Расстояние, установленное для проведения теста. В зависимости от расстояния происходит расчет размеров символа для определения остроты зрения. Изменить расстояние проведения теста можно в настройках приложения."
-        distanceDiscrLabel.font = .systemFont(ofSize: 7)
-        distanceDiscrLabel.numberOfLines = 0
+        textFieldDiscrRTS.addSubview(textFieldLabel)
+        textFieldLabel.translatesAutoresizingMaskIntoConstraints = false
+        textFieldLabel.leftAnchor.constraint(equalTo: textFieldDiscrRTS.leftAnchor, constant: 5).isActive = true
+        textFieldLabel.topAnchor.constraint(equalTo: textFieldDiscrRTS.topAnchor, constant: 5).isActive = true
+        textFieldLabel.heightAnchor.constraint(equalTo: textFieldDiscrRTS.heightAnchor, multiplier: 10/11).isActive = true
+        textFieldLabel.widthAnchor.constraint(equalTo: textFieldDiscrRTS.widthAnchor, multiplier: 3/5, constant: -10).isActive = true
+        textFieldLabel.backgroundColor = .clear
+        textFieldLabel.text = "Текстовое поле, в котором отображаются введенные Вами цифры."
+        textFieldLabel.font = .systemFont(ofSize: 7)
+        textFieldLabel.numberOfLines = 0
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
-        distanceDiscrLabel.isUserInteractionEnabled = true
-        distanceDiscrLabel.addGestureRecognizer(tap)
+        textFieldLabel.isUserInteractionEnabled = true
+        textFieldLabel.addGestureRecognizer(tap)
+    }
+    
+    fileprivate func addNumberDescrView() {
+        firstInstrView.addSubview(numberDiscrRBS)
+        numberDiscrRBS.radius = 10
+        numberDiscrRBS.fat = 10
+        numberDiscrRBS.ratio = 1/2
+        
+        numberDiscrRBS.translatesAutoresizingMaskIntoConstraints = false
+        numberDiscrRBS.rightAnchor.constraint(equalTo: basicHyperScreenImageView.centerXAnchor, constant: -15).isActive = true
+        numberDiscrRBS.bottomAnchor.constraint(equalTo: basicHyperScreenImageView.centerYAnchor, constant: 0).isActive = true
+        numberDiscrRBS.heightAnchor.constraint(equalTo: basicHyperScreenImageView.heightAnchor, multiplier: 10/45).isActive = true
+        numberDiscrRBS.leftAnchor.constraint(equalTo: firstInstrView.leftAnchor, constant: 5).isActive = true
+        numberDiscrRBS.backgroundColor = .clear
+        numberDiscrRBS.layer.borderColor = UIColor.clear.cgColor
+        
+        
+        numberDiscrRBS.addSubview(numberDiscrLabel)
+        numberDiscrLabel.translatesAutoresizingMaskIntoConstraints = false
+        numberDiscrLabel.leftAnchor.constraint(equalTo: numberDiscrRBS.leftAnchor, constant: 5).isActive = true
+        numberDiscrLabel.topAnchor.constraint(equalTo: numberDiscrRBS.topAnchor, constant: 5).isActive = true
+        numberDiscrLabel.heightAnchor.constraint(equalTo: numberDiscrRBS.heightAnchor, multiplier: 10/11).isActive = true
+        numberDiscrLabel.widthAnchor.constraint(equalTo: numberDiscrRBS.widthAnchor, multiplier: 1/2, constant: -10).isActive = true
+        numberDiscrLabel.backgroundColor = .clear
+        numberDiscrLabel.text = " Трехзначное число. Если введенное Вами число окажется равно данному числу, то следующее число появится уже меньшего размера."
+        numberDiscrLabel.font = .systemFont(ofSize: 7)
+        numberDiscrLabel.numberOfLines = 0
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
+        numberDiscrLabel.isUserInteractionEnabled = true
+        numberDiscrLabel.addGestureRecognizer(tap)
     }
     //MARK:bigLabel
     @objc func bigLabelAction(recognizer: UIGestureRecognizer) {
         //var bottomAnch = symbolDiscrLBS.bottomAnchor
         var text = String()
-        if recognizer.view == symbolDiscrLabel{
+        if recognizer.view == closeEyeDiscrLabel{
             
-            text = symbolDiscrLabel.text ?? ""
+            text = closeEyeDiscrLabel.text ?? ""
             
         }else if recognizer.view == stopBtnDiscrLabel{
             text = stopBtnDiscrLabel.text ?? ""
             
-        }else if recognizer.view == actionBtnLabel{
-            text = actionBtnLabel.text ?? ""
+        }else if recognizer.view == timeProgressDiscrLabel{
+            text = timeProgressDiscrLabel.text ?? ""
             
-        }else if recognizer.view == deviceDetectLabel{
-            text = deviceDetectLabel.text ?? ""
+        }else if recognizer.view == textFieldLabel{
+            text = textFieldLabel.text ?? ""
             
-        }else if recognizer.view == distanceDiscrLabel{
-            text = distanceDiscrLabel.text ?? ""
+        }else if recognizer.view == numberDiscrLabel{
+            text = numberDiscrLabel.text ?? ""
             
         }else if recognizer.view == speechSymbolDiscrLabel{
             text = speechSymbolDiscrLabel.text ?? ""
@@ -817,3 +858,6 @@ class InfoStartViewController: UIViewController {
         howDoAutoDetectLabel.text = "  Включите в настройках приложения переключатель автоматического определения расстояния. Для автоматического определения расстояния в помещении должно быть хорошее освещение. Установите время, которое Вам потребуется, чтобы отойти на планируемое расстояние. \n\n 📱    →    🧍=👍 \n \n При определении расстояния в кадре должно быть не более одного человека, стоящего лицом к фронтальной камере телефона.\n\n  📱    →    👫=👎 \n \n Если будет больше - расстояние может быть определено некорректно.  Далее тест проводится также как при включенном распознавании речи."
     }
 }
+
+
+

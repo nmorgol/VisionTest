@@ -85,39 +85,39 @@ class NormalLightView: UIView {
         points.stroke()
         
         
-        number.move(to: CGPoint(x: self.frame.width*2/20 + self.frame.width*1/40,
-                                y: self.frame.height*3/4 + self.frame.height*1/20))
-        
-        number.addLine(to: CGPoint(x: self.frame.width*2/20,
-                                   y: self.frame.height*3/4 + self.frame.height*1/20))
-        
-        number.addLine(to: CGPoint(x: self.frame.width*2/20,
-                                   y: self.frame.height*3/4 + self.frame.height*3/40))
-        
-        number.addCurve(to: CGPoint(x: self.frame.width*2/20,
-                                    y: self.frame.height*3/4 + self.frame.height*2/20),
-                        controlPoint1: CGPoint(x: self.frame.width*2/20 + self.frame.width*3/80,
-                                               y: self.frame.height*3/4 + self.frame.height*5/80),
-                        controlPoint2: CGPoint(x: self.frame.width*2/20 + self.frame.width*3/80,
-                                               y: self.frame.height*3/4 + self.frame.height*9/80))
-        
-        number.lineWidth = 1
-        UIColor.red.setStroke()
-        number.stroke()
-        
-        letter.move(to: CGPoint(x: self.frame.width*3/20, y: self.frame.height*3/4 + self.frame.height*2/20))
-        letter.addLine(to: CGPoint(x: self.frame.width*3/20, y: self.frame.height*3/4 + self.frame.height*3/40))
-        letter.addLine(to: CGPoint(x: self.frame.width*13/80, y: self.frame.height*3/4 + self.frame.height*7/80))
-        letter.addLine(to: CGPoint(x: self.frame.width*14/80, y: self.frame.height*3/4 + self.frame.height*6/80))
-        letter.addLine(to: CGPoint(x: self.frame.width*7/40, y: self.frame.height*3/4 + self.frame.height*8/80))
-        letter.move(to: CGPoint(x: self.frame.width*2/10,
-                                y: self.frame.height*3/4 + self.frame.height*1/10 + self.frame.height*1/160))
-        letter.addLine(to: CGPoint(x: self.frame.width*2/10,
-                                y: self.frame.height*3/4 + self.frame.height*1/10 - self.frame.height*1/160))
-        
-        letter.lineWidth = 1
-        UIColor.red.setStroke()
-        letter.stroke()
+//        number.move(to: CGPoint(x: self.frame.width*2/20 + self.frame.width*1/40,
+//                                y: self.frame.height*3/4 + self.frame.height*1/20))
+//        
+//        number.addLine(to: CGPoint(x: self.frame.width*2/20,
+//                                   y: self.frame.height*3/4 + self.frame.height*1/20))
+//        
+//        number.addLine(to: CGPoint(x: self.frame.width*2/20,
+//                                   y: self.frame.height*3/4 + self.frame.height*3/40))
+//        
+//        number.addCurve(to: CGPoint(x: self.frame.width*2/20,
+//                                    y: self.frame.height*3/4 + self.frame.height*2/20),
+//                        controlPoint1: CGPoint(x: self.frame.width*2/20 + self.frame.width*3/80,
+//                                               y: self.frame.height*3/4 + self.frame.height*5/80),
+//                        controlPoint2: CGPoint(x: self.frame.width*2/20 + self.frame.width*3/80,
+//                                               y: self.frame.height*3/4 + self.frame.height*9/80))
+//        
+//        number.lineWidth = 1
+//        UIColor.red.setStroke()
+//        number.stroke()
+//        
+//        letter.move(to: CGPoint(x: self.frame.width*3/20, y: self.frame.height*3/4 + self.frame.height*2/20))
+//        letter.addLine(to: CGPoint(x: self.frame.width*3/20, y: self.frame.height*3/4 + self.frame.height*3/40))
+//        letter.addLine(to: CGPoint(x: self.frame.width*13/80, y: self.frame.height*3/4 + self.frame.height*7/80))
+//        letter.addLine(to: CGPoint(x: self.frame.width*14/80, y: self.frame.height*3/4 + self.frame.height*6/80))
+//        letter.addLine(to: CGPoint(x: self.frame.width*7/40, y: self.frame.height*3/4 + self.frame.height*8/80))
+//        letter.move(to: CGPoint(x: self.frame.width*2/10,
+//                                y: self.frame.height*3/4 + self.frame.height*1/10 + self.frame.height*1/160))
+//        letter.addLine(to: CGPoint(x: self.frame.width*2/10,
+//                                y: self.frame.height*3/4 + self.frame.height*1/10 - self.frame.height*1/160))
+//        
+//        letter.lineWidth = 1
+//        UIColor.red.setStroke()
+//        letter.stroke()
     }
     
 
