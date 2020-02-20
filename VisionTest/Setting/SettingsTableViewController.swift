@@ -13,6 +13,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     let userCellID = "UserCell"
     let settingsCellID = "SettingsCell"
     let symbolCellId = "SymbolCell"
+    let cellIAPurchasesID = "cellID"
+    
     let userInfoImageView = UIImageView()
     
     var name = ""
@@ -44,7 +46,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         self.tableView.register(UserTableViewCell.self, forCellReuseIdentifier: userCellID)
         self.tableView.register(SymbolTableViewCell.self, forCellReuseIdentifier: symbolCellId)
         
-        
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIAPurchasesID)
         
         tableView.tableFooterView = UIView()
         
@@ -100,7 +102,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 3
+        return 4
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -112,6 +114,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             return 2
         case 2:
             return 3
+        case 3:
+            return 1
         default:
             break
         }
@@ -220,7 +224,12 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
                 
                 cell = cell3
             }
+            return cell
             
+        }else if indexPath.section == 3{
+            let cell4 = tableView.dequeueReusableCell(withIdentifier: cellIAPurchasesID, for: indexPath)
+            cell4.textLabel?.text = "In-App Purchases"
+            cell = cell4
             return cell
         }
         return cell
@@ -233,6 +242,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         case 1:
             return " "
         case 2:
+            return " "
+        case 3:
             return " "
         default:
             break
@@ -269,6 +280,15 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             }
         default:
             print("default")
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 3{
+            if indexPath.row == 0{
+                let vc = IAPurchTableViewController()
+                self.navigationController?.pushViewController(vc, animated: false)
+            }
         }
     }
    
