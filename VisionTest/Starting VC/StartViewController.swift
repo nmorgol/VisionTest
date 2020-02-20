@@ -132,6 +132,10 @@ class StartViewController: UIViewController {
 
         userView.layer.shadowOpacity = 0.1
         userView.layer.shadowColor = UIColor.black.cgColor
+        
+        userView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(userImageViewAction))
+        userView.addGestureRecognizer(tap)
     }
     
     

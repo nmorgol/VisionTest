@@ -22,11 +22,13 @@ class HyperopiaViewController: UIViewController {
     
     var timer: Timer!
     var timerCounter = 0
-    var stopBool = false // для работы таймера от слова СТОП
+    var stopBool = true // для работы таймера от слова СТОП
     let stopLabel = UILabel()//всплывает по слову СТОП
     
     var rightRes = Float()
     var leftRes = Float()
+    
+    var animateCounter = Int(1)
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -37,7 +39,6 @@ class HyperopiaViewController: UIViewController {
         self.title = "Hyperopia test"
         self.view.backgroundColor = .white
         
-//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
         
     }
     
@@ -53,17 +54,8 @@ class HyperopiaViewController: UIViewController {
         addProgressView()
         addReciveTextLabel()
         
-//        let vc = InfoHyperopiaViewController()
-//        
-//        vc.selectedSegmentIndex = 1
-//        
-//        self.present(vc, animated: true, completion: nil)
-//        reciveTextField.resignFirstResponder()
-//        
-//        
-//        if vc.isBeingDismissed{
-//            reciveTextField.becomeFirstResponder()
-//        }
+        
+        animatedEyeLabel()
     }
     
 
@@ -74,13 +66,13 @@ class HyperopiaViewController: UIViewController {
     }
     
     
-    @objc func actionResults() {
-        //disapearTrue = false
-        let resultVC = ResultsTableViewController()
-        resultVC.title = "Hyperopia test results"
-        resultVC.state = "Hyperopia"
-        self.navigationController?.pushViewController(resultVC, animated: true)
-    }
+//    @objc func actionResults() {
+//        //disapearTrue = false
+//        let resultVC = ResultsTableViewController()
+//        resultVC.title = "Hyperopia test results"
+//        resultVC.state = "Hyperopia"
+//        self.navigationController?.pushViewController(resultVC, animated: true)
+//    }
     
     
     // MARK: View
@@ -170,6 +162,8 @@ class HyperopiaViewController: UIViewController {
 
         stopLabel.backgroundColor = .white
         stopLabel.numberOfLines = 0
+        
+        
         stopLabel.text = "Тест завершен. \n Результаты: \n - правый глаз \(rightRes) \n - левый глаз \(leftRes)"
 
         stopLabel.isUserInteractionEnabled = true
@@ -231,29 +225,40 @@ class HyperopiaViewController: UIViewController {
     
     @objc func stopButtonAction() {
         if stopButton.currentTitle == "❌"{
-            
-            timer.invalidate()
+            stopBool = true
+            //timer.invalidate()
             timerCounter = 0
             
             saveResult()//надо до сброса счетчика ставить
-            startFontCounter = 1
-            fontSize = 47.0/Double(startFontCounter)
-            stopButton.setTitle( "✅", for: .normal)
             
-            if eyeLabel.text == "Закройте левый глаз"{
+            
+            
+            if eyeLabel.text == "Закройте левый глаз"{//надо до сброса счетчика ставить
                 rightRes = ((Float(startFontCounter)-1.0)/10.0)
-                eyeLabel.text = "Закройте правый глаз"
             }else if eyeLabel.text == "Закройте правый глаз"{
                 leftRes = ((Float(startFontCounter)-1.0)/10.0)
-                //eyeLabel.text = "Закройте правый глаз"
+            }
+            
+            startFontCounter = 1//сброс счетчика
+            fontSize = 47.0/Double(startFontCounter)
+            
+            if eyeLabel.text == "Закройте левый глаз"{//надо до сброса счетчика ставить
+                eyeLabel.text = "Закройте правый глаз"
+            }else if eyeLabel.text == "Закройте правый глаз"{
                 
                 reciveTextField.resignFirstResponder()
                 addStopLabel()
             }
             
+            
+            
+            stopButton.setTitle( "✅", for: .normal)
         }else if stopButton.currentTitle == "✅"{
             stopButton.setTitle( "❌", for: .normal)
-            timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+            
+            animatedEyeLabel()
+            //stopBool = false
+            //timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
         }
         
     }
@@ -287,9 +292,30 @@ class HyperopiaViewController: UIViewController {
                 print(error)
             }
         }
-    
-    
-    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        reciveTextField.becomeFirstResponder()
+    @objc func animatedEyeLabel() {
+        UILabel.animate(withDuration: 0.15/Double(animateCounter), animations: {
+            
+            self.eyeLabel.transform = CGAffineTransform.init(translationX: 0, y: -30)
+        }) { (_) in
+            
+            UILabel.animate(withDuration: 0.15, animations: {
+                self.eyeLabel.transform = CGAffineTransform.init(translationX: 0, y: 30)
+            }) { (_) in
+                UILabel.animate(withDuration: 0.10, animations: {
+                    self.eyeLabel.transform = CGAffineTransform.init(translationX: 0, y: -15)
+                }) { (_) in
+                    UILabel.animate(withDuration: 0.05, animations: {
+                        self.eyeLabel.transform = CGAffineTransform.init(translationX: 0, y: 7.5)
+                    }) { (_) in
+                        UILabel.animate(withDuration: 0.05, animations: {
+                            self.eyeLabel.transform = CGAffineTransform.init(translationX: 0, y: -7.5)
+                        }) { (_) in
+                            self.stopBool = false
+                        }
+                    }
+                }
+            }
+        }
     }
+    
 }

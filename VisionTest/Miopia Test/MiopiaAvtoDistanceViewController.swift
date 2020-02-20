@@ -5,6 +5,7 @@ import Speech
 import AVKit
 import AVFoundation
 import Vision
+import CoreData
 
 class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, AVSpeechSynthesizerDelegate {
     
@@ -82,9 +83,15 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
     var testingText = [String]()//текст c которым сравнивать recieveText = ""//текст из яблок
     
     var synthesizer = AVSpeechSynthesizer()
+    var textUteranseFirst = String()
+    var textUteranseSecond = String()
     
     var timer = Timer()
     var startTimerCounter = 5//время до старта
+    
+    var stopBool = true
+    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     // MARK: viewDidLoad
     override func viewDidLoad() {
@@ -215,7 +222,8 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         }
         
         recognitionTask?.cancel()
-        self.recognitionTask = nil
+        recognitionTask = nil
+        
         recieveText = ""
         testingText = []
         
@@ -236,7 +244,7 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         
         // Cancel the previous task if it's running.
         recognitionTask?.cancel()
-        self.recognitionTask = nil
+        recognitionTask = nil
         
         // Configure the audio session for the app.
         let audioSession = AVAudioSession.sharedInstance()
@@ -798,11 +806,12 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         
         let metr = Int(distance)
         let santi = Int((distance - Float(metr))*100)
+        
         startLabel.text = "\(metr).\(santi)"
         
-        var textUteranse = String()
-        textUteranse = "Расстояние равно \(metr) метров \(santi) сантиметров.    Закройте левый глаз"
-        let utteranceSp = AVSpeechUtterance(string: textUteranse)
+        
+        textUteranseFirst = "Расстояние равно \(metr) метров \(santi) сантиметров.    Закройте левый глаз"
+        let utteranceSp = AVSpeechUtterance(string: textUteranseFirst)
         utteranceSp.voice = AVSpeechSynthesisVoice(language: "ru")
         utteranceSp.rate = 0.5
         let audioSession = AVAudioSession.sharedInstance()
@@ -810,140 +819,180 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         
         synthesizer.speak(utteranceSp)
     }
+    
     //когда говорилка закончила говорить
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
-        
-        startLabel.font = .systemFont(ofSize: 17)
-        startLabel.removeFromSuperview()
-        
-        timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(testTimerAction), userInfo: nil, repeats: true)
+        if textUteranseFirst == "Тест завершен"{
+            self.navigationController?.popViewController(animated: false)
+        }else{
+            stopBool = false
+            counterTestTimer = 0
+            
+            startLabel.font = .systemFont(ofSize: 17)
+            startLabel.removeFromSuperview()
+            
+            if timer.isValid != true{
+                timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(testTimerAction), userInfo: nil, repeats: true)
+            }
+        }
     }
     
     @objc func testTimerAction(){
         
-        progress.setProgress(0.1*Float(Int(counterTestTimer)%10), animated: false)
-        
-        //старт распознавания 4 цикла сменысимвола
-        if counterTestTimer == 0 || Int(counterTestTimer)%40 == 0{
-            if audioEngine.isRunning {
-                audioEngine.stop()
-                recognitionRequest?.endAudio()
-                audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
-            }else{
-                do {
-                    try startRecording()
-                } catch let error {
-                    print("косяк какой-то \(error)")
-                }
-            }
-        }
-        
-        //меняем символ
-        if counterTestTimer == 0 || Int(counterTestTimer)%10 == 0 {
+        if stopBool == false {
+            progress.setProgress(0.1*Float(Int(counterTestTimer)%10), animated: false)
             
-            compareStop(reciveText: recieveText)//если пришло слово "СТОП"
-            
-            progress.setProgress(0, animated: false)
-            
-            currentView.removeFromSuperview()
-            
-            if workViewArray.count > 0{
-                
-                currentView = workViewArray.randomElement()!
-                var indexDel = Int()
-                for i in 0 ... workViewArray.count-1 {
-                    
-                    if currentView.isEqual(workViewArray[i]){
-                        
-                        indexDel = i
+            //старт распознавания 4 цикла смены символа
+            if counterTestTimer == 0 || Int(counterTestTimer)%40 == 0{
+                testingText = []
+                recieveText = ""
+                if audioEngine.isRunning {
+                    audioEngine.stop()
+                    recognitionRequest?.endAudio()
+                    audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+                }else{
+                    do {
+                        try startRecording()
+                    } catch let error {
+                        print("косяк какой-то \(error)")
                     }
                 }
-                workViewArray.remove(at: indexDel)
+            }
+            //меняем символ
+            if counterTestTimer == 0 || Int(counterTestTimer)%10 == 0 {
                 
-                for i in 0 ... viewArray.count-1{//создание массива правильных ответов
-                    if currentView.isEqual(viewArray[i]){
-                        switch i {
-                        case 0:
-                            testingText.append("право")
-                        case 1:
-                            testingText.append("лево")
-                        case 2:
-                            testingText.append("верх")
-                        case 3:
-                            testingText.append("низ")
-                        default:
-                            return
+                compareStop(reciveText: recieveText)//если пришло слово "СТОП"
+                
+                progress.setProgress(0, animated: false)
+                
+                currentView.removeFromSuperview()
+                
+                if workViewArray.count > 0 && !stopBool {
+                    currentView = workViewArray.randomElement()!
+                    var indexDel = Int()
+                    for i in 0 ... workViewArray.count-1 {//удаляем из рабочего массива элемент
+                        if currentView.isEqual(workViewArray[i]){
+                            indexDel = i
+                        }
+                    }
+                    workViewArray.remove(at: indexDel)
+                    
+                    for i in 0 ... viewArray.count-1{//создание массива правильных ответов
+                        if currentView.isEqual(viewArray[i]){
+                            switch i {
+                            case 0:
+                                testingText.append("право")
+                            case 1:
+                                testingText.append("лево")
+                            case 2:
+                                testingText.append("верх")
+                            case 3:
+                                testingText.append("низ")
+                            default:
+                                return
+                            }
                         }
                     }
                 }
+                if workViewArray.count == 0 && !stopBool{
+                    workViewArray = viewArray
+                }
+                let koeficient = koef*counterTestCicle
+                addLandoltSnellenView(addingView: currentView, koef: koeficient)
             }
-            if workViewArray.count == 0{
-                workViewArray = viewArray
-            }
-            let koeficient = koef*counterTestCicle
-            addLandoltSnellenView(addingView: currentView, koef: koeficient)
-        }
-        
-        if Int(counterTestTimer+1)%40 == 0{
-            print("recieveText",recieveText)
-            print("testingText",testingText)
-
-            let recivTextTest = recieveText
             
-            DispatchQueue.global(qos: .userInteractive).async {
-                [unowned self] in
-                if self.audioEngine.isRunning {
-                    self.audioEngine.stop()
-                    self.recognitionRequest?.endAudio()
-                    self.audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
-                }else{
-                    do {
-                        try self.startRecording()
-                    } catch {
-                        
+            if Int(counterTestTimer+1)%40 == 0 && !stopBool{//4 цикла закончились
+                print("recieveText",recieveText)
+                print("testingText",testingText)
+                
+                let recivTextTest = recieveText
+                
+                DispatchQueue.main.async {
+                    [unowned self] in
+                    if self.audioEngine.isRunning {
+                        self.audioEngine.stop()
+                        self.recognitionRequest?.endAudio()
+                        self.audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+                    }else{
+                        do {
+                            try self.startRecording()
+                        } catch {
+                            
+                        }
                     }
                 }
+                compareString(origText: testingText, reciveText: recivTextTest)
+                
+                recieveText = ""
+                testingText = []
+                DispatchQueue.global(qos: .userInteractive).async {
+                    [unowned self] in
+                    self.recognitionTask?.cancel()
+                    self.recognitionTask = nil
+                }
             }
+            counterTestTimer += 1
             
-           compareString(origText: testingText, reciveText: recivTextTest)
-            
-            recieveText = ""
-            testingText = []
-            DispatchQueue.global(qos: .userInteractive).async {
-                [unowned self] in
-                self.recognitionTask?.cancel()
-                self.recognitionTask = nil
+        }else{//если stopBool == true
+            if counterTestTimer == 0{//
+                do {
+                    try beginSynthesizerSecond()
+                } catch {
+
+                }
             }
+            counterTestTimer += 1
         }
-        
-        counterTestTimer += 1
     }
     
     func compareStop(reciveText: String){//окончание теста по слову "СТОП"
         if (reciveText.lowercased()).contains("стоп"){
-            timer.invalidate()
-            
-            DispatchQueue.global(qos: .userInteractive).async {
-                [unowned self] in
-                if self.audioEngine.isRunning {
-                    self.audioEngine.stop()
-                    self.recognitionRequest?.endAudio()
-                    self.audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
-                }else{
-                    do {
-                        try self.startRecording()
-                    } catch {
-                        
-                    }
+          
+            if self.audioEngine.isRunning {
+                self.audioEngine.stop()
+                self.recognitionRequest?.endAudio()
+                self.audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+                
+                self.recognitionTask?.cancel()
+                self.recognitionTask = nil
+            }else{
+                do {
+                    try self.startRecording()
+                } catch {
+                    
                 }
             }
-            let alert = UIAlertController(title: "Внимание", message: "Приложение остановлено по слову СТОП", preferredStyle: .alert)
-            let alerActon = UIAlertAction(title: "ок", style: .default) { (alert) in
-                print("alerActon")
-            }
-            alert.addAction(alerActon)
-            self.present(alert, animated: false, completion: nil)
+            
+            saveResult()
+            
+            currentView.removeFromSuperview()
+            
+            testingText = []
+            recieveText = ""
+            counterTestCicle = 1
+            counterTestTimer = -1//потому что в окончании цикла добавится еще 1
+            workViewArray = viewArray
+            
+            stopBool = true
+            
         }
+    }
+    
+    @objc func beginSynthesizerSecond() throws {
+        
+        if textUteranseFirst == "Закройте правый глаз"{
+            textUteranseFirst = "Тест завершен"
+        }else{
+            textUteranseFirst = "Закройте правый глаз"
+        }
+        
+        let utteranceSp = AVSpeechUtterance(string: textUteranseFirst)
+        utteranceSp.voice = AVSpeechSynthesisVoice(language: "ru")
+        utteranceSp.rate = 0.5
+        let audioSession = AVAudioSession.sharedInstance()
+        try audioSession.setCategory(.playback, mode: .spokenAudio, options: .duckOthers)
+        
+        synthesizer.speak(utteranceSp)
     }
     
     func compareString(origText: [String], reciveText: String){
@@ -985,6 +1034,35 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
             
         }
         print(counterTestCicle)
+    }
+    
+    func saveResult(){
+        
+        do{
+            let resultUser = try context.fetch(User.fetchRequest())
+            let resCurrentUser = try context.fetch(CurrentUser.fetchRequest())
+            if resCurrentUser.count > 0{
+                let curUserNum = (resCurrentUser.last as! CurrentUser).currentUser
+                let curUser = (resultUser[Int(curUserNum)] as! User)
+                let result = MiopiaTestResult(context: context)
+                print("результат", ((counterTestCicle-1)/10))
+                result.result = ((Float(counterTestCicle)-1.0)/10.0)
+                result.dateTest = Date()
+                if textUteranseFirst == "Закройте правый глаз"{
+                    result.testingEye = "Левый глаз"
+                }else {
+                    result.testingEye = "Правый глаз"
+                }
+                
+                curUser.addToRelationship(result)
+                
+                try context.save()
+                print(result)
+            }
+            
+        }catch let error as NSError {
+            print(error)
+        }
     }
     
     

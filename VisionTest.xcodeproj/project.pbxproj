@@ -16,6 +16,8 @@
 		EB2D59C623AF9EE100D42A7D /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D59C523AF9EE100D42A7D /* SettingsTableViewCell.swift */; };
 		EB2D59C823AFA6F600D42A7D /* SymbolTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D59C723AFA6F600D42A7D /* SymbolTableViewCell.swift */; };
 		EB2D59CA23B08C1900D42A7D /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D59C923B08C1900D42A7D /* UserViewController.swift */; };
+		EB2DA0A423FE705500AFD51C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB2DA0A323FE705500AFD51C /* StoreKit.framework */; };
+		EB2DA0A823FE74DC00AFD51C /* IAPProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2DA0A723FE74DC00AFD51C /* IAPProducts.swift */; };
 		EB3193DD23DC359800D97FB0 /* MiopiaAvtoDistanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3193DC23DC359800D97FB0 /* MiopiaAvtoDistanceViewController.swift */; };
 		EB359751239634ED001C2240 /* LandoltRightUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB359750239634ED001C2240 /* LandoltRightUIView.swift */; };
 		EB38F4452393A93000D30348 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB38F4442393A93000D30348 /* AppDelegate.swift */; };
@@ -84,6 +86,8 @@
 		EB2D59C523AF9EE100D42A7D /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		EB2D59C723AFA6F600D42A7D /* SymbolTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolTableViewCell.swift; sourceTree = "<group>"; };
 		EB2D59C923B08C1900D42A7D /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
+		EB2DA0A323FE705500AFD51C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		EB2DA0A723FE74DC00AFD51C /* IAPProducts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPProducts.swift; sourceTree = "<group>"; };
 		EB3193DC23DC359800D97FB0 /* MiopiaAvtoDistanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiopiaAvtoDistanceViewController.swift; sourceTree = "<group>"; };
 		EB359750239634ED001C2240 /* LandoltRightUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandoltRightUIView.swift; sourceTree = "<group>"; };
 		EB38F4412393A93000D30348 /* VisionTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisionTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -136,6 +140,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB2DA0A423FE705500AFD51C /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,6 +210,30 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		EB2DA0A223FE705500AFD51C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EB2DA0A323FE705500AFD51C /* StoreKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EB2DA0A523FE737500AFD51C /* Global */ = {
+			isa = PBXGroup;
+			children = (
+				EB2DA0A623FE73A300AFD51C /* Model */,
+			);
+			path = Global;
+			sourceTree = "<group>";
+		};
+		EB2DA0A623FE73A300AFD51C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				EB2DA0A723FE74DC00AFD51C /* IAPProducts.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		EB359752239634FE001C2240 /* LandoltView */ = {
 			isa = PBXGroup;
 			children = (
@@ -223,6 +252,7 @@
 				EB38F45D2393A93400D30348 /* VisionTestTests */,
 				EB38F4682393A93400D30348 /* VisionTestUITests */,
 				EB38F4422393A93000D30348 /* Products */,
+				EB2DA0A223FE705500AFD51C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -240,6 +270,7 @@
 			isa = PBXGroup;
 			children = (
 				EB38F4442393A93000D30348 /* AppDelegate.swift */,
+				EB2DA0A523FE737500AFD51C /* Global */,
 				EBF4868323EBE424003C3004 /* Starting VC */,
 				EB1F611923C25B9800E96024 /* Miopia Test */,
 				EB1F611823C25B6000E96024 /* Hyperopia Test */,
@@ -502,6 +533,7 @@
 				EB87B1AE23F2CAFC00A74EEF /* Extension String.swift in Sources */,
 				EBE633E0239D5E6A00FDCA38 /* UserTableViewCell.swift in Sources */,
 				EB2CF9AC23D2EA98006336E8 /* MicrophoneView.swift in Sources */,
+				EB2DA0A823FE74DC00AFD51C /* IAPProducts.swift in Sources */,
 				EB87B1A823EEF0B800A74EEF /* SpeakLeftBottomView.swift in Sources */,
 				EB551CC423D1C1240020A46D /* ResultsTableViewCell.swift in Sources */,
 				EB12A76923EEE3E7008ED40E /* SpeakLeftTopView.swift in Sources */,

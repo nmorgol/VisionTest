@@ -25,14 +25,15 @@ class InfoHyperopiaViewController: UIViewController {
     let viewForTable = UIView()
     let tableDescrLabel = UILabel()
     let tableImageView = UIImageView()
+    let tappedImageView = UIImageView()
     
-    let symbolDescribeView = UIView()
-    let firstLabel = UILabel()
-    let firstNumberLabel = UILabel()
-    let landoltLabel = UILabel()
-    let secondLandoltLabel = UILabel()
-    let snelenView = SnellenLeftView()
-    let snelenLabel = UILabel()
+//    let symbolDescribeView = UIView()
+//    let firstLabel = UILabel()
+//    let firstNumberLabel = UILabel()
+//    let landoltLabel = UILabel()
+//    let secondLandoltLabel = UILabel()
+//    let snelenView = SnellenLeftView()
+//    let snelenLabel = UILabel()
     
     
     //инструкция
@@ -67,8 +68,8 @@ class InfoHyperopiaViewController: UIViewController {
     let speechSymbolDiscrLabel = UILabel()
     let lineDescrLabel = UILabel()
     
-    let thirdInstrView = UIView()
-    let howDoAutoDetectLabel = UILabel()
+//    let thirdInstrView = UIView()
+//    let howDoAutoDetectLabel = UILabel()
     
     //MARK: viewDidLoad()
     
@@ -84,7 +85,7 @@ class InfoHyperopiaViewController: UIViewController {
         addSegmContr()
         addScrollView()
         
-        addMyopViews()
+        addHyperopiaViews()
         
         addAttentionView()
         addTableViews()
@@ -114,10 +115,10 @@ class InfoHyperopiaViewController: UIViewController {
             scrollInfoView.removeFromSuperview()
             
             addScrollView()
-            addMyopViews()
+            addHyperopiaViews()
             addAttentionView()
             addTableViews()
-            addSybolDiscrView()
+            //addSybolDiscrView()
             
         }else if segmentedContr.selectedSegmentIndex == 1{
             scrolView.removeFromSuperview()
@@ -125,7 +126,7 @@ class InfoHyperopiaViewController: UIViewController {
             addScrollInfoView()
             addFirstInstrView()
             addSecondInstrView()
-            addThirdInstrView()
+            //addThirdInstrView()
         }
     }
     
@@ -144,8 +145,8 @@ class InfoHyperopiaViewController: UIViewController {
         scrolView.contentSize = CGSize(width: view.frame.width, height: 1600)
         
     }
-    //MARK: окно миопия
-    func addMyopViews() {
+    //MARK: окно гиперопия
+    func addHyperopiaViews() {
         
         scrolView.addSubview(viewForDescrMyopia)
         
@@ -300,6 +301,11 @@ class InfoHyperopiaViewController: UIViewController {
         tableImageView.image = UIImage(named: "hyptropia table")
         tableImageView.contentMode = .scaleAspectFit
         
+        let tableTap = UITapGestureRecognizer(target: self, action: #selector(tableImageViewAction))
+        tableImageView.isUserInteractionEnabled = true
+        tableImageView.addGestureRecognizer(tableTap)
+        
+        
         viewForTable.addSubview(tableDescrLabel)
         
         tableDescrLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -310,93 +316,113 @@ class InfoHyperopiaViewController: UIViewController {
         
         tableDescrLabel.numberOfLines = 0
         tableDescrLabel.textAlignment = .natural
-        tableDescrLabel.text = "Тексты для контроля остроты зрения с дистанции наблюдения 30 см используются как традиционное средство контроля зрения вблизи и подбора очков для чтения. Может использоваться в офтальмологических кабинетах при исследовании пресбиопии (дальнозоркости) у пациентов или в магазинах «Оптика» для подбора очков для близи."
+        tableDescrLabel.text = "Тексты для контроля остроты зрения с дистанции наблюдения 30 см используются как традиционное средство контроля зрения вблизи и подбора очков для чтения. Может использоваться в офтальмологических кабинетах при исследовании дальнозоркости у пациентов или в магазинах «Оптика» для подбора очков для близи."
         
     }
+    
+    @objc func tableImageViewAction(){
+        view.addSubview(tappedImageView)
+        tappedImageView.translatesAutoresizingMaskIntoConstraints = false
+        tappedImageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
+        tappedImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        tappedImageView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 1).isActive = true
+        tappedImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        tappedImageView.backgroundColor = .clear
+        tappedImageView.image = UIImage(named: "hyptropia table")
+        tappedImageView.contentMode = .scaleAspectFit
+        tappedImageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedImageViewAction))
+        tappedImageView.addGestureRecognizer(tap)
+    }
+    @objc func tappedImageViewAction(){
+        tappedImageView.removeFromSuperview()
+    }
+    
+    
     //MARK: окно символов в тесте
-    func addSybolDiscrView() {
-        scrolView.addSubview(symbolDescribeView)
-        
-        symbolDescribeView.translatesAutoresizingMaskIntoConstraints = false
-        symbolDescribeView.widthAnchor.constraint(equalTo: scrolView.widthAnchor, multiplier: 95/100).isActive = true
-        symbolDescribeView.topAnchor.constraint(equalTo: viewForTable.bottomAnchor, constant: 10).isActive = true
-        symbolDescribeView.heightAnchor.constraint(equalToConstant: 650).isActive = true
-        symbolDescribeView.centerXAnchor.constraint(equalTo: scrolView.centerXAnchor).isActive = true
-        
-        symbolDescribeView.backgroundColor = .white
-        symbolDescribeView.layer.cornerRadius = 20
-        symbolDescribeView.layer.shadowOpacity = 0.1
-        symbolDescribeView.layer.shadowColor = UIColor.gray.cgColor
-        
-        
-        symbolDescribeView.addSubview(firstLabel)
-        
-        firstLabel.translatesAutoresizingMaskIntoConstraints = false
-        firstLabel.widthAnchor.constraint(equalTo: symbolDescribeView.widthAnchor, multiplier: 95/100).isActive = true
-        firstLabel.topAnchor.constraint(equalTo: symbolDescribeView.topAnchor, constant: 0).isActive = true
-        firstLabel.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        firstLabel.centerXAnchor.constraint(equalTo: symbolDescribeView.centerXAnchor).isActive = true
-        
-        firstLabel.numberOfLines = 0
-        firstLabel.textAlignment = .natural
-        firstLabel.text = "   В приложении (в тесте на наличие дальнозоркости)  используются используются трехзначные числа, например  '923'."
-        
-        symbolDescribeView.addSubview(firstNumberLabel)
-        
-        firstNumberLabel.translatesAutoresizingMaskIntoConstraints = false
-        firstNumberLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        firstNumberLabel.topAnchor.constraint(equalTo: firstLabel.bottomAnchor, constant: 20).isActive = true
-        firstNumberLabel.leftAnchor.constraint(equalTo: symbolDescribeView.leftAnchor, constant: 20).isActive = true
-        firstNumberLabel.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        firstNumberLabel.text = "\(Int.random(in: 100...999))"
-        firstNumberLabel.textAlignment = .center
-        firstNumberLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 40)
-        
-        
-        symbolDescribeView.addSubview(landoltLabel)
-        
-        landoltLabel.translatesAutoresizingMaskIntoConstraints = false
-        landoltLabel.rightAnchor.constraint(equalTo: symbolDescribeView.rightAnchor).isActive = true
-        landoltLabel.topAnchor.constraint(equalTo: firstLabel.bottomAnchor, constant: 0).isActive = true
-        landoltLabel.leftAnchor.constraint(equalTo: firstNumberLabel.rightAnchor, constant: 20).isActive = true
-        landoltLabel.heightAnchor.constraint(equalToConstant: 210).isActive = true
-        
-        landoltLabel.numberOfLines = 0
-        landoltLabel.textAlignment = .natural
-        landoltLabel.text = "Оптотипы Ландольта по форме представляют собой черные кольца разной величины с разрывами, обращенными в разные стороны, и по распознаванию этого разрыва можно определить минимальный угол разрешения глаза."
-        
-        symbolDescribeView.addSubview(secondLandoltLabel)
-        
-        secondLandoltLabel.translatesAutoresizingMaskIntoConstraints = false
-        secondLandoltLabel.rightAnchor.constraint(equalTo: symbolDescribeView.rightAnchor).isActive = true
-        secondLandoltLabel.topAnchor.constraint(equalTo: landoltLabel.bottomAnchor, constant: 0).isActive = true
-        secondLandoltLabel.leftAnchor.constraint(equalTo: symbolDescribeView.leftAnchor, constant: 5).isActive = true
-        secondLandoltLabel.heightAnchor.constraint(equalToConstant: 130).isActive = true
-        
-        secondLandoltLabel.numberOfLines = 0
-        secondLandoltLabel.textAlignment = .natural
-        secondLandoltLabel.text = "Ширина кольца Ландольта и ширина разрыва в 5 раз меньше его наружного диаметра, то есть соотношение этих параметров – 5 : 1 : 1. Направление разрыва кольца может иметь четыре варианта (вверху, внизу, справа и слева)."
-        
-        symbolDescribeView.addSubview(snelenView)
-        
-        snelenView.translatesAutoresizingMaskIntoConstraints = false
-        snelenView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        snelenView.topAnchor.constraint(equalTo: secondLandoltLabel.bottomAnchor, constant: 60).isActive = true
-        snelenView.leftAnchor.constraint(equalTo: symbolDescribeView.leftAnchor, constant: 20).isActive = true
-        snelenView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        
-        symbolDescribeView.addSubview(snelenLabel)
-        
-        snelenLabel.translatesAutoresizingMaskIntoConstraints = false
-        snelenLabel.rightAnchor.constraint(equalTo: symbolDescribeView.rightAnchor).isActive = true
-        snelenLabel.topAnchor.constraint(equalTo: secondLandoltLabel.bottomAnchor, constant: 0).isActive = true
-        snelenLabel.leftAnchor.constraint(equalTo: snelenView.rightAnchor, constant: 20).isActive = true
-        snelenLabel.heightAnchor.constraint(equalToConstant: 200).isActive = true
-        
-        snelenLabel.numberOfLines = 0
-        snelenLabel.textAlignment = .natural
-        snelenLabel.text = "Оптотип Снеллена - вписанная в квадрат фигура, подобная букве 'Ш', которая может иметь 4 ориентации. Такие знаки также широко используются в офтальмологии."
-    }
+//    func addSybolDiscrView() {
+//        scrolView.addSubview(symbolDescribeView)
+//
+//        symbolDescribeView.translatesAutoresizingMaskIntoConstraints = false
+//        symbolDescribeView.widthAnchor.constraint(equalTo: scrolView.widthAnchor, multiplier: 95/100).isActive = true
+//        symbolDescribeView.topAnchor.constraint(equalTo: viewForTable.bottomAnchor, constant: 10).isActive = true
+//        symbolDescribeView.heightAnchor.constraint(equalToConstant: 650).isActive = true
+//        symbolDescribeView.centerXAnchor.constraint(equalTo: scrolView.centerXAnchor).isActive = true
+//
+//        symbolDescribeView.backgroundColor = .white
+//        symbolDescribeView.layer.cornerRadius = 20
+//        symbolDescribeView.layer.shadowOpacity = 0.1
+//        symbolDescribeView.layer.shadowColor = UIColor.gray.cgColor
+//
+//
+//        symbolDescribeView.addSubview(firstLabel)
+//
+//        firstLabel.translatesAutoresizingMaskIntoConstraints = false
+//        firstLabel.widthAnchor.constraint(equalTo: symbolDescribeView.widthAnchor, multiplier: 95/100).isActive = true
+//        firstLabel.topAnchor.constraint(equalTo: symbolDescribeView.topAnchor, constant: 0).isActive = true
+//        firstLabel.heightAnchor.constraint(equalToConstant: 100).isActive = true
+//        firstLabel.centerXAnchor.constraint(equalTo: symbolDescribeView.centerXAnchor).isActive = true
+//
+//        firstLabel.numberOfLines = 0
+//        firstLabel.textAlignment = .natural
+//        firstLabel.text = "   В приложении (в тесте на наличие дальнозоркости)  используются используются трехзначные числа, например  '923'."
+//
+//        symbolDescribeView.addSubview(firstNumberLabel)
+//
+//        firstNumberLabel.translatesAutoresizingMaskIntoConstraints = false
+//        firstNumberLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
+//        firstNumberLabel.topAnchor.constraint(equalTo: firstLabel.bottomAnchor, constant: 20).isActive = true
+//        firstNumberLabel.leftAnchor.constraint(equalTo: symbolDescribeView.leftAnchor, constant: 20).isActive = true
+//        firstNumberLabel.heightAnchor.constraint(equalToConstant: 100).isActive = true
+//        firstNumberLabel.text = "\(Int.random(in: 100...999))"
+//        firstNumberLabel.textAlignment = .center
+//        firstNumberLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 40)
+//
+//
+//        symbolDescribeView.addSubview(landoltLabel)
+//
+//        landoltLabel.translatesAutoresizingMaskIntoConstraints = false
+//        landoltLabel.rightAnchor.constraint(equalTo: symbolDescribeView.rightAnchor).isActive = true
+//        landoltLabel.topAnchor.constraint(equalTo: firstLabel.bottomAnchor, constant: 0).isActive = true
+//        landoltLabel.leftAnchor.constraint(equalTo: firstNumberLabel.rightAnchor, constant: 20).isActive = true
+//        landoltLabel.heightAnchor.constraint(equalToConstant: 210).isActive = true
+//
+//        landoltLabel.numberOfLines = 0
+//        landoltLabel.textAlignment = .natural
+//        landoltLabel.text = "Оптотипы Ландольта по форме представляют собой черные кольца разной величины с разрывами, обращенными в разные стороны, и по распознаванию этого разрыва можно определить минимальный угол разрешения глаза."
+//
+//        symbolDescribeView.addSubview(secondLandoltLabel)
+//
+//        secondLandoltLabel.translatesAutoresizingMaskIntoConstraints = false
+//        secondLandoltLabel.rightAnchor.constraint(equalTo: symbolDescribeView.rightAnchor).isActive = true
+//        secondLandoltLabel.topAnchor.constraint(equalTo: landoltLabel.bottomAnchor, constant: 0).isActive = true
+//        secondLandoltLabel.leftAnchor.constraint(equalTo: symbolDescribeView.leftAnchor, constant: 5).isActive = true
+//        secondLandoltLabel.heightAnchor.constraint(equalToConstant: 130).isActive = true
+//
+//        secondLandoltLabel.numberOfLines = 0
+//        secondLandoltLabel.textAlignment = .natural
+//        secondLandoltLabel.text = "Ширина кольца Ландольта и ширина разрыва в 5 раз меньше его наружного диаметра, то есть соотношение этих параметров – 5 : 1 : 1. Направление разрыва кольца может иметь четыре варианта (вверху, внизу, справа и слева)."
+//
+//        symbolDescribeView.addSubview(snelenView)
+//
+//        snelenView.translatesAutoresizingMaskIntoConstraints = false
+//        snelenView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+//        snelenView.topAnchor.constraint(equalTo: secondLandoltLabel.bottomAnchor, constant: 60).isActive = true
+//        snelenView.leftAnchor.constraint(equalTo: symbolDescribeView.leftAnchor, constant: 20).isActive = true
+//        snelenView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+//
+//        symbolDescribeView.addSubview(snelenLabel)
+//
+//        snelenLabel.translatesAutoresizingMaskIntoConstraints = false
+//        snelenLabel.rightAnchor.constraint(equalTo: symbolDescribeView.rightAnchor).isActive = true
+//        snelenLabel.topAnchor.constraint(equalTo: secondLandoltLabel.bottomAnchor, constant: 0).isActive = true
+//        snelenLabel.leftAnchor.constraint(equalTo: snelenView.rightAnchor, constant: 20).isActive = true
+//        snelenLabel.heightAnchor.constraint(equalToConstant: 200).isActive = true
+//
+//        snelenLabel.numberOfLines = 0
+//        snelenLabel.textAlignment = .natural
+//        snelenLabel.text = "Оптотип Снеллена - вписанная в квадрат фигура, подобная букве 'Ш', которая может иметь 4 ориентации. Такие знаки также широко используются в офтальмологии."
+//    }
     
     
     //MARK: инструкция
@@ -411,7 +437,7 @@ class InfoHyperopiaViewController: UIViewController {
         scrollInfoView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         scrollInfoView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
-        scrollInfoView.contentSize = CGSize(width: view.frame.width, height: 1890)
+        scrollInfoView.contentSize = CGSize(width: view.frame.width, height: 1330)
         
     }
     
@@ -739,7 +765,7 @@ class InfoHyperopiaViewController: UIViewController {
         howDoRecognLabel.heightAnchor.constraint(equalTo: secondInstrView.heightAnchor, multiplier: 1/2, constant: 0).isActive = true
         howDoRecognLabel.centerXAnchor.constraint(equalTo: scrollInfoView.centerXAnchor).isActive = true
         
-        howDoRecognLabel.text = "Для распознавания речи включите соответствующий переключатель в настройках приложения. Также установите время, которое Вам потребуется чтобы отойти от телефона на установленное расстояние.\n \nПри включении распознавания речи тест на наличие миопии можно проводить самостоятельно.\n Необходимо использовать беспроводную гарнитуру.\n "
+        howDoRecognLabel.text = "Для распознавания речи включите соответствующий переключатель в настройках приложения.\n\n Тест проводится как и при выключенном распознавании речи, только надо не набирать на клавиатуре цифры, а произносить их в микрофон телефона. Можно использовать беспроводную гарнитуру.\n\n В случае невозможности определения числа на экране скажите 'СТОП'."
         
         howDoRecognLabel.numberOfLines = 0
         
@@ -751,7 +777,7 @@ class InfoHyperopiaViewController: UIViewController {
         speechRecScreenImageView.leftAnchor.constraint(equalTo: secondInstrView.leftAnchor, constant: 20).isActive = true
         speechRecScreenImageView.bottomAnchor.constraint(equalTo: secondInstrView.bottomAnchor, constant: -40).isActive = true
         speechRecScreenImageView.backgroundColor = .clear
-        speechRecScreenImageView.image = UIImage(named: "Speech Recognition myopia Test screen")
+        speechRecScreenImageView.image = UIImage(named: "hyperopia speechRec screen")
         speechRecScreenImageView.layer.borderWidth = 0.5
         
         addSpeechSymbolDescrView()
@@ -768,7 +794,7 @@ class InfoHyperopiaViewController: UIViewController {
         speechSymbolDiscrLBS.ratio = 3/10
         
         speechSymbolDiscrLBS.translatesAutoresizingMaskIntoConstraints = false
-        speechSymbolDiscrLBS.topAnchor.constraint(equalTo: speechRecScreenImageView.topAnchor).isActive = true
+        speechSymbolDiscrLBS.bottomAnchor.constraint(equalTo: speechRecScreenImageView.centerYAnchor).isActive = true
         speechSymbolDiscrLBS.leftAnchor.constraint(equalTo: speechRecScreenImageView.centerXAnchor, constant: 10).isActive = true
         speechSymbolDiscrLBS.heightAnchor.constraint(equalTo: speechRecScreenImageView.heightAnchor, multiplier: 1/3).isActive = true
         speechSymbolDiscrLBS.rightAnchor.constraint(equalTo: secondInstrView.rightAnchor, constant: -20).isActive = true
@@ -783,7 +809,7 @@ class InfoHyperopiaViewController: UIViewController {
         speechSymbolDiscrLabel.widthAnchor.constraint(equalTo: speechSymbolDiscrLBS.widthAnchor, multiplier: 7/10, constant: -10).isActive = true
         speechSymbolDiscrLabel.backgroundColor = .clear
         
-        speechSymbolDiscrLabel.text = "Если Вы можете различить в какую сторону направлен символ - произнесите в микрофон гарнитуры направление символа: 'вправо', 'влево', 'вверх' или 'вниз'. Когда Вы правильно назвали 3 из 4-х направлений - на экране появится символ более мелкого размера. Если невозможно определить направление символа - произнесите слово 'СТОП'. Тест завершится. Результат будет сохранен."
+        speechSymbolDiscrLabel.text = "Если Вы можете различить число - произнесите в микрофон какое число Вы видите, например: 'двести сорок пять' или 'два' 'четыре' 'пять'. Когда Вы правильно назовете число - на экране появится число более мелкого размера. Если невозможно определить число  - произнесите слово 'СТОП'. Тест завершится. Результат будет сохранен."
         speechSymbolDiscrLabel.font = .systemFont(ofSize: 7)
         speechSymbolDiscrLabel.numberOfLines = 0
         
@@ -816,7 +842,7 @@ class InfoHyperopiaViewController: UIViewController {
         lineDescrLabel.widthAnchor.constraint(equalTo: lineDescrLTS.widthAnchor, multiplier: 7/10, constant: -10).isActive = true
         lineDescrLabel.backgroundColor = .clear
         
-        lineDescrLabel.text = "Индикатор оставшегося времени до момента появления нового символа."
+        lineDescrLabel.text = "Текстовое поле, в котором будет отображаться текст, который Вы произнесете в микрофон."
         lineDescrLabel.font = .systemFont(ofSize: 7)
         lineDescrLabel.numberOfLines = 0
         
@@ -826,37 +852,37 @@ class InfoHyperopiaViewController: UIViewController {
     }
     //MARK:addThirdInstrView()
     
-    func addThirdInstrView() {
-        
-        scrollInfoView.addSubview(thirdInstrView)
-        
-        thirdInstrView.translatesAutoresizingMaskIntoConstraints = false
-        thirdInstrView.widthAnchor.constraint(equalTo: scrollInfoView.widthAnchor, multiplier: 95/100).isActive = true
-        thirdInstrView.topAnchor.constraint(equalTo: secondInstrView.bottomAnchor, constant: 10).isActive = true
-        thirdInstrView.heightAnchor.constraint(equalToConstant: 550).isActive = true
-        thirdInstrView.centerXAnchor.constraint(equalTo: scrollInfoView.centerXAnchor).isActive = true
-        
-        thirdInstrView.backgroundColor = #colorLiteral(red: 0.912041011, green: 0.9828456094, blue: 1, alpha: 1)
-        thirdInstrView.layer.cornerRadius = 20
-        thirdInstrView.layer.shadowOpacity = 0.1
-        thirdInstrView.layer.shadowColor = UIColor.gray.cgColor
-        
-        addAutoDetectLabel()
-    }
+//    func addThirdInstrView() {
+//
+//        scrollInfoView.addSubview(thirdInstrView)
+//
+//        thirdInstrView.translatesAutoresizingMaskIntoConstraints = false
+//        thirdInstrView.widthAnchor.constraint(equalTo: scrollInfoView.widthAnchor, multiplier: 95/100).isActive = true
+//        thirdInstrView.topAnchor.constraint(equalTo: secondInstrView.bottomAnchor, constant: 10).isActive = true
+//        thirdInstrView.heightAnchor.constraint(equalToConstant: 550).isActive = true
+//        thirdInstrView.centerXAnchor.constraint(equalTo: scrollInfoView.centerXAnchor).isActive = true
+//
+//        thirdInstrView.backgroundColor = #colorLiteral(red: 0.912041011, green: 0.9828456094, blue: 1, alpha: 1)
+//        thirdInstrView.layer.cornerRadius = 20
+//        thirdInstrView.layer.shadowOpacity = 0.1
+//        thirdInstrView.layer.shadowColor = UIColor.gray.cgColor
+//
+//        addAutoDetectLabel()
+//    }
     
-    func addAutoDetectLabel() {
-        
-        thirdInstrView.addSubview(howDoAutoDetectLabel)
-        howDoAutoDetectLabel.translatesAutoresizingMaskIntoConstraints = false
-        howDoAutoDetectLabel.rightAnchor.constraint(equalTo: thirdInstrView.rightAnchor, constant: -20).isActive = true
-        howDoAutoDetectLabel.topAnchor.constraint(equalTo: thirdInstrView.topAnchor, constant: 20).isActive = true
-        howDoAutoDetectLabel.heightAnchor.constraint(equalTo: thirdInstrView.heightAnchor, multiplier: 4/5).isActive = true
-        howDoAutoDetectLabel.leftAnchor.constraint(equalTo: thirdInstrView.leftAnchor, constant: 20).isActive = true
-        howDoAutoDetectLabel.backgroundColor = .clear
-        howDoAutoDetectLabel.numberOfLines = 0
-        howDoAutoDetectLabel.font = .systemFont(ofSize: 15)
-        howDoAutoDetectLabel.text = "  Включите в настройках приложения переключатель автоматического определения расстояния. Для автоматического определения расстояния в помещении должно быть хорошее освещение. Установите время, которое Вам потребуется, чтобы отойти на планируемое расстояние. \n\n 📱    →    🧍=👍 \n \n При определении расстояния в кадре должно быть не более одного человека, стоящего лицом к фронтальной камере телефона.\n\n  📱    →    👫=👎 \n \n Если будет больше - расстояние может быть определено некорректно.  Далее тест проводится также как при включенном распознавании речи."
-    }
+//    func addAutoDetectLabel() {
+//
+//        thirdInstrView.addSubview(howDoAutoDetectLabel)
+//        howDoAutoDetectLabel.translatesAutoresizingMaskIntoConstraints = false
+//        howDoAutoDetectLabel.rightAnchor.constraint(equalTo: thirdInstrView.rightAnchor, constant: -20).isActive = true
+//        howDoAutoDetectLabel.topAnchor.constraint(equalTo: thirdInstrView.topAnchor, constant: 20).isActive = true
+//        howDoAutoDetectLabel.heightAnchor.constraint(equalTo: thirdInstrView.heightAnchor, multiplier: 4/5).isActive = true
+//        howDoAutoDetectLabel.leftAnchor.constraint(equalTo: thirdInstrView.leftAnchor, constant: 20).isActive = true
+//        howDoAutoDetectLabel.backgroundColor = .clear
+//        howDoAutoDetectLabel.numberOfLines = 0
+//        howDoAutoDetectLabel.font = .systemFont(ofSize: 15)
+//        howDoAutoDetectLabel.text = "  Включите в настройках приложения переключатель автоматического определения расстояния. Для автоматического определения расстояния в помещении должно быть хорошее освещение. Установите время, которое Вам потребуется, чтобы отойти на планируемое расстояние. \n\n 📱    →    🧍=👍 \n \n При определении расстояния в кадре должно быть не более одного человека, стоящего лицом к фронтальной камере телефона.\n\n  📱    →    👫=👎 \n \n Если будет больше - расстояние может быть определено некорректно.  Далее тест проводится также как при включенном распознавании речи."
+//    }
 }
 
 
