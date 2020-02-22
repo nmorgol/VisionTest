@@ -11,8 +11,8 @@ class NormalLightView: UIView {
         let downLine = UIBezierPath()
         let leftLine = UIBezierPath()
         let points = UIBezierPath()
-        let number = UIBezierPath()
-        let letter = UIBezierPath()
+//        let number = UIBezierPath()
+//        let letter = UIBezierPath()
         
         centralLine.move(to: CGPoint(x: self.frame.width*1.25/10, y: self.frame.height*4.75/10))
         centralLine.addLine(to: CGPoint(x: self.frame.width*1.5/10, y: self.frame.height/2))

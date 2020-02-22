@@ -61,6 +61,19 @@ class StartViewController: UIViewController {
             let resultUser = try context.fetch(User.fetchRequest())
             let resCurrentUser = try context.fetch(CurrentUser.fetchRequest())
             let settings = try context.fetch(SettingsApp.fetchRequest())
+            let iap = try context.fetch(InAppPurchases.fetchRequest())
+            
+            if iap.count == 0{
+                let newIAP = InAppPurchases(context: context)
+                newIAP.setValue(false, forKey: "speechRecognition")
+                newIAP.setValue(false, forKey: "moreThanOneUser")
+                newIAP.setValue(false, forKey: "autoDetectDistance")
+                do {
+                    try context.save()
+                }catch let error as NSError{
+                    print(error)
+                }
+            }
             
             if resultUser.count > 0 {
                 let curUser = (resCurrentUser.last as! CurrentUser).currentUser

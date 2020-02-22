@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CurrentUserApp" representedClassName=".CurrentUser" syncable="YES" codeGenerationType="class">
         <attribute name="currentUser" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
     </entity>
@@ -8,6 +8,11 @@
         <attribute name="result" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="testingEye" optional="YES" attributeType="String"/>
         <relationship name="relationship1" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="relationship1" inverseEntity="User"/>
+    </entity>
+    <entity name="InAppPurchases" representedClassName="InAppPurchases" syncable="YES" codeGenerationType="class">
+        <attribute name="autoDetectDistance" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="moreThanOneUser" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="speechRecognition" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
     </entity>
     <entity name="Localization" representedClassName="Localization" syncable="YES" codeGenerationType="class">
         <attribute name="identificator" optional="YES" attributeType="String"/>
@@ -36,9 +41,10 @@
     <elements>
         <element name="CurrentUserApp" positionX="-7962.44140625" positionY="-3311.6015625" width="128" height="58"/>
         <element name="HyperopiaTestResult" positionX="-7639.7109375" positionY="-3528.6484375" width="128" height="103"/>
+        <element name="Localization" positionX="-8098.546875" positionY="-3309.09375" width="128" height="58"/>
         <element name="MiopiaTestResult" positionX="-8012.640625" positionY="-3513.578125" width="128" height="118"/>
         <element name="SettingsApp" positionX="-7825.8125" positionY="-3313.87890625" width="128" height="118"/>
         <element name="User" positionX="-7828.15625" positionY="-3513.53125" width="144.93359375" height="118"/>
-        <element name="Localization" positionX="-8098.546875" positionY="-3309.09375" width="128" height="58"/>
+        <element name="InAppPurchases" positionX="-7866" positionY="-3384" width="128" height="88"/>
     </elements>
 </model>
