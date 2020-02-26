@@ -101,7 +101,7 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         
         synthesizer.delegate = self
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
+//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
         
         tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(tapGestureRecognizer:)))
 
@@ -272,7 +272,7 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
                 
                 self.recieveText = result.bestTranscription.formattedString
                 isFinal = result.isFinal
-                
+                print(self.recieveText)
             }
             
             if error != nil || isFinal {
@@ -1053,7 +1053,7 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
                 }else {
                     result.testingEye = "Правый глаз"
                 }
-                
+                result.distance = distance
                 curUser.addToRelationship(result)
                 
                 try context.save()

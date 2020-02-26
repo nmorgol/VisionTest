@@ -59,13 +59,22 @@ class IAPurchTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        
 
+//        var cell = UITableViewCell(style: .value1, reuseIdentifier: "reuseIdentifier")
+//        cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        var cell:UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier")
+        if (cell != nil){
+            cell = UITableViewCell(style: UITableViewCell.CellStyle.subtitle,
+                        reuseIdentifier: "reuseIdentifier")
+        }
+        
         let product = IAPManager.shared.products[indexPath.row]
-        cell.textLabel?.text = product.localizedTitle + " - " + self.priceStringFor(product: product)
+        cell?.textLabel?.text = product.localizedTitle + " - " + self.priceStringFor(product: product)
+        cell?.detailTextLabel?.text = "Non-consumables"
         
         
-        return cell
+        return cell!
     }
     
     
@@ -132,7 +141,6 @@ class IAPurchTableViewController: UITableViewController {
         iapNew.setValue(autoDetectDistance, forKey: "autoDetectDistance")
         iapNew.setValue(speechrecognize, forKey: "speechRecognition")
         iapNew.setValue(moreThanOneUser, forKey: "moreThanOneUser")
-        
         
         do {
             try context.save()

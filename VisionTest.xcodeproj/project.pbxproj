@@ -20,6 +20,7 @@
 		EB2DA0A823FE74DC00AFD51C /* IAPProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2DA0A723FE74DC00AFD51C /* IAPProducts.swift */; };
 		EB2DA0AB23FE77A500AFD51C /* IAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2DA0AA23FE77A500AFD51C /* IAPManager.swift */; };
 		EB2DA0AE23FED57800AFD51C /* IAPurchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2DA0AD23FED57800AFD51C /* IAPurchTableViewController.swift */; };
+		EB2DA0B12401439D00AFD51C /* LockUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2DA0B02401439D00AFD51C /* LockUIView.swift */; };
 		EB3193DD23DC359800D97FB0 /* MiopiaAvtoDistanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3193DC23DC359800D97FB0 /* MiopiaAvtoDistanceViewController.swift */; };
 		EB359751239634ED001C2240 /* LandoltRightUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB359750239634ED001C2240 /* LandoltRightUIView.swift */; };
 		EB38F4452393A93000D30348 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB38F4442393A93000D30348 /* AppDelegate.swift */; };
@@ -92,6 +93,7 @@
 		EB2DA0A723FE74DC00AFD51C /* IAPProducts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPProducts.swift; sourceTree = "<group>"; };
 		EB2DA0AA23FE77A500AFD51C /* IAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
 		EB2DA0AD23FED57800AFD51C /* IAPurchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPurchTableViewController.swift; sourceTree = "<group>"; };
+		EB2DA0B02401439D00AFD51C /* LockUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockUIView.swift; sourceTree = "<group>"; };
 		EB3193DC23DC359800D97FB0 /* MiopiaAvtoDistanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiopiaAvtoDistanceViewController.swift; sourceTree = "<group>"; };
 		EB359750239634ED001C2240 /* LandoltRightUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandoltRightUIView.swift; sourceTree = "<group>"; };
 		EB38F4412393A93000D30348 /* VisionTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisionTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -206,6 +208,7 @@
 		EB2CF9AA23D2EA21006336E8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EB2DA0AF2401436600AFD51C /* Lock */,
 				EB12A76A23EEE887008ED40E /* Speak Views */,
 				EB721D4323EBEB21004086E5 /* Eye */,
 				EBE5DF9923D32B6E005801DF /* Microphone */,
@@ -253,6 +256,14 @@
 				EB2DA0AD23FED57800AFD51C /* IAPurchTableViewController.swift */,
 			);
 			path = "In-App Purchases VC";
+			sourceTree = "<group>";
+		};
+		EB2DA0AF2401436600AFD51C /* Lock */ = {
+			isa = PBXGroup;
+			children = (
+				EB2DA0B02401439D00AFD51C /* LockUIView.swift */,
+			);
+			path = Lock;
 			sourceTree = "<group>";
 		};
 		EB359752239634FE001C2240 /* LandoltView */ = {
@@ -564,6 +575,7 @@
 				EB38F484239553BE00D30348 /* PurchasesTableViewCell.swift in Sources */,
 				EB38F47A2393ECB100D30348 /* HyperopiaViewController.swift in Sources */,
 				EB87B1AA23EEF90A00A74EEF /* SpeakRightTopView.swift in Sources */,
+				EB2DA0B12401439D00AFD51C /* LockUIView.swift in Sources */,
 				EBDC7B4B23EC3E63006192BE /* EyeView.swift in Sources */,
 				EB8C340623B9E90500AFA10A /* ExtensionUIImageOrientation.swift in Sources */,
 				EB1F611B23C25D6C00E96024 /* HyperopiaSpeechViewController.swift in Sources */,

@@ -276,8 +276,8 @@ class StartViewController: UIViewController {
         settingsButton.titleLabel?.textColor = .systemBlue
         settingsButton.titleLabel?.textAlignment = .center
         
-        
-        settingsButton.setImage("⚙️".image(), for: .normal)
+        let size = CGSize(width: 50, height: 50)
+        settingsButton.setImage("⚙️".image(size: size), for: .normal)
         
         
         settingsButton.setTitle("Настройки приложения", for: .normal)
@@ -341,7 +341,8 @@ class StartViewController: UIViewController {
         startButton.layer.shadowColor = UIColor.gray.cgColor
         startButton.layer.shadowOpacity = 0.1
         
-        startButton.setImage("✅".image(), for: .normal)
+        let size = CGSize(width: 50, height: 50)
+        startButton.setImage("✅".image(size: size), for: .normal)
         startButton.setTitle("Тест на наличие близорукости", for: .normal)
         startButton.titleLabel?.textAlignment = .center
         startButton.titleLabel?.numberOfLines = 0
@@ -356,7 +357,8 @@ class StartViewController: UIViewController {
         myopiaResultButton.topAnchor.constraint(equalTo: startMyopiaView.bottomAnchor, constant: 10).isActive = true
         myopiaResultButton.bottomAnchor.constraint(equalTo: informMyopiaButton.topAnchor, constant: -10).isActive = true
         myopiaResultButton.rightAnchor.constraint(equalTo: startMyopiaView.rightAnchor, constant: 0).isActive = true
-        myopiaResultButton.setImage("📁".image(), for: .normal)
+        
+        myopiaResultButton.setImage("📁".image(size: size), for: .normal)
         myopiaResultButton.setTitle("Результаты теста близорукости", for: .normal)
         
         myopiaResultButton.titleLabel?.numberOfLines = 0
@@ -380,7 +382,7 @@ class StartViewController: UIViewController {
         informMyopiaButton.layer.shadowColor = UIColor.lightGray.cgColor
         informMyopiaButton.layer.shadowOpacity = 0.1
         
-        informMyopiaButton.setImage("ℹ️".image(), for: .normal)
+        informMyopiaButton.setImage("ℹ️".image(size: size), for: .normal)
         informMyopiaButton.setTitle("Информация и инструкции", for: .normal)
         informMyopiaButton.titleLabel?.textAlignment = .center
         informMyopiaButton.titleLabel?.numberOfLines = 0
@@ -436,7 +438,8 @@ class StartViewController: UIViewController {
         startButton.centerXAnchor.constraint(equalTo: startHyperopiaView.centerXAnchor).isActive = true
         startButton.bottomAnchor.constraint(equalTo: startHyperopiaView.bottomAnchor).isActive = true
 
-        startButton.setImage("✅".image(), for: .normal)
+        let size = CGSize(width: 50, height: 50)
+        startButton.setImage("✅".image(size: size), for: .normal)
         startButton.setTitle("Тест на наличие дальнозоркости", for: .normal)
         startButton.titleLabel?.textAlignment = .center
         startButton.titleLabel?.numberOfLines = 0
@@ -456,7 +459,8 @@ class StartViewController: UIViewController {
         hyperopiaResultButton.bottomAnchor.constraint(equalTo: informHyperopiaButton.topAnchor, constant: -10).isActive = true
         hyperopiaResultButton.rightAnchor.constraint(equalTo: startHyperopiaView.rightAnchor, constant: 0).isActive = true
         //hyperopiaResultButton.setImage(UIImage(named: "folder"), for: .normal)
-        hyperopiaResultButton.setImage("📁".image(), for: .normal)
+        
+        hyperopiaResultButton.setImage("📁".image(size: size), for: .normal)
         hyperopiaResultButton.setTitle("Результаты теста дальнозоркости", for: .normal)
         
         hyperopiaResultButton.titleLabel?.numberOfLines = 0
@@ -483,7 +487,7 @@ class StartViewController: UIViewController {
         informHyperopiaButton.setTitleColor(.systemBlue, for: .normal)
         informHyperopiaButton.titleLabel?.textAlignment = .center
         informHyperopiaButton.titleLabel?.numberOfLines = 0
-        informHyperopiaButton.setImage("ℹ️".image(), for: .normal)
+        informHyperopiaButton.setImage("ℹ️".image(size: size), for: .normal)
         informHyperopiaButton.setTitle("Информация и инструкции", for: .normal)
         informHyperopiaButton.addTarget(self, action: #selector(infoButtonHyperAction), for: .touchUpInside)
     }

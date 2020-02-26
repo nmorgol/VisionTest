@@ -33,6 +33,13 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     var settingTextLabelTag = Int()
     let labelForTextField = UILabel()
     
+    let lock1 = LockUIView()
+    let lock2 = LockUIView()
+    
+    var iapAutoDetectDistance = false
+    var iapSpeechRecognition = false
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = #colorLiteral(red: 0.6561266184, green: 0.9085168242, blue: 0.9700091481, alpha: 1)
@@ -67,6 +74,15 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             let resultUser = try context.fetch(User.fetchRequest())
             let resCurrentUser = try context.fetch(CurrentUser.fetchRequest())
             let settings = try context.fetch(SettingsApp.fetchRequest())
+            let iap = try context.fetch(InAppPurchases.fetchRequest())
+            
+            if iap.count > 0{
+                iapSpeechRecognition = (iap.last as! InAppPurchases).speechRecognition
+                iapAutoDetectDistance = (iap.last as! InAppPurchases).autoDetectDistance
+                
+                print(iapSpeechRecognition)
+                
+            }
             
             if resCurrentUser.count > 0 {
                 let curUser = (resCurrentUser.last as! CurrentUser).currentUser
@@ -159,6 +175,21 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
                 cell2.settingSwitch.isOn = avtoDetectDistBool
                 cell2.accessoryType = .detailButton
                 
+                if !iapAutoDetectDistance{
+                    cell2.settingSwitch.addSubview(lock1)
+                    lock1.translatesAutoresizingMaskIntoConstraints = false
+                    lock1.heightAnchor.constraint(equalTo: cell2.heightAnchor, multiplier: 1).isActive = true
+                    lock1.widthAnchor.constraint(equalTo: lock1.heightAnchor, multiplier: 1).isActive = true
+                    lock1.leftAnchor.constraint(equalTo: cell2.settingSwitch.leftAnchor).isActive = true
+                    lock1.centerYAnchor.constraint(equalTo: cell2.settingSwitch.centerYAnchor).isActive = true
+                    lock1.backgroundColor = .white
+                    lock1.alpha = 0.5
+                    cell2.settingSwitch.isEnabled = false
+                }else{
+                    lock1.removeFromSuperview()
+                    cell2.settingSwitch.isEnabled = true
+                }
+                
             }else{
                 cell2.settingLabel.text = otstup + "Распознавание речи"
                 cell2.settingLabel.numberOfLines = 0
@@ -166,9 +197,26 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
                 cell2.settingSwitch.addTarget(self, action: #selector(speechSwitchAction(paramSwitch:)), for: .valueChanged)
                 cell2.settingSwitch.isOn = speechRecognBool
                 cell2.accessoryType = .detailButton
+                
+                if !iapSpeechRecognition{
+                    cell2.settingSwitch.addSubview(lock2)
+                    lock2.translatesAutoresizingMaskIntoConstraints = false
+                    lock2.heightAnchor.constraint(equalTo: cell2.heightAnchor, multiplier: 1).isActive = true
+                    lock2.widthAnchor.constraint(equalTo: lock2.heightAnchor, multiplier: 1).isActive = true
+                    lock2.leftAnchor.constraint(equalTo: cell2.settingSwitch.leftAnchor).isActive = true
+                    lock2.centerYAnchor.constraint(equalTo: cell2.settingSwitch.centerYAnchor).isActive = true
+                    lock2.backgroundColor = .white
+                    lock2.alpha = 0.5
+                    cell2.settingSwitch.isEnabled = false
+                }else{
+                    lock2.removeFromSuperview()
+                    cell2.settingSwitch.isEnabled = true
+                }
+                
             }
 //            cell2.accessoryType = .detailButton
             cell = cell2
+            
             return cell
             
         }

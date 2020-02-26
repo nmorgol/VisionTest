@@ -61,6 +61,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         self.navigationItem.title = "Hyperopia test speech"
         self.view.backgroundColor = .white
         
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -87,7 +88,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     
     override func viewWillLayoutSubviews() {
         super .viewWillLayoutSubviews()
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleRouteChange(notification:)), name: AVAudioSession.routeChangeNotification, object: AVAudioSession.sharedInstance())
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -155,7 +156,6 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     
     // MARK: Speech
     private func startRecording() throws {
-        
         // Cancel the previous task if it's running.
         recognitionTask?.cancel()
         self.recognitionTask = nil
@@ -163,6 +163,8 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         // Configure the audio session for the app.
         let audioSession = AVAudioSession.sharedInstance()
         try audioSession.setCategory(.playAndRecord, mode: .voiceChat, options: .allowBluetooth)
+        //try audioSession.setCategory(.playAndRecord, mode: .voiceChat, policy: .default, options: [.allowBluetoothA2DP, .defaultToSpeaker])
+        
         try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         let inputNode = audioEngine.inputNode
         
@@ -207,14 +209,37 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         
         // Configure the microphone input.
         let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
+        
+//        func configureAudioTap() {
+//          let audioEngine = self.audioEngine
+//
+//          let inputNode = audioEngine.inputNode
+//          let inputNodeFormat = inputNode.outputFormat(forBus: 0)
+//          let mixerNode = AVAudioMixerNode()
+//          audioEngine.attach(mixerNode)
+//          audioEngine.connect(inputNode, to: mixerNode, format: nil)
+//
+//          mixerNode.installTap(onBus: 0, bufferSize: 1024, format: inputNodeFormat, block: { [unowned self] buffer, time in
+//            self.recognitionRequest?.append(buffer)
+//          })
+//        }
+        
+        let mixerNode = AVAudioMixerNode()
+        audioEngine.attach(mixerNode)
+        audioEngine.connect(inputNode, to: mixerNode, format: nil)
+        
+        mixerNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
             self.recognitionRequest?.append(buffer)
-            
         }
+        
+        
+//        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
+//            self.recognitionRequest?.append(buffer)
+//        }
         
         audioEngine.prepare()
         try audioEngine.start()
-        
+        print(audioEngine.inputNode.inputFormat(forBus: 0).sampleRate)
     }
     
     // MARK: SFSpeechRecognizerDelegate
@@ -465,6 +490,7 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
             if timerCounter == 0 || timerCounter%10 == 0{
                 
                 inputText = String(Int.random(in: 100...999))
+                wordLabel.font = UIFont(name: "HelveticaNeue-Bold", size: CGFloat(fontSize))
                 print(inputText)
                 reciveTextLabel.text = ""
                 wordLabel.text = inputText
@@ -480,6 +506,15 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                     } catch {
                     }
                 }
+                
+//                NotificationCenter.default.addObserver(self, selector: <#T##Selector#>, name: NSNotification.Name(AVAudioEngine.), object: AVAudioEngine.self)
+                
+//                [[NSNotificationCenter defaultCenter] addObserver: myObject
+//                selector:@selector(handleInterruption:)
+//                name:AVAudioEngineConfigurationChangeNotification
+//                object:audioEngine]
+                
+                
             }else if ((timerCounter + 1)%10 == 0)  {
                 
                 DispatchQueue.main.async {
@@ -499,13 +534,16 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                     if compareString(str1: inputText, str2: reciveTextLabel.text!){
                         
                         startFontCounter += 1
-                        fontSize = Float(40/startFontCounter)
+                        fontSize = (Float(40)/Float(startFontCounter))
+                        
                         
                     }
                     compareStop(str2: reciveTextLabel.text!)
                     if stopBool == true{
                         startFontCounter = 1
                         fontSize = Float(40/startFontCounter)
+                        
+                        
                     }
                 }
                 DispatchQueue.global(qos: .userInteractive).async {
@@ -556,8 +594,61 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         animatedEyeLabel()
     }
     
+    @objc func notificationAction(notification: NSNotification){
+        
+        
+        if audioEngine.isRunning {
+            audioEngine.stop()
+            recognitionRequest?.endAudio()
+            //audioEngine.inputNode.removeTap(onBus: 0)//надо с этой строкой еще подумать
+
+            do {
+                try startRecording()
+
+            } catch {
+            }
+
+        }
+        print("смена формата")
+        
+//        do {
+//            try startRecording()
+//
+//        } catch {
+//        }
+//
+    }
     
     
+    @objc func handleRouteChange(notification: NSNotification) {
+        guard let userInfo = notification.userInfo,
+            let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
+            let reason = AVAudioSession.RouteChangeReason(rawValue:reasonValue) else {
+                return
+        }
+        switch reason {
+        case .newDeviceAvailable:
+            print(1)
+//            print(audioEngine.inputNode.inputFormat(forBus: 0).sampleRate)
+//            
+//            let recordingFormat = audioEngine.inputNode.outputFormat(forBus: 0)
+//            
+//            audioEngine.inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
+//                self.recognitionRequest?.append(buffer)
+//            }
+            
+        case .oldDeviceUnavailable:
+            print(2)
+//            print(audioEngine.inputNode.inputFormat(forBus: 0).sampleRate)
+//
+//            let recordingFormat = audioEngine.inputNode.outputFormat(forBus: 0)
+//
+//            audioEngine.inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
+//                self.recognitionRequest?.append(buffer)
+//            }
+        default: ()
+        }
+    }
     
     
     

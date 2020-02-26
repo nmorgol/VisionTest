@@ -21,6 +21,8 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     var newUserBool = false
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var iapMoreThenOneUser = false
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +34,8 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonAction)), UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(organizeButtonAction))]
         
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,9 +44,14 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         do {//получили текущего юзера
             usersArray = try context.fetch(User.fetchRequest())
             let resCurrUser = try context.fetch(CurrentUser.fetchRequest())
+            let iap = try context.fetch(InAppPurchases.fetchRequest())
             if resCurrUser.count > 0 {
                 currentUser = Int((resCurrUser.last as! CurrentUser).currentUser)
             }else{currentUser = 0}
+            
+            if iap.count > 0{
+                iapMoreThenOneUser = (iap.last as! InAppPurchases).moreThanOneUser
+            }
         } catch let error as NSError {
             print(error)
         }
@@ -141,51 +150,67 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     }
     
     @objc func addButtonAction(){
-
-        userImageView.image = UIImage(named: "placeholder")
-        userTextView.text = ""
-        userTextField.text = ""
         
-        newUserBool = true
-        
-        let userNew = User(context: context)//добавили нового пользователя
-        userNew.setValue(userImageView.image?.jpeg(.lowest), forKey: "photo")
-        userNew.setValue(userTextField.text, forKey: "name")
-        userNew.setValue(userTextView.text, forKey: "info")
-        do {
-            try context.save()
-        }catch let error as NSError{
-            print(error)
-        }
-        usersArray.append(userNew)
-        if newUserBool == true{ //если это новый пользователь
-            do {//удаляем текущего пользователя
-                let result = try context.fetch(CurrentUser.fetchRequest())
-                for res in result{
-                    context.delete(res as! NSManagedObject)
-                }
-                try? context.save()
-            } catch let error as NSError {
-                print(error)
-            }
+        if iapMoreThenOneUser{
+            userImageView.image = UIImage(named: "placeholder")
+            userTextView.text = ""
+            userTextField.text = ""
             
-            var count = Int()
-            do {//получили массив всех юзеров
-                count = try context.fetch(User.fetchRequest()).count//присвоили переменной длину массива
-            }catch let error as NSError {
-                print(error)
-            }
-            currentUser = count - 1
-            let newCurrentUser = CurrentUser(context: context)
-            newCurrentUser.setValue(Float(count-1), forKey: "currentUser")//создали нового текущего пользователя - последний в списке
+            newUserBool = true
+            let array = ["👶🏻", "👧", "🧒🏼", "👨🏼‍🦳", "👵🏻", "👴🏻", "👱🏽‍♀️", "🧔🏻"]
+            
+            let size = CGSize(width: 50, height: 50)
+            userImageView.image = array.randomElement()?.image(size: size)
+            
+            let userNew = User(context: context)//добавили нового пользователя
+            userNew.setValue(userImageView.image?.jpeg(.lowest), forKey: "photo")
+            userNew.setValue(userTextField.text, forKey: "name")
+            userNew.setValue(userTextView.text, forKey: "info")
             do {
                 try context.save()
             }catch let error as NSError{
                 print(error)
             }
-            print(count - 1)
+            usersArray.append(userNew)
+            if newUserBool == true{ //если это новый пользователь
+                do {//удаляем текущего пользователя
+                    let result = try context.fetch(CurrentUser.fetchRequest())
+                    for res in result{
+                        context.delete(res as! NSManagedObject)
+                    }
+                    try? context.save()
+                } catch let error as NSError {
+                    print(error)
+                }
+                
+                var count = Int()
+                do {//получили массив всех юзеров
+                    count = try context.fetch(User.fetchRequest()).count//присвоили переменной длину массива
+                }catch let error as NSError {
+                    print(error)
+                }
+                currentUser = count - 1
+                let newCurrentUser = CurrentUser(context: context)
+                newCurrentUser.setValue(Float(count-1), forKey: "currentUser")//создали нового текущего пользователя - последний в списке
+                do {
+                    try context.save()
+                }catch let error as NSError{
+                    print(error)
+                }
+                print(count - 1)
+            }
+        }else{
+            let iapVC = IAPurchTableViewController()
+            
+            let alert = UIAlertController(title: " ", message: "Для увеличения количества пользователей необходимо совершить покупку", preferredStyle: .actionSheet)
+            let alertAction = UIAlertAction(title: "перейти к покупкам", style: .default) { (_) in
+                self.navigationController?.pushViewController(iapVC, animated: true)
+            }
+            let alertCancel = UIAlertAction(title: "cancel", style: .cancel, handler: nil)
+            alert.addAction(alertAction)
+            alert.addAction(alertCancel)
+            self.present(alert, animated: true, completion: nil)
         }
-        
     }
     
     @objc func photoButtonAction(){
