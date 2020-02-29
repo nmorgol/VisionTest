@@ -119,6 +119,8 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         }
         
         userTextField.backgroundColor = .systemGray6
+        userTextField.textAlignment = .center
+        userTextField.layer.cornerRadius = 10
         
         secondView.translatesAutoresizingMaskIntoConstraints = false
         secondView.topAnchor.constraint(equalTo: userTextField.bottomAnchor).isActive = true
@@ -135,7 +137,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         }
         
         userTextView.backgroundColor = .systemGray6
-        
+        userTextView.layer.cornerRadius = 10
     }
     
     func setImage(){
@@ -152,53 +154,62 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     @objc func addButtonAction(){
         
         if iapMoreThenOneUser{
-            userImageView.image = UIImage(named: "placeholder")
-            userTextView.text = ""
-            userTextField.text = ""
             
-            newUserBool = true
-            let array = ["👶🏻", "👧", "🧒🏼", "👨🏼‍🦳", "👵🏻", "👴🏻", "👱🏽‍♀️", "🧔🏻"]
-            
-            let size = CGSize(width: 50, height: 50)
-            userImageView.image = array.randomElement()?.image(size: size)
-            
-            let userNew = User(context: context)//добавили нового пользователя
-            userNew.setValue(userImageView.image?.jpeg(.lowest), forKey: "photo")
-            userNew.setValue(userTextField.text, forKey: "name")
-            userNew.setValue(userTextView.text, forKey: "info")
-            do {
-                try context.save()
-            }catch let error as NSError{
-                print(error)
-            }
-            usersArray.append(userNew)
-            if newUserBool == true{ //если это новый пользователь
-                do {//удаляем текущего пользователя
-                    let result = try context.fetch(CurrentUser.fetchRequest())
-                    for res in result{
-                        context.delete(res as! NSManagedObject)
-                    }
-                    try? context.save()
-                } catch let error as NSError {
-                    print(error)
-                }
+            let alert = UIAlertController(title: nil, message: "Хотите добавить нового пользователя?", preferredStyle: .alert)
+            let alertCansel = UIAlertAction(title: "Cansel", style: .destructive, handler: nil)
+            let alertAction = UIAlertAction(title: "Добавить пользователя", style: .default) { (action) in
+                self.userImageView.image = UIImage(named: "placeholder")
+                self.userTextView.text = ""
+                self.userTextField.text = ""
                 
-                var count = Int()
-                do {//получили массив всех юзеров
-                    count = try context.fetch(User.fetchRequest()).count//присвоили переменной длину массива
-                }catch let error as NSError {
-                    print(error)
-                }
-                currentUser = count - 1
-                let newCurrentUser = CurrentUser(context: context)
-                newCurrentUser.setValue(Float(count-1), forKey: "currentUser")//создали нового текущего пользователя - последний в списке
+                self.newUserBool = true
+                let array = ["👶🏻", "👧", "🧒🏼", "👨🏼‍🦳", "👵🏻", "👴🏻", "👱🏽‍♀️", "🧔🏻"]
+                
+                let size = CGSize(width: 50, height: 50)
+                self.userImageView.image = array.randomElement()?.image(size: size)
+                
+                let userNew = User(context: self.context)//добавили нового пользователя
+                userNew.setValue(self.userImageView.image?.jpeg(.lowest), forKey: "photo")
+                userNew.setValue(self.userTextField.text, forKey: "name")
+                userNew.setValue(self.userTextView.text, forKey: "info")
                 do {
-                    try context.save()
+                    try self.context.save()
                 }catch let error as NSError{
                     print(error)
                 }
-                print(count - 1)
+                self.usersArray.append(userNew)
+                if self.newUserBool == true{ //если это новый пользователь
+                    do {//удаляем текущего пользователя
+                        let result = try self.context.fetch(CurrentUser.fetchRequest())
+                        for res in result{
+                            self.context.delete(res as! NSManagedObject)
+                        }
+                        try? self.context.save()
+                    } catch let error as NSError {
+                        print(error)
+                    }
+                    
+                    var count = Int()
+                    do {//получили массив всех юзеров
+                        count = try self.context.fetch(User.fetchRequest()).count//присвоили переменной длину массива
+                    }catch let error as NSError {
+                        print(error)
+                    }
+                    self.currentUser = count - 1
+                    let newCurrentUser = CurrentUser(context: self.context)
+                    newCurrentUser.setValue(Float(count-1), forKey: "currentUser")//создали нового текущего пользователя - последний в списке
+                    do {
+                        try self.context.save()
+                    }catch let error as NSError{
+                        print(error)
+                    }
+                    print(count - 1)
+                }
             }
+            alert.addAction(alertAction)
+            alert.addAction(alertCansel)
+            self.present(alert, animated: false, completion: nil)
+            
         }else{
             let iapVC = IAPurchTableViewController()
             
@@ -233,9 +244,11 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         let userArrayVC = UsersArrayTableViewController()
         userArrayVC.complition = { curUser in
             self.currentUser = curUser
-            self.userImageView.image = UIImage(data: self.usersArray[self.currentUser].photo!)
+            let imgData = UIImage(named: "placeholder")?.pngData()
+            self.userImageView.image = UIImage(data: self.usersArray[self.currentUser].photo ?? imgData!)
         }
         userArrayVC.state = "Main"
+        userArrayVC.stateBool = true
         self.navigationController?.pushViewController(userArrayVC, animated: false)
     }
     

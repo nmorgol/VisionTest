@@ -625,22 +625,31 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
                         return
                 }
                 
-                
                 // MARK: Perform all UI updates (drawing) on the main queue, not the background queue on which this handler is being called.
                 DispatchQueue.main.async {
-                    //                    self.drawFaceObservations(results)
-                    let deviceCoef = UIDevice.deviceСoefficient
                     
+                    let deviceCoef = UIDevice.deviceСoefficient
                     
                     let left = results.first?.landmarks?.leftPupil?.pointsInImage(imageSize: self.view.frame.size).first?.x
                     let righ = results.first?.landmarks?.rightPupil?.pointsInImage(imageSize: self.view.frame.size).first?.x
-                    let rez = (Float(righ!) - Float(left!))*deviceCoef//(458/326)
+                    //let rez = (Float(righ!) - Float(left!))//*deviceCoef//(458/326)
                     //self.distLabel.text = "\(31/rez))"
+                    
+                    let leftY = results.first?.landmarks?.leftPupil?.pointsInImage(imageSize: self.view.frame.size).first?.y
+                    let righY = results.first?.landmarks?.rightPupil?.pointsInImage(imageSize: self.view.frame.size).first?.y
+                    
+                    
+                    let coef = Float(self.view.frame.width/self.view.frame.height)
+                    let dist = (Float(righ!) - Float(left!))
+                    let absFloat = abs((Float(righY!) - Float(leftY!)))*coef
+                    let realDistance = sqrtf(absFloat*absFloat + dist*dist)*deviceCoef
+                    
                     if self.avtoDetectDist == true {
-                        self.distance = (31/rez)
+                        self.distance = (31/realDistance)
                     }else{return}
                     
-                    
+                    print(31/dist, (31/realDistance))
+                    //print(dist, absFloat*coef)
                 }
             })
             
@@ -1053,7 +1062,8 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
                 }else {
                     result.testingEye = "Правый глаз"
                 }
-                result.distance = distance
+                let savingDistance = Float(Int(distance*100))/100
+                result.distance = savingDistance
                 curUser.addToRelationship(result)
                 
                 try context.save()

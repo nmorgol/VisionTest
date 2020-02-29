@@ -297,7 +297,7 @@ class StartViewController: UIViewController {
         startMyopiaView.centerXAnchor.constraint(equalTo: myopiaView.centerXAnchor).isActive = true
         startMyopiaView.topAnchor.constraint(equalTo: myopiaView.topAnchor, constant: 10).isActive = true
         
-        startMyopiaView.backgroundColor = .white
+        startMyopiaView.backgroundColor = #colorLiteral(red: 0.912041011, green: 0.9828456094, blue: 1, alpha: 1)
         startMyopiaView.layer.cornerRadius = 20
         
         startMyopiaView.layer.shadowColor = UIColor.gray.cgColor
@@ -403,7 +403,7 @@ class StartViewController: UIViewController {
         startHyperopiaView.centerXAnchor.constraint(equalTo: hyperopiaView.centerXAnchor).isActive = true
         startHyperopiaView.topAnchor.constraint(equalTo: hyperopiaView.topAnchor, constant: 10).isActive = true
         
-        startHyperopiaView.backgroundColor = .white
+        startHyperopiaView.backgroundColor = #colorLiteral(red: 0.912041011, green: 0.9828456094, blue: 1, alpha: 1)
         startHyperopiaView.layer.cornerRadius = 20
         
         startHyperopiaView.layer.shadowColor = UIColor.gray.cgColor

@@ -191,7 +191,7 @@ class ResultsTableViewController: UITableViewController {
                 print(sortedMiopiaArray!.count)
                 sortedMiopiaArray!.remove(at: indexPath.row)
                 print(sortedMiopiaArray!.count)
-                tableView.deleteRows(at: [indexPath], with: .left)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
                 recieveTestsResults()
             }else if state == "Hyperopia"{
                 
@@ -232,7 +232,7 @@ class ResultsTableViewController: UITableViewController {
                 print(sortedHyperopiaArray!.count)
                 sortedHyperopiaArray!.remove(at: indexPath.row)
                 print(sortedHyperopiaArray!.count)
-                tableView.deleteRows(at: [indexPath], with: .left)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
                 recieveTestsResults()
             }
         }

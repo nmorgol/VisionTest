@@ -6,6 +6,7 @@ import CoreData
 class UsersArrayTableViewController: UITableViewController {
     
     var state = String()//определить откуда был переход
+    var stateBool = false
     
     var complition:((Int)->())?
     
@@ -98,24 +99,32 @@ class UsersArrayTableViewController: UITableViewController {
         
     }
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return .delete
+        var boolReturn = UITableViewCell.EditingStyle(rawValue: 0)
+        if stateBool{
+            boolReturn = .delete
+        }else{
+            boolReturn = UITableViewCell.EditingStyle.none
+        }
+        
+        return boolReturn!
+        
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete{
+        if editingStyle == .delete && stateBool{
+            
             let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
             do {//удалили пользователя
                 usersArray = try context.fetch(User.fetchRequest())
                 context.delete(usersArray[indexPath.row] as NSManagedObject)
                 
-                
-                
                 try? context.save()
+                
                 usersArray = try context.fetch(User.fetchRequest())
             } catch let error as NSError {
                 print(error)
             }
-            tableView.deleteRows(at: [indexPath], with: .left)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
             
             if usersArray.count == 0{//если пользователей не осталось - создаем нового
                 let userNew = User(context: context)//добавили нового пользователя
@@ -132,6 +141,7 @@ class UsersArrayTableViewController: UITableViewController {
                 }
             }
             
+            
             do {//удалили текущего пользователя
                 let result = try context.fetch(CurrentUser.fetchRequest())
                 
@@ -144,23 +154,33 @@ class UsersArrayTableViewController: UITableViewController {
             } catch let error as NSError {
                 print(error)
             }
-            let newCurrentUser = CurrentUser(context: context)
-            newCurrentUser.setValue(Float(usersArray.count-1), forKey: "currentUser")
+//            let newCurrentUser = CurrentUser(context: context)
+//            newCurrentUser.setValue(Float(usersArray.count-1), forKey: "currentUser")
             do {//создали нового текущего пользователя
+                let newCurrentUser = CurrentUser(context: context)
+                newCurrentUser.setValue(Float(usersArray.count-1), forKey: "currentUser")
                 try context.save()
             }catch let error as NSError{
                 print(error)
             }
             
-            tableView.reloadData()
+            //tableView.reloadData()
         }
+        tableView.reloadData()
     }
 
     
     
     override func viewWillDisappear(_ animated: Bool) {
         super .viewWillAppear(false)
-        self.tabBarController?.tabBar.isHidden = false
+//        self.tabBarController?.tabBar.isHidden = false
+        do {
+            let curUs = try context.fetch(CurrentUser.fetchRequest())
+            print(curUs)
+        } catch let error as NSError {
+            print(error)
+        }
+        
     }
     
 }

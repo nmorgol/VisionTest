@@ -53,7 +53,7 @@ class MiopiaViewController: UIViewController {
         self.navigationItem.title = "Miopia test"
         self.view.backgroundColor = .white
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
+//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
         
         
     }
@@ -273,7 +273,13 @@ class MiopiaViewController: UIViewController {
             addLandoltSnellenView(addingView: currentView, koef: koeficient)
         }else{//если не угадал символ
             saveResult()
-            wrongAnswer()
+            if currentEye == "Right eye"{
+                
+                addStartLabel()
+                startLabel.text = "Тест завершен"
+            }else{
+                wrongAnswer()
+            }
         }
     }
     
@@ -281,7 +287,13 @@ class MiopiaViewController: UIViewController {
         saveResult()
         wrongCounter = 1//для срабатывания метода wrongAnswer()
         superWrong = 1//для срабатывания метода wrongAnswer()
-        wrongAnswer()
+        if currentEye == "Right eye"{
+            
+            addStartLabel()
+            startLabel.text = "Тест завершен"
+        }else{
+            wrongAnswer()
+        }
     }
     
     @objc func tapAction(tapGestureRecognizer: UITapGestureRecognizer){
@@ -308,9 +320,9 @@ class MiopiaViewController: UIViewController {
                 result.result = (counter-1)/10
                 result.dateTest = Date()
                 if currentEye == "Left eye"{
-                    result.testingEye = "Right eye"
+                    result.testingEye = "Правый глаз"
                 }else if currentEye == "Right eye"{
-                    result.testingEye = "Left eye"
+                    result.testingEye = "Левый глаз"
                 }
                 
                 curUser.addToRelationship(result)
@@ -386,7 +398,17 @@ class MiopiaViewController: UIViewController {
     }
     
     func createStartAlert(){
-        let alert = UIAlertController(title: "", message: "Закройте \(currentEye)", preferredStyle: .alert)
+        var eye = ""
+        
+        if currentEye == "Right eye"{
+            eye = "правый глаз"
+            
+        }else if currentEye == "Left eye"{
+            eye = "левый глаз"
+            
+        }
+        
+        let alert = UIAlertController(title: "", message: "Закройте \(eye)", preferredStyle: .alert)
         let alertAction = UIAlertAction(title: "ok", style: .default) { (action) in
             print("ok")
         }

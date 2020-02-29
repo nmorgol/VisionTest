@@ -27,7 +27,7 @@ class IAPurchTableViewController: UITableViewController {
             print(error)
         }
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Restore", style: .plain, target: self, action: #selector(restorePurchases))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Restore Purchases", style: .plain, target: self, action: #selector(restorePurchases))
         
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
         
