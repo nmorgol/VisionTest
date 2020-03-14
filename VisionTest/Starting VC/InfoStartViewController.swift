@@ -461,7 +461,7 @@ class InfoStartViewController: UIViewController {
         howDoTestLabel.backgroundColor = .clear
         howDoTestLabel.numberOfLines = 0
         howDoTestLabel.font = .systemFont(ofSize: 15)
-        howDoTestLabel.text = "   Расположите телефон на расстоянии, уcтановленном в настройках приложения. Называйте направления символа вашему ассистенту, который будет нажимать соответствующие кнопки. "
+        howDoTestLabel.text = "   Расположите телефон на расстоянии, уcтановленном в настройках приложения. Называйте направления символа вашему ассистенту, который будет нажимать соответствующие кнопки на экране телефона. "
     }
     
     fileprivate func addSymbolDescrView() {
@@ -494,6 +494,7 @@ class InfoStartViewController: UIViewController {
         symbolDiscrLabel.isUserInteractionEnabled = true
         
         symbolDiscrLabel.addGestureRecognizer(tap)
+        lupaInView(view: symbolDiscrLabel)
     }
     
     fileprivate func addStopBtnDescrView() {
@@ -525,6 +526,8 @@ class InfoStartViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
         stopBtnDiscrLabel.isUserInteractionEnabled = true
         stopBtnDiscrLabel.addGestureRecognizer(tap)
+        
+        lupaInView(view: stopBtnDiscrLabel)
     }
     
     
@@ -550,13 +553,15 @@ class InfoStartViewController: UIViewController {
         actionBtnLabel.heightAnchor.constraint(equalTo: actionBtnDiscrLTS.heightAnchor, multiplier: 10/11).isActive = true
         actionBtnLabel.widthAnchor.constraint(equalTo: actionBtnDiscrLTS.widthAnchor, multiplier: 1/2, constant: -10).isActive = true
         actionBtnLabel.backgroundColor = .clear
-        actionBtnLabel.text = "Если Вы можете различить в какую сторону направлен символ - нажмите на кнопку, которая соответствует направлению символа. В случае совпадения направления символа и стрелки на кнопке  - появится символ более мелкого размера. "
+        actionBtnLabel.text = "Если Вы можете различить в какую сторону направлен символ - Ваш ассистент должен нажать на кнопку, которую Вы ему назовете. \n В случае совпадения направления символа и стрелки на кнопке  - появится символ более мелкого размера. "
         actionBtnLabel.font = .systemFont(ofSize: 7)
         actionBtnLabel.numberOfLines = 0
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
         actionBtnLabel.isUserInteractionEnabled = true
         actionBtnLabel.addGestureRecognizer(tap)
+        
+        lupaInView(view: actionBtnLabel)
     }
     
     fileprivate func addDeviceDescrView() {
@@ -587,6 +592,8 @@ class InfoStartViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
         deviceDetectLabel.isUserInteractionEnabled = true
         deviceDetectLabel.addGestureRecognizer(tap)
+        
+        lupaInView(view: deviceDetectLabel)
     }
     
     fileprivate func addDistanceDescrView() {
@@ -617,6 +624,8 @@ class InfoStartViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
         distanceDiscrLabel.isUserInteractionEnabled = true
         distanceDiscrLabel.addGestureRecognizer(tap)
+        
+        lupaInView(view: distanceDiscrLabel)
     }
     //MARK:bigLabel
     @objc func bigLabelAction(recognizer: UIGestureRecognizer) {
@@ -749,6 +758,8 @@ class InfoStartViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
         speechSymbolDiscrLabel.isUserInteractionEnabled = true
         speechSymbolDiscrLabel.addGestureRecognizer(tap)
+        
+        lupaInView(view: speechSymbolDiscrLabel)
     }
     
     func addLineDescrView() {
@@ -782,6 +793,8 @@ class InfoStartViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
         lineDescrLabel.isUserInteractionEnabled = true
         lineDescrLabel.addGestureRecognizer(tap)
+        
+        lupaInView(view: lineDescrLabel)
     }
     //MARK:addThirdInstrView()
     
@@ -809,11 +822,24 @@ class InfoStartViewController: UIViewController {
         howDoAutoDetectLabel.translatesAutoresizingMaskIntoConstraints = false
         howDoAutoDetectLabel.rightAnchor.constraint(equalTo: thirdInstrView.rightAnchor, constant: -20).isActive = true
         howDoAutoDetectLabel.topAnchor.constraint(equalTo: thirdInstrView.topAnchor, constant: 20).isActive = true
-        howDoAutoDetectLabel.heightAnchor.constraint(equalTo: thirdInstrView.heightAnchor, multiplier: 4/5).isActive = true
+        howDoAutoDetectLabel.heightAnchor.constraint(equalTo: thirdInstrView.heightAnchor, multiplier: 7/8).isActive = true
         howDoAutoDetectLabel.leftAnchor.constraint(equalTo: thirdInstrView.leftAnchor, constant: 20).isActive = true
         howDoAutoDetectLabel.backgroundColor = .clear
         howDoAutoDetectLabel.numberOfLines = 0
         howDoAutoDetectLabel.font = .systemFont(ofSize: 15)
-        howDoAutoDetectLabel.text = "  Включите в настройках приложения переключатель автоматического определения расстояния. Для автоматического определения расстояния в помещении должно быть хорошее освещение. Установите время, которое Вам потребуется, чтобы отойти на планируемое расстояние. \n\n 📱    →    🧍=👍 \n \n При определении расстояния в кадре должно быть не более одного человека, стоящего лицом к фронтальной камере телефона.\n\n  📱    →    👫=👎 \n \n Если будет больше - расстояние может быть определено некорректно.  Далее тест проводится также как при включенном распознавании речи."
+        howDoAutoDetectLabel.text = "  Включите в настройках приложения переключатель автоматического определения расстояния. Для автоматического определения расстояния в помещении должно быть хорошее освещение.\n Установите время, которое Вам потребуется, чтобы отойти на планируемое расстояние.  \n\n!!!  При определении расстояния в кадре должно быть не более одного человека, стоящего лицом к фронтальной камере телефона:\n\n 📱    →    🧍 = ✅   \n \n Если будет более одного человека - расстояние может быть определено некорректно:\n\n 📱    →    👫 = 🚫 \n\n  Далее тест проводится также как при включенном распознавании речи."
+    }
+    
+    func lupaInView(view: UIView){
+        let labelLupa = UILabel()
+        view.addSubview(labelLupa)
+        labelLupa.translatesAutoresizingMaskIntoConstraints = false
+        labelLupa.text = "🔎"
+        labelLupa.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        labelLupa.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        labelLupa.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        labelLupa.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        labelLupa.alpha = 0.7
+        labelLupa.font = .boldSystemFont(ofSize: 20)
     }
 }

@@ -498,7 +498,7 @@ class InfoHyperopiaViewController: UIViewController {
         howDoTestLabel.backgroundColor = .clear
         howDoTestLabel.numberOfLines = 0
         howDoTestLabel.font = .systemFont(ofSize: 15)
-        howDoTestLabel.text = "   Расположите телефон на расстоянии 30 - 40 сантиметров. На клавиатуре наберите число указанное в центральном окне. "
+        howDoTestLabel.text = "   Расположите телефон на расстоянии 30 - 40 сантиметров. На клавиатуре наберите число, которое указанно в центральном окне. "
     }
     
     fileprivate func addCloseEyeDescrView() {
@@ -531,6 +531,8 @@ class InfoHyperopiaViewController: UIViewController {
         closeEyeDiscrLabel.isUserInteractionEnabled = true
         
         closeEyeDiscrLabel.addGestureRecognizer(tap)
+        
+        lupaInView(view: closeEyeDiscrLabel)
     }
     
     fileprivate func addStopBtnDescrView() {
@@ -562,6 +564,8 @@ class InfoHyperopiaViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
         stopBtnDiscrLabel.isUserInteractionEnabled = true
         stopBtnDiscrLabel.addGestureRecognizer(tap)
+        
+        lupaInView(view: stopBtnDiscrLabel)
     }
     
     
@@ -593,6 +597,8 @@ class InfoHyperopiaViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
         timeProgressDiscrLabel.isUserInteractionEnabled = true
         timeProgressDiscrLabel.addGestureRecognizer(tap)
+        
+        lupaInView(view: timeProgressDiscrLabel)
     }
     
     fileprivate func addKeyboardDescrView() {
@@ -616,13 +622,15 @@ class InfoHyperopiaViewController: UIViewController {
         keyboardDiscrLabel.heightAnchor.constraint(equalTo: keyboardDiscrLTS.heightAnchor, multiplier: 10/11).isActive = true
         keyboardDiscrLabel.widthAnchor.constraint(equalTo: keyboardDiscrLTS.widthAnchor, multiplier: 1/2, constant: -10).isActive = true
         keyboardDiscrLabel.backgroundColor = .clear
-        keyboardDiscrLabel.text = "Наберите на клавиатуре число равное числу в центре экрана."
+        keyboardDiscrLabel.text = "Наберите на клавиатуре число, которое указано в центре экрана."
         keyboardDiscrLabel.font = .systemFont(ofSize: 7)
         keyboardDiscrLabel.numberOfLines = 0
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
         keyboardDiscrLabel.isUserInteractionEnabled = true
         keyboardDiscrLabel.addGestureRecognizer(tap)
+        
+        lupaInView(view: keyboardDiscrLabel)
     }
     
     fileprivate func addtextFielDescrView() {
@@ -646,13 +654,15 @@ class InfoHyperopiaViewController: UIViewController {
         textFieldLabel.heightAnchor.constraint(equalTo: textFieldDiscrRTS.heightAnchor, multiplier: 10/11).isActive = true
         textFieldLabel.widthAnchor.constraint(equalTo: textFieldDiscrRTS.widthAnchor, multiplier: 3/5, constant: -10).isActive = true
         textFieldLabel.backgroundColor = .clear
-        textFieldLabel.text = "Текстовое поле, в котором отображаются введенные Вами цифры."
+        textFieldLabel.text = "Текстовое поле, в котором отображаются введенные на клавиатуре цифры."
         textFieldLabel.font = .systemFont(ofSize: 7)
         textFieldLabel.numberOfLines = 0
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
         textFieldLabel.isUserInteractionEnabled = true
         textFieldLabel.addGestureRecognizer(tap)
+        
+        lupaInView(view: textFieldLabel)
     }
     
     fileprivate func addNumberDescrView() {
@@ -677,13 +687,15 @@ class InfoHyperopiaViewController: UIViewController {
         numberDiscrLabel.heightAnchor.constraint(equalTo: numberDiscrRBS.heightAnchor, multiplier: 10/11).isActive = true
         numberDiscrLabel.widthAnchor.constraint(equalTo: numberDiscrRBS.widthAnchor, multiplier: 1/2, constant: -10).isActive = true
         numberDiscrLabel.backgroundColor = .clear
-        numberDiscrLabel.text = " Трехзначное число. Если введенное Вами число окажется равно данному числу, то следующее число появится уже меньшего размера."
+        numberDiscrLabel.text = " Трехзначное число. Если введенное Вами число окажется равно данному числу, то у следующего числа будет более мелкий шрифт."
         numberDiscrLabel.font = .systemFont(ofSize: 7)
         numberDiscrLabel.numberOfLines = 0
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
         numberDiscrLabel.isUserInteractionEnabled = true
         numberDiscrLabel.addGestureRecognizer(tap)
+        
+        lupaInView(view: numberDiscrLabel)
     }
     //MARK:bigLabel
     @objc func bigLabelAction(recognizer: UIGestureRecognizer) {
@@ -711,6 +723,10 @@ class InfoHyperopiaViewController: UIViewController {
         }
         else if recognizer.view == lineDescrLabel{
             text = lineDescrLabel.text ?? ""
+            
+        }
+        else if recognizer.view == keyboardDiscrLabel{
+            text = keyboardDiscrLabel.text ?? ""
             
         }
         
@@ -816,6 +832,8 @@ class InfoHyperopiaViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
         speechSymbolDiscrLabel.isUserInteractionEnabled = true
         speechSymbolDiscrLabel.addGestureRecognizer(tap)
+        
+        lupaInView(view: speechSymbolDiscrLabel)
     }
     
     func addLineDescrView() {
@@ -849,40 +867,22 @@ class InfoHyperopiaViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(bigLabelAction(recognizer:)))
         lineDescrLabel.isUserInteractionEnabled = true
         lineDescrLabel.addGestureRecognizer(tap)
+        
+        lupaInView(view: lineDescrLabel)
     }
-    //MARK:addThirdInstrView()
     
-//    func addThirdInstrView() {
-//
-//        scrollInfoView.addSubview(thirdInstrView)
-//
-//        thirdInstrView.translatesAutoresizingMaskIntoConstraints = false
-//        thirdInstrView.widthAnchor.constraint(equalTo: scrollInfoView.widthAnchor, multiplier: 95/100).isActive = true
-//        thirdInstrView.topAnchor.constraint(equalTo: secondInstrView.bottomAnchor, constant: 10).isActive = true
-//        thirdInstrView.heightAnchor.constraint(equalToConstant: 550).isActive = true
-//        thirdInstrView.centerXAnchor.constraint(equalTo: scrollInfoView.centerXAnchor).isActive = true
-//
-//        thirdInstrView.backgroundColor = #colorLiteral(red: 0.912041011, green: 0.9828456094, blue: 1, alpha: 1)
-//        thirdInstrView.layer.cornerRadius = 20
-//        thirdInstrView.layer.shadowOpacity = 0.1
-//        thirdInstrView.layer.shadowColor = UIColor.gray.cgColor
-//
-//        addAutoDetectLabel()
-//    }
-    
-//    func addAutoDetectLabel() {
-//
-//        thirdInstrView.addSubview(howDoAutoDetectLabel)
-//        howDoAutoDetectLabel.translatesAutoresizingMaskIntoConstraints = false
-//        howDoAutoDetectLabel.rightAnchor.constraint(equalTo: thirdInstrView.rightAnchor, constant: -20).isActive = true
-//        howDoAutoDetectLabel.topAnchor.constraint(equalTo: thirdInstrView.topAnchor, constant: 20).isActive = true
-//        howDoAutoDetectLabel.heightAnchor.constraint(equalTo: thirdInstrView.heightAnchor, multiplier: 4/5).isActive = true
-//        howDoAutoDetectLabel.leftAnchor.constraint(equalTo: thirdInstrView.leftAnchor, constant: 20).isActive = true
-//        howDoAutoDetectLabel.backgroundColor = .clear
-//        howDoAutoDetectLabel.numberOfLines = 0
-//        howDoAutoDetectLabel.font = .systemFont(ofSize: 15)
-//        howDoAutoDetectLabel.text = "  Включите в настройках приложения переключатель автоматического определения расстояния. Для автоматического определения расстояния в помещении должно быть хорошее освещение. Установите время, которое Вам потребуется, чтобы отойти на планируемое расстояние. \n\n 📱    →    🧍=👍 \n \n При определении расстояния в кадре должно быть не более одного человека, стоящего лицом к фронтальной камере телефона.\n\n  📱    →    👫=👎 \n \n Если будет больше - расстояние может быть определено некорректно.  Далее тест проводится также как при включенном распознавании речи."
-//    }
+    func lupaInView(view: UIView){
+        let labelLupa = UILabel()
+        view.addSubview(labelLupa)
+        labelLupa.translatesAutoresizingMaskIntoConstraints = false
+        labelLupa.text = "🔎"
+        labelLupa.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        labelLupa.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        labelLupa.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        labelLupa.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        labelLupa.alpha = 0.7
+        labelLupa.font = .boldSystemFont(ofSize: 20)
+    }
 }
 
 

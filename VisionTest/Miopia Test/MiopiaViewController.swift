@@ -4,12 +4,16 @@ import UIKit
 import CoreData
 
 class MiopiaViewController: UIViewController {
+    
     let startLabel = UILabel()
+    let startTestButton = UIButton()
+    let goToInfoButton = UIButton()
+    
     let helpSymbolView = UIView()//для символа
     let helpWorkView = UIView()//для кнопок
     let deviceNameLabel = UILabel()
     let distanceLabel = UILabel()
-    var distance = Float(0.5)//расстояние для первого запуска
+    var distance = Float(4)//расстояние для первого запуска
     //кнопки
     let topButton = UIButton()
     let bottomButton = UIButton()
@@ -27,7 +31,6 @@ class MiopiaViewController: UIViewController {
     let topLandoltView = LandoltTopUIView()
     let bottomLandoltView = LandoltBottomUIView()
     
-//    let microphoneView = MicrophoneView()
     
     var viewArray = [UIView]()
     var workViewArray = [UIView]()
@@ -65,7 +68,7 @@ class MiopiaViewController: UIViewController {
         
         viewArray = [rightLandoltView, leftLandoltView, topLandoltView, bottomLandoltView]
         
-        koef = ((UIDevice.modelWidth)/70)*5/0.5 //(70) - 70мм для (5) - расстояние 5м , а 0.5 - расстояние теста == 0.5м итого размер символа должен быть 7мм
+        koef = ((UIDevice.modelWidth)/70)*5/4//0.5 //(70) - 70мм для (5) - расстояние 5м , а 0.5 - расстояние теста == 4м итого размер символа должен быть 7мм
         // MARK: - CoreData
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         do {
@@ -139,17 +142,17 @@ class MiopiaViewController: UIViewController {
         //startLabel.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
         startLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
-        startLabel.text = "Коснитесь экрана для начала теста"
+        startLabel.text = "Для корректного выполнения теста ознакомьтесь с инструкциями к приложению"
         startLabel.textAlignment = .center
         startLabel.numberOfLines = 0
-        startLabel.textColor = .systemBlue
+        startLabel.textColor = .black
         startLabel.font = .systemFont(ofSize: 30)
         startLabel.backgroundColor = .white
-        startLabel.alpha = 0.8
+        //startLabel.alpha = 0.8
         startLabel.isUserInteractionEnabled = true
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(tapGestureRecognizer:)))
-        startLabel.addGestureRecognizer(tap)
+//        let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(tapGestureRecognizer:)))
+//        startLabel.addGestureRecognizer(tap)
         
         topButton.isEnabled = false
         bottomButton.isEnabled = false
@@ -158,6 +161,27 @@ class MiopiaViewController: UIViewController {
         centralButton.isEnabled = false
         
         
+        startLabel.addSubview(startTestButton)
+        startTestButton.setTitle("Начать тест", for: .normal)
+        startTestButton.setTitleColor(.systemBlue, for: .normal)
+        startTestButton.addTarget(self, action: #selector(tapAction(tapGestureRecognizer:)), for: .touchUpInside)
+        
+        startTestButton.translatesAutoresizingMaskIntoConstraints = false
+        startTestButton.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
+        startTestButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3, constant: 60).isActive = true
+        startTestButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/20).isActive = true
+        startTestButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        
+        startLabel.addSubview(goToInfoButton)
+        goToInfoButton.setTitle("К инструкции", for: .normal)
+        goToInfoButton.setTitleColor(.systemBlue, for: .normal)
+        goToInfoButton.addTarget(self, action: #selector(goToInfoButtonAction), for: .touchUpInside)
+        
+        goToInfoButton.translatesAutoresizingMaskIntoConstraints = false
+        goToInfoButton.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        goToInfoButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3, constant: 60).isActive = true
+        goToInfoButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/20).isActive = true
+        goToInfoButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
     
     func addHelpSymbolView() {
@@ -306,6 +330,16 @@ class MiopiaViewController: UIViewController {
         
         startAlert()
     }
+    
+    @objc func goToInfoButtonAction(){
+        
+        let vc = InfoStartViewController()
+        
+        self.present(vc, animated: false, completion: nil)
+        
+        //startLabel.removeFromSuperview()
+    }
+    
     
     func saveResult(){
         do{

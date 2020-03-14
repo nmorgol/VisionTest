@@ -24,7 +24,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     
     var avtoDetectDistBool = false
     var speechRecognBool = false
-    var distanceTest = Float(0.5)
+    var distanceTest = Float(4.0)
     var timeToStart = Float(0)
     var symbolTest = "Snellen"
     
@@ -66,7 +66,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(true)
         
-        self.navigationController?.navigationBar.isHidden = false
+//        self.navigationController?.navigationBar.isHidden = false
         
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let image = UIImage(named: "placeholder")?.pngData()!
@@ -111,7 +111,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     
     override func viewWillDisappear(_ animated: Bool) {
         super .viewWillDisappear(false)
-        self.navigationController?.navigationBar.isHidden = false
+//        self.navigationController?.navigationBar.isHidden = false
     }
     
     // MARK: - Table view data source
@@ -456,6 +456,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     }
      
     @objc func labelDistTextAction(_ sender: UILabel){
+        self.navigationController?.navigationBar.isHidden = true
         self.view.addSubview(coverView)
         coverView.addSubview(labelTextField)
         coverView.addSubview(labelForTextField)
@@ -500,8 +501,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     
     
     @objc func resingFirstREspDist(){
-        
-        distanceTest = Float(labelTextField.text!) ?? (0.5)
+        self.navigationController?.navigationBar.isHidden = false
+        distanceTest = Float(labelTextField.text!) ?? (4.0)
         labelTextField.text = ""
         labelTextField.resignFirstResponder()
         labelTextField.removeFromSuperview()
@@ -511,6 +512,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     }
     
     @objc func labelTimeTextAction(_ sender: UILabel){
+        self.navigationController?.navigationBar.isHidden = true
         self.view.addSubview(coverView)
         coverView.addSubview(labelTextField)
         coverView.addSubview(labelForTextField)
@@ -553,8 +555,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         labelTextField.delegate = self
     }
     @objc func resingFirstREspTime(){
-        
-        timeToStart = Float(labelTextField.text!) ?? (0)
+        self.navigationController?.navigationBar.isHidden = false
+        timeToStart = Float(labelTextField.text!) ?? (5.0)
         labelTextField.text = ""
         labelTextField.resignFirstResponder()
         labelForTextField.removeFromSuperview()

@@ -338,7 +338,7 @@ class StartViewController: UIViewController {
         startButton.backgroundColor = .white
         startButton.layer.cornerRadius = 20
         
-        startButton.layer.shadowColor = UIColor.gray.cgColor
+        startButton.layer.shadowColor = UIColor.lightGray.cgColor
         startButton.layer.shadowOpacity = 0.1
         
         let size = CGSize(width: 50, height: 50)
