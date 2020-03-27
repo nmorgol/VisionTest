@@ -276,27 +276,47 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             
         }else if indexPath.section == 3{
             let cell4 = tableView.dequeueReusableCell(withIdentifier: cellIAPurchasesID, for: indexPath)
-            cell4.textLabel?.text = "In-App Purchases"
+            cell4.textLabel?.text = "Покупки"
+            cell4.accessoryType = .disclosureIndicator
             cell = cell4
             return cell
         }
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        switch section {
+//        case 0:
+//            return "Информация о пользователе"
+//        case 1:
+//            return "Настройки приложения"
+//        case 2:
+//            return "Настройки теста близорукости"
+//        case 3:
+//            return "Встроенные покупки"
+//        default:
+//            break
+//        }
+//        return "11"
+//    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let label : UILabel = UILabel()
+        label.textColor = .white
+        label.backgroundColor = .systemBlue
         switch section {
         case 0:
-            return ""
+            label.text = "Информация о пользователе"
         case 1:
-            return " "
+            label.text = "Настройки приложения"
         case 2:
-            return " "
+            label.text = "Настройки теста близорукости"
         case 3:
-            return " "
+            label.text = "Встроенные покупки"
         default:
             break
         }
-        return "11"
+        return label
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -316,15 +336,15 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             print(0)
         case 1:
             if indexPath.row == 0{
-                accessoryButtonAction(title: "AvtoDetectDistance")
+                accessoryButtonAction(title: "Автоопределение расстояния")
             }else{
-               accessoryButtonAction(title: "SpeechRecognize")
+               accessoryButtonAction(title: "Распознавание речи")
             }
         case 2:
             if indexPath.row == 0{
-                accessoryButtonAction(title: "DistanceTest")
+                accessoryButtonAction(title: "Дистанция теста")
             }else{
-                accessoryButtonAction(title: "TimeBeforeTest")
+                accessoryButtonAction(title: "Время до начала теста")
             }
         default:
             print("default")
@@ -339,6 +359,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             }
         }
     }
+    
+    
    
     @objc func actionSave() {
         
@@ -360,6 +382,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         let settingsNew = SettingsApp(context: context)
         settingsNew.setValue(avtoDetectDistBool, forKey: "avtoDetectDistance")
         settingsNew.setValue(speechRecognBool, forKey: "speechRecognize")
+        
+
         settingsNew.setValue(distanceTest, forKey: "distanceTest")
         settingsNew.setValue(timeToStart, forKey: "timeBeforeTest")
         settingsNew.setValue(symbolTest, forKey: "symbolTest")

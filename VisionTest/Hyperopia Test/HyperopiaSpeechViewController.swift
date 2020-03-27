@@ -28,6 +28,9 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     var startFontCounter = 1//счетчик уменьшения размера шрифта
     var fontSize = Float(40)//методом подбора = острота зрения 0.1
     
+    var leftEyeResult = Float()
+    var rightEyeResult = Float()
+    
     var inputText = String()
     
     var comletion: ((String)->())?//вроде как можно удалить уже
@@ -383,7 +386,10 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         stopLabel.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
         
         stopLabel.backgroundColor = .white
-        stopLabel.text = "стоп стоп стоп"
+        stopLabel.numberOfLines = 0
+        stopLabel.textAlignment = .center
+        
+        stopLabel.text = "Тест завершен.\n Результат: правый глаз - \(rightEyeResult). \n Результат: левый глаз - \(leftEyeResult)."
         stopLabel.textAlignment = .center
         
         
@@ -572,8 +578,10 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
                 result.dateTest = Date()
                 if eyeLabel.text == "Закройте правый глаз"{
                     result.testingEye = "Левый глаз"
+                    leftEyeResult = ((Float(startFontCounter)-1.0)/10.0)
                 }else if eyeLabel.text == "Закройте левый глаз"{
                     result.testingEye = "Правый глаз"
+                    rightEyeResult = ((Float(startFontCounter)-1.0)/10.0)
                 }
                 
                 curUser.addToRelationship1(result)

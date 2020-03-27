@@ -498,7 +498,7 @@ class InfoHyperopiaViewController: UIViewController {
         howDoTestLabel.backgroundColor = .clear
         howDoTestLabel.numberOfLines = 0
         howDoTestLabel.font = .systemFont(ofSize: 15)
-        howDoTestLabel.text = "   Расположите телефон на расстоянии 30 - 40 сантиметров. На клавиатуре наберите число, которое указанно в центральном окне. "
+        howDoTestLabel.text = "   Расположите телефон на расстоянии 30 - 40 сантиметров. На клавиатуре наберите число, которое указано в центральном окне. "
     }
     
     fileprivate func addCloseEyeDescrView() {

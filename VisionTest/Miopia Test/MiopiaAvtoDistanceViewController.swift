@@ -44,6 +44,11 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
     var distanceBool = false
     
     let startLabel = UILabel()
+    let startTestButton = UIButton()
+    let goToInfoButton = UIButton()
+    let canselForeverButton = UIButton()
+    var canselStartLabel = Bool()
+    
     var tap = UITapGestureRecognizer()//target: self, action: #selector(tapAction(tapGestureRecognizer:)))
     let startTimerLabel = UILabel()
     let helpSymbolView = UIView()//для символа
@@ -146,6 +151,8 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
                 else{
                     viewArray = [rightLandoltView, leftLandoltView, topLandoltView, bottomLandoltView]
                 }
+            let canselInstruct = try context.fetch(CanselInstruction.fetchRequest())
+            canselStartLabel = (canselInstruct.last as! CanselInstruction).myopiaSpeechCansel
             //}
         } catch let error as NSError {
             print(error)
@@ -153,6 +160,7 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         
         workViewArray = viewArray
         addStartLabel()
+        canselStartLabelAction()
 //        if distanceBool{
 //            self.session = self.setupAVCaptureSession()
 //            self.prepareVisionRequest()
@@ -692,24 +700,74 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         startLabel.alpha = 1
         startLabel.isUserInteractionEnabled = true
         startLabel.numberOfLines = 0
-        var trueDist = "выкл"
-        var trueSpeech = "выкл"
-        var dist = "\(distance)"
-        if avtoDetectDist{
-            trueDist = "вкл"
-            dist = "_"
-        }
-        if speechRecogn{
-            trueSpeech = "вкл"
-        }
         
-        startLabel.text = "Расстояние установлено: \(dist) м. \n \nРаспознавание речи: \(trueSpeech). \n \nОпределение расстояния: \(trueDist). \n \nВремя до начала теста установлено: \(startTimerCounter) с. \n \nДля изменения настроек перейдите в меню приложения.\n \nДля окончания теста скажите: СТОП \n \nКоснитесь экрана для начала теста.  "
-        startLabel.textAlignment = .left
-        startLabel.font = .systemFont(ofSize: 17)
-        startLabel.textColor = .systemBlue
+        startLabel.text = "Для корректного выполнения теста ознакомьтесь с инструкциями к приложению"
+        startLabel.textAlignment = .center
+        startLabel.font = .systemFont(ofSize: 30)
+        
+//        startLabel.addGestureRecognizer(tap)
+
+        startLabel.addSubview(canselForeverButton)
+        canselForeverButton.setTitle("Больше не показывать это окно", for: .normal)
+        canselForeverButton.titleLabel?.numberOfLines = 0
+        canselForeverButton.titleLabel?.textAlignment = .center
+        canselForeverButton.setTitleColor(.systemBlue, for: .normal)
+        canselForeverButton.backgroundColor = .white
+        canselForeverButton.addTarget(self, action: #selector(canselForeverButtonAction), for: .touchUpInside)
+        canselForeverButton.layer.shadowColor = UIColor.lightGray.cgColor
+        canselForeverButton.layer.shadowOpacity = 0.1
+        
+        
+        canselForeverButton.translatesAutoresizingMaskIntoConstraints = false
+        canselForeverButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        canselForeverButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3, constant: 60).isActive = true
+        canselForeverButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/17).isActive = true
+        canselForeverButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        
+        startLabel.addSubview(startTestButton)
+        startTestButton.setTitle("Начать тест", for: .normal)
+        startTestButton.setTitleColor(.systemBlue, for: .normal)
+        startTestButton.addTarget(self, action: #selector(tapAction(tapGestureRecognizer:)), for: .touchUpInside)
+        startTestButton.backgroundColor = .white
+        startTestButton.layer.shadowColor = UIColor.lightGray.cgColor
+        startTestButton.layer.shadowOpacity = 0.1
+        
+        startTestButton.translatesAutoresizingMaskIntoConstraints = false
+        startTestButton.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
+        startTestButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3, constant: 50).isActive = true
+        startTestButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/20).isActive = true
+        startTestButton.bottomAnchor.constraint(equalTo: canselForeverButton.topAnchor, constant: -15).isActive = true
+        
+        startLabel.addSubview(goToInfoButton)
+        goToInfoButton.setTitle("К инструкции", for: .normal)
+        goToInfoButton.setTitleColor(.systemBlue, for: .normal)
+        goToInfoButton.addTarget(self, action: #selector(goToInfoButtonAction), for: .touchUpInside)
+        goToInfoButton.backgroundColor = .white
+        goToInfoButton.layer.shadowColor = UIColor.lightGray.cgColor
+        goToInfoButton.layer.shadowOpacity = 0.1
+        
+        goToInfoButton.translatesAutoresizingMaskIntoConstraints = false
+        goToInfoButton.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        goToInfoButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3, constant: 50).isActive = true
+        goToInfoButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/20).isActive = true
+        goToInfoButton.bottomAnchor.constraint(equalTo: canselForeverButton.topAnchor, constant: -15).isActive = true
+        
+//        var trueDist = "выкл"
+//        var trueSpeech = "выкл"
+//        var dist = "\(distance)"
+//        if avtoDetectDist{
+//            trueDist = "вкл"
+//            dist = "_"
+//        }
+//        if speechRecogn{
+//            trueSpeech = "вкл"
+//        }
+        
+        //startLabel.text = "Расстояние установлено: \(dist) м. \n \nРаспознавание речи: \(trueSpeech). \n \nОпределение расстояния: \(trueDist). \n \nВремя до начала теста установлено: \(startTimerCounter) с. \n \nДля изменения настроек перейдите в меню приложения.\n \nДля окончания теста скажите: СТОП \n \nКоснитесь экрана для начала теста.  "
+        
+        //startLabel.textColor = .systemBlue
 
         
-        startLabel.addGestureRecognizer(tap)
 
     }
     
@@ -766,7 +824,9 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
 
     
     @objc func tapAction(tapGestureRecognizer: UITapGestureRecognizer){
-        
+        startTestButton.removeFromSuperview()
+        goToInfoButton.removeFromSuperview()
+        canselForeverButton.removeFromSuperview()
         
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(startTimerAction), userInfo: nil, repeats: true)
         // MARK: session?.startRunning()
@@ -1075,11 +1135,72 @@ class MiopiaAvtoDistanceViewController: UIViewController, SFSpeechRecognizerDele
         }
     }
     
+    @objc func canselForeverButtonAction(){
+        let newCansel = CanselInstruction(context: context)
+        
+        newCansel.setValue(true, forKey: "myopiaSpeechCansel")
+        
+        do {
+            try context.save()
+        }catch let error as NSError{
+            print(error)
+        }
+        
+//        startLabel.removeFromSuperview()
+        
+    }
     
+    @objc func goToInfoButtonAction(){
+            
+            let vc = InfoStartViewController()
+    //        self.navigationController?.pushViewController(vc, animated: true)
+            
+            
+            vc.navigationController?.title = "Информация и инструкции"
+            vc.navigationController?.view.backgroundColor = .blue
+            vc.state = true
+            
+            let navVC = UINavigationController(rootViewController: vc)
+            navVC.view.backgroundColor = .blue
+            navVC.view.alpha = 1
+            
+            let goBackItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(navAction))//(title: "Закрыть", style: .done, target: self, action: #selector(navAction))
+            
+            navVC.navigationItem.rightBarButtonItem = goBackItem
+            navVC.navigationItem.title = "Информация и инструкции"
+            //navVC.title = "Информация и инструкции"
+            self.present(navVC, animated: false, completion: nil)
+            //self.dismiss(animated: true, completion: nil)
+            //startLabel.removeFromSuperview()
+        }
     
+    @objc func navAction(){
+        self.dismiss(animated: false, completion: nil)
+    }
     
+    func canselStartLabelAction() {
+        if canselStartLabel{
+            tapActionCanselStart()
+        }
+    }
     
-    
+    @objc func tapActionCanselStart(){
+            startTestButton.removeFromSuperview()
+            goToInfoButton.removeFromSuperview()
+            canselForeverButton.removeFromSuperview()
+            
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(startTimerAction), userInfo: nil, repeats: true)
+            // MARK: session?.startRunning()
+            if speechRecogn{
+                self.session = self.setupAVCaptureSession()
+                self.prepareVisionRequest()
+                self.session?.startRunning()
+            }
+    //        self.session = self.setupAVCaptureSession()
+    //        self.prepareVisionRequest()
+    //        self.session?.startRunning()
+            startLabel.removeGestureRecognizer(tap)
+        }
     
     
     

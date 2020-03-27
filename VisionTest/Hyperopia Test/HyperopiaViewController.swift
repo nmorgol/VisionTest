@@ -162,7 +162,7 @@ class HyperopiaViewController: UIViewController {
 
         stopLabel.backgroundColor = .white
         stopLabel.numberOfLines = 0
-        
+        stopLabel.textAlignment = .center
         
         stopLabel.text = "Тест завершен. \n Результаты: \n - правый глаз \(rightRes) \n - левый глаз \(leftRes)"
 

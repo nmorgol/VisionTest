@@ -4,6 +4,8 @@ import UIKit
 
 class InfoStartViewController: UIViewController {
 
+    var state = false
+    
     let segmentedContr = UISegmentedControl(items: ["Информация","Инструкция"])
     
     //информация
@@ -71,6 +73,10 @@ class InfoStartViewController: UIViewController {
         super.viewDidLoad()
 
         self.view.backgroundColor = #colorLiteral(red: 0.6561266184, green: 0.9085168242, blue: 0.9700091481, alpha: 1)
+        
+        if state {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(navAction))
+        }
         
     }
 
@@ -841,5 +847,9 @@ class InfoStartViewController: UIViewController {
         labelLupa.heightAnchor.constraint(equalToConstant: 40).isActive = true
         labelLupa.alpha = 0.7
         labelLupa.font = .boldSystemFont(ofSize: 20)
+    }
+    
+    @objc func navAction(){
+        self.dismiss(animated: false, completion: nil)
     }
 }

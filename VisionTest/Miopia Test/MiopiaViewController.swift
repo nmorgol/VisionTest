@@ -8,6 +8,11 @@ class MiopiaViewController: UIViewController {
     let startLabel = UILabel()
     let startTestButton = UIButton()
     let goToInfoButton = UIButton()
+    let canselForeverButton = UIButton()
+    var canselStartLabel = Bool()
+    
+    var rezRightEye = Float()
+    var rezLeftEye = Float()
     
     let helpSymbolView = UIView()//для символа
     let helpWorkView = UIView()//для кнопок
@@ -87,6 +92,9 @@ class MiopiaViewController: UIViewController {
             else{
                 viewArray = [rightLandoltView, leftLandoltView, topLandoltView, bottomLandoltView]
             }
+            let canselInfo = try context.fetch(CanselInstruction.fetchRequest())
+            canselStartLabel = (canselInfo.last as! CanselInstruction).myopiaLightCansel
+            print("значение \(canselInfo)")
             
         } catch let error as NSError {
             print(error)
@@ -103,14 +111,16 @@ class MiopiaViewController: UIViewController {
         addDeviceNameLabel()
         addDistanceLabel()
         addLandoltSnellenView(addingView: currentView, koef: koef)
-        addStartLabel()
-        
+//        addStartLabel()
+//        deleteStartLabel()
         
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super .viewDidAppear(false)
 //        startAlert()
+        addStartLabel()
+        deleteStartLabel()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -135,6 +145,7 @@ class MiopiaViewController: UIViewController {
     }
     
     func addStartLabel(){
+        
         self.view.addSubview(startLabel)
         startLabel.translatesAutoresizingMaskIntoConstraints = false
         startLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -160,28 +171,52 @@ class MiopiaViewController: UIViewController {
         rightButton.isEnabled = false
         centralButton.isEnabled = false
         
+        startLabel.addSubview(canselForeverButton)
+        canselForeverButton.setTitle("Больше не показывать это окно", for: .normal)
+        canselForeverButton.titleLabel?.numberOfLines = 0
+        canselForeverButton.titleLabel?.textAlignment = .center
+        canselForeverButton.setTitleColor(.systemBlue, for: .normal)
+        canselForeverButton.backgroundColor = .white
+        canselForeverButton.addTarget(self, action: #selector(canselForeverButtonAction), for: .touchUpInside)
+        canselForeverButton.layer.shadowColor = UIColor.lightGray.cgColor
+        canselForeverButton.layer.shadowOpacity = 0.1
+        
+        
+        canselForeverButton.translatesAutoresizingMaskIntoConstraints = false
+        canselForeverButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        canselForeverButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3, constant: 60).isActive = true
+        canselForeverButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/17).isActive = true
+        canselForeverButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
         startLabel.addSubview(startTestButton)
         startTestButton.setTitle("Начать тест", for: .normal)
         startTestButton.setTitleColor(.systemBlue, for: .normal)
         startTestButton.addTarget(self, action: #selector(tapAction(tapGestureRecognizer:)), for: .touchUpInside)
+        startTestButton.backgroundColor = .white
+        startTestButton.layer.shadowColor = UIColor.lightGray.cgColor
+        startTestButton.layer.shadowOpacity = 0.1
         
         startTestButton.translatesAutoresizingMaskIntoConstraints = false
         startTestButton.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        startTestButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3, constant: 60).isActive = true
+        startTestButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3, constant: 50).isActive = true
         startTestButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/20).isActive = true
-        startTestButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        startTestButton.bottomAnchor.constraint(equalTo: canselForeverButton.topAnchor, constant: -15).isActive = true
         
         startLabel.addSubview(goToInfoButton)
         goToInfoButton.setTitle("К инструкции", for: .normal)
         goToInfoButton.setTitleColor(.systemBlue, for: .normal)
         goToInfoButton.addTarget(self, action: #selector(goToInfoButtonAction), for: .touchUpInside)
+        goToInfoButton.backgroundColor = .white
+        goToInfoButton.layer.shadowColor = UIColor.lightGray.cgColor
+        goToInfoButton.layer.shadowOpacity = 0.1
         
         goToInfoButton.translatesAutoresizingMaskIntoConstraints = false
         goToInfoButton.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
-        goToInfoButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3, constant: 60).isActive = true
+        goToInfoButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3, constant: 50).isActive = true
         goToInfoButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/20).isActive = true
-        goToInfoButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        goToInfoButton.bottomAnchor.constraint(equalTo: canselForeverButton.topAnchor, constant: -15).isActive = true
+        
+        
     }
     
     func addHelpSymbolView() {
@@ -300,7 +335,11 @@ class MiopiaViewController: UIViewController {
             if currentEye == "Right eye"{
                 
                 addStartLabel()
-                startLabel.text = "Тест завершен"
+                startTestButton.removeFromSuperview()
+                goToInfoButton.removeFromSuperview()
+                startLabel.text = "Тест завершен. \nРезультат правый глаз: \(rezRightEye)\nРезультат левый глаз: \(rezLeftEye) "
+                startLabel.font = .systemFont(ofSize: 17)
+                
             }else{
                 wrongAnswer()
             }
@@ -314,7 +353,13 @@ class MiopiaViewController: UIViewController {
         if currentEye == "Right eye"{
             
             addStartLabel()
-            startLabel.text = "Тест завершен"
+            canselForeverButton.removeFromSuperview()
+//            startTestButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+//            goToInfoButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+            startTestButton.removeFromSuperview()
+            goToInfoButton.removeFromSuperview()
+            startLabel.text = "Тест завершен. \nРезультат правый глаз: \(rezRightEye)\nРезультат левый глаз: \(rezLeftEye) "
+            startLabel.font = .systemFont(ofSize: 17)
         }else{
             wrongAnswer()
         }
@@ -334,9 +379,24 @@ class MiopiaViewController: UIViewController {
     @objc func goToInfoButtonAction(){
         
         let vc = InfoStartViewController()
+//        self.navigationController?.pushViewController(vc, animated: true)
         
-        self.present(vc, animated: false, completion: nil)
         
+        vc.navigationController?.title = "Информация и инструкции"
+        vc.navigationController?.view.backgroundColor = .blue
+        vc.state = true
+        
+        let navVC = UINavigationController(rootViewController: vc)
+        navVC.view.backgroundColor = .blue
+        navVC.view.alpha = 1
+        
+        let goBackItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(navAction))//(title: "Закрыть", style: .done, target: self, action: #selector(navAction))
+        
+        navVC.navigationItem.rightBarButtonItem = goBackItem
+        navVC.navigationItem.title = "Информация и инструкции"
+        //navVC.title = "Информация и инструкции"
+        self.present(navVC, animated: false, completion: nil)
+        //self.dismiss(animated: true, completion: nil)
         //startLabel.removeFromSuperview()
     }
     
@@ -355,8 +415,10 @@ class MiopiaViewController: UIViewController {
                 result.dateTest = Date()
                 if currentEye == "Left eye"{
                     result.testingEye = "Правый глаз"
+                    rezRightEye = (counter-1)/10
                 }else if currentEye == "Right eye"{
                     result.testingEye = "Левый глаз"
+                    rezLeftEye = (counter-1)/10
                 }
                 
                 curUser.addToRelationship(result)
@@ -449,4 +511,40 @@ class MiopiaViewController: UIViewController {
         alert.addAction(alertAction)
         self.present(alert, animated: true, completion: nil)
     }
+    
+    func deleteStartLabel(){
+        if canselStartLabel{
+            startLabel.removeFromSuperview()
+            topButton.isEnabled = true
+            bottomButton.isEnabled = true
+            leftButton.isEnabled = true
+            rightButton.isEnabled = true
+            centralButton.isEnabled = true
+            startAlert()
+        }
+    }
+    @objc func canselForeverButtonAction(){
+        let newCansel = CanselInstruction(context: context)
+        
+        newCansel.setValue(true, forKey: "myopiaLightCansel")
+        
+        do {
+            try context.save()
+        }catch let error as NSError{
+            print(error)
+        }
+        
+        startLabel.removeFromSuperview()
+        topButton.isEnabled = true
+        bottomButton.isEnabled = true
+        leftButton.isEnabled = true
+        rightButton.isEnabled = true
+        centralButton.isEnabled = true
+        startAlert()
+    }
+    
+    @objc func navAction(){
+        self.dismiss(animated: false, completion: nil)
+    }
+    
 }

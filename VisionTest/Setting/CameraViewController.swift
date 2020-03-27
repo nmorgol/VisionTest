@@ -100,7 +100,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         usePhotoButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1/3).isActive = true
         usePhotoButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
         
-        usePhotoButton.setTitle("Use Photo", for: .normal)
+        usePhotoButton.setTitle("Использовать", for: .normal)
         usePhotoButton.setTitleColor(.black, for: .normal)
         usePhotoButton.layer.cornerRadius = 20
         usePhotoButton.layer.borderWidth = 0.3
@@ -117,7 +117,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
         deletePhotoButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         
         deletePhotoButton.setTitleColor(.black, for: .normal)
-        deletePhotoButton.setTitle("Crop Photo", for: .normal)
+        deletePhotoButton.setTitle("Обрезать", for: .normal)
         deletePhotoButton.layer.cornerRadius = 20
         deletePhotoButton.layer.borderWidth = 0.3
         

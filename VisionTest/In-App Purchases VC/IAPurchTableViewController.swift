@@ -27,7 +27,7 @@ class IAPurchTableViewController: UITableViewController {
             print(error)
         }
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Restore Purchases", style: .plain, target: self, action: #selector(restorePurchases))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Восстановить покупки", style: .plain, target: self, action: #selector(restorePurchases))
         
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
         
@@ -71,7 +71,7 @@ class IAPurchTableViewController: UITableViewController {
         
         let product = IAPManager.shared.products[indexPath.row]
         cell?.textLabel?.text = product.localizedTitle + " - " + self.priceStringFor(product: product)
-        cell?.detailTextLabel?.text = "Non-consumables"
+        cell?.detailTextLabel?.text = "Не расходуемая покупка"
         
         
         return cell!

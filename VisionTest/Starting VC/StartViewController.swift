@@ -62,7 +62,10 @@ class StartViewController: UIViewController {
             let resCurrentUser = try context.fetch(CurrentUser.fetchRequest())
             let settings = try context.fetch(SettingsApp.fetchRequest())
             let iap = try context.fetch(InAppPurchases.fetchRequest())
+            let canselInfo = try context.fetch(CanselInstruction.fetchRequest())
             
+            
+            print(iap.count)
             if iap.count == 0{
                 let newIAP = InAppPurchases(context: context)
                 newIAP.setValue(false, forKey: "speechRecognition")
@@ -74,6 +77,8 @@ class StartViewController: UIViewController {
                     print(error)
                 }
             }
+            
+            
             
             if resultUser.count > 0 {
                 let curUser = (resCurrentUser.last as! CurrentUser).currentUser
@@ -104,6 +109,19 @@ class StartViewController: UIViewController {
                 avtoDetectDistBool = (settings.last as! SettingsApp).avtoDetectDistance
                 speechRecognBool = (settings.last as! SettingsApp).speechRecognize
                 symbolTest = (settings.last as! SettingsApp).symbolTest ?? "Snellen"
+            }
+            if canselInfo.count == 0{
+                let newCansel = CanselInstruction(context: context)
+                newCansel.setValue(false, forKey: "hyperopiaLightCansel")
+                newCansel.setValue(false, forKey: "hyperopiaSpeechCansel")
+                newCansel.setValue(false, forKey: "myopiaLightCansel")
+                newCansel.setValue(false, forKey: "myopiaSpeechCansel")
+                
+                do {
+                    try context.save()
+                }catch let error as NSError{
+                    print(error)
+                }
             }
             
         } catch let error as NSError {
