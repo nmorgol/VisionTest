@@ -47,6 +47,17 @@
 		EB87B1AE23F2CAFC00A74EEF /* Extension String.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87B1AD23F2CAFC00A74EEF /* Extension String.swift */; };
 		EB87B1B223F31BB200A74EEF /* InfoHyperopiaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87B1B123F31BB200A74EEF /* InfoHyperopiaViewController.swift */; };
 		EB8C340623B9E90500AFA10A /* ExtensionUIImageOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8C340523B9E90500AFA10A /* ExtensionUIImageOrientation.swift */; };
+		EB928CA7243F6FC4007E06BA /* LastSphereView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB928CA6243F6FC4007E06BA /* LastSphereView.swift */; };
+		EB928CA9243F700B007E06BA /* SphereView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB928CA8243F700B007E06BA /* SphereView.swift */; };
+		EB928CAB243F7042007E06BA /* SectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB928CAA243F7042007E06BA /* SectorView.swift */; };
+		EB928CAD243F7078007E06BA /* 90DegrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB928CAC243F7078007E06BA /* 90DegrView.swift */; };
+		EB928CAF243F709F007E06BA /* Rotate90DegrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB928CAE243F709F007E06BA /* Rotate90DegrView.swift */; };
+		EB928CB1243F70CF007E06BA /* ScaledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB928CB0243F70CF007E06BA /* ScaledView.swift */; };
+		EB928CB3243F7103007E06BA /* DegreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB928CB2243F7103007E06BA /* DegreeView.swift */; };
+		EB928CB5243F7134007E06BA /* MinuteInDegreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB928CB4243F7134007E06BA /* MinuteInDegreeView.swift */; };
+		EB928CB72441BE59007E06BA /* DegreeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB928CB62441BE59007E06BA /* DegreeViewController.swift */; };
+		EB928CBB2441F3EA007E06BA /* TopDegreeToMinuteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB928CBA2441F3EA007E06BA /* TopDegreeToMinuteView.swift */; };
+		EB928CBD24421895007E06BA /* SymbolDescribeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB928CBC24421895007E06BA /* SymbolDescribeView.swift */; };
 		EBD11F6C23BB42BE00AA9FF1 /* UsersArrayTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD11F6B23BB42BE00AA9FF1 /* UsersArrayTableViewController.swift */; };
 		EBD11F6E23BB489800AA9FF1 /* UserArrayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD11F6D23BB489800AA9FF1 /* UserArrayTableViewCell.swift */; };
 		EBDC7B4B23EC3E63006192BE /* EyeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDC7B4A23EC3E63006192BE /* EyeView.swift */; };
@@ -126,6 +137,17 @@
 		EB87B1AD23F2CAFC00A74EEF /* Extension String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension String.swift"; sourceTree = "<group>"; };
 		EB87B1B123F31BB200A74EEF /* InfoHyperopiaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoHyperopiaViewController.swift; sourceTree = "<group>"; };
 		EB8C340523B9E90500AFA10A /* ExtensionUIImageOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIImageOrientation.swift; sourceTree = "<group>"; };
+		EB928CA6243F6FC4007E06BA /* LastSphereView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastSphereView.swift; sourceTree = "<group>"; };
+		EB928CA8243F700B007E06BA /* SphereView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SphereView.swift; sourceTree = "<group>"; };
+		EB928CAA243F7042007E06BA /* SectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectorView.swift; sourceTree = "<group>"; };
+		EB928CAC243F7078007E06BA /* 90DegrView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 90DegrView.swift; sourceTree = "<group>"; };
+		EB928CAE243F709F007E06BA /* Rotate90DegrView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rotate90DegrView.swift; sourceTree = "<group>"; };
+		EB928CB0243F70CF007E06BA /* ScaledView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaledView.swift; sourceTree = "<group>"; };
+		EB928CB2243F7103007E06BA /* DegreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DegreeView.swift; sourceTree = "<group>"; };
+		EB928CB4243F7134007E06BA /* MinuteInDegreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinuteInDegreeView.swift; sourceTree = "<group>"; };
+		EB928CB62441BE59007E06BA /* DegreeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DegreeViewController.swift; sourceTree = "<group>"; };
+		EB928CBA2441F3EA007E06BA /* TopDegreeToMinuteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopDegreeToMinuteView.swift; sourceTree = "<group>"; };
+		EB928CBC24421895007E06BA /* SymbolDescribeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolDescribeView.swift; sourceTree = "<group>"; };
 		EBD11F6B23BB42BE00AA9FF1 /* UsersArrayTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersArrayTableViewController.swift; sourceTree = "<group>"; };
 		EBD11F6D23BB489800AA9FF1 /* UserArrayTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserArrayTableViewCell.swift; sourceTree = "<group>"; };
 		EBDC7B4A23EC3E63006192BE /* EyeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeView.swift; sourceTree = "<group>"; };
@@ -208,6 +230,7 @@
 		EB2CF9AA23D2EA21006336E8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EB928CA5243F6F25007E06BA /* Degree */,
 				EB2DA0AF2401436600AFD51C /* Lock */,
 				EB12A76A23EEE887008ED40E /* Speak Views */,
 				EB721D4323EBEB21004086E5 /* Eye */,
@@ -404,6 +427,23 @@
 			path = Eye;
 			sourceTree = "<group>";
 		};
+		EB928CA5243F6F25007E06BA /* Degree */ = {
+			isa = PBXGroup;
+			children = (
+				EB928CA6243F6FC4007E06BA /* LastSphereView.swift */,
+				EB928CA8243F700B007E06BA /* SphereView.swift */,
+				EB928CAA243F7042007E06BA /* SectorView.swift */,
+				EB928CAC243F7078007E06BA /* 90DegrView.swift */,
+				EB928CAE243F709F007E06BA /* Rotate90DegrView.swift */,
+				EB928CB0243F70CF007E06BA /* ScaledView.swift */,
+				EB928CB2243F7103007E06BA /* DegreeView.swift */,
+				EB928CB4243F7134007E06BA /* MinuteInDegreeView.swift */,
+				EB928CBA2441F3EA007E06BA /* TopDegreeToMinuteView.swift */,
+				EB928CBC24421895007E06BA /* SymbolDescribeView.swift */,
+			);
+			path = Degree;
+			sourceTree = "<group>";
+		};
 		EB951CA423BA10E700C2DD7B /* Collections Users */ = {
 			isa = PBXGroup;
 			children = (
@@ -428,6 +468,7 @@
 				EBF4868123E9937C003C3004 /* StartViewController.swift */,
 				EBDC7B5023EC789C006192BE /* InfoStartViewController.swift */,
 				EB87B1B123F31BB200A74EEF /* InfoHyperopiaViewController.swift */,
+				EB928CB62441BE59007E06BA /* DegreeViewController.swift */,
 			);
 			path = "Starting VC";
 			sourceTree = "<group>";
@@ -566,11 +607,13 @@
 				EB87B1AE23F2CAFC00A74EEF /* Extension String.swift in Sources */,
 				EBE633E0239D5E6A00FDCA38 /* UserTableViewCell.swift in Sources */,
 				EB2CF9AC23D2EA98006336E8 /* MicrophoneView.swift in Sources */,
+				EB928CB72441BE59007E06BA /* DegreeViewController.swift in Sources */,
 				EB2DA0A823FE74DC00AFD51C /* IAPProducts.swift in Sources */,
 				EB87B1A823EEF0B800A74EEF /* SpeakLeftBottomView.swift in Sources */,
 				EB551CC423D1C1240020A46D /* ResultsTableViewCell.swift in Sources */,
 				EB12A76923EEE3E7008ED40E /* SpeakLeftTopView.swift in Sources */,
 				EBF48D92239656EB00CB3418 /* LandoltBottomUIView.swift in Sources */,
+				EB928CAD243F7078007E06BA /* 90DegrView.swift in Sources */,
 				EB87B1B223F31BB200A74EEF /* InfoHyperopiaViewController.swift in Sources */,
 				EB38F484239553BE00D30348 /* PurchasesTableViewCell.swift in Sources */,
 				EB38F47A2393ECB100D30348 /* HyperopiaViewController.swift in Sources */,
@@ -579,6 +622,7 @@
 				EBDC7B4B23EC3E63006192BE /* EyeView.swift in Sources */,
 				EB8C340623B9E90500AFA10A /* ExtensionUIImageOrientation.swift in Sources */,
 				EB1F611B23C25D6C00E96024 /* HyperopiaSpeechViewController.swift in Sources */,
+				EB928CA7243F6FC4007E06BA /* LastSphereView.swift in Sources */,
 				EB38F4862395667F00D30348 /* SettingsTableViewController.swift in Sources */,
 				EB2D59C623AF9EE100D42A7D /* SettingsTableViewCell.swift in Sources */,
 				EB359751239634ED001C2240 /* LandoltRightUIView.swift in Sources */,
@@ -595,19 +639,27 @@
 				EB49208E239A378D0062D974 /* SnellenLeftView.swift in Sources */,
 				EB38F4452393A93000D30348 /* AppDelegate.swift in Sources */,
 				EBD11F6E23BB489800AA9FF1 /* UserArrayTableViewCell.swift in Sources */,
+				EB928CB5243F7134007E06BA /* MinuteInDegreeView.swift in Sources */,
 				EB2D59C823AFA6F600D42A7D /* SymbolTableViewCell.swift in Sources */,
+				EB928CB1243F70CF007E06BA /* ScaledView.swift in Sources */,
+				EB928CA9243F700B007E06BA /* SphereView.swift in Sources */,
 				EB2DA0AB23FE77A500AFD51C /* IAPManager.swift in Sources */,
 				EB492095239BB5BE0062D974 /* ExtensionUIDevice.swift in Sources */,
 				EB49208C239832AE0062D974 /* SnellenRightView.swift in Sources */,
+				EB928CAB243F7042007E06BA /* SectorView.swift in Sources */,
 				EBDC7B4D23EC3F2B006192BE /* MyopiaLightView.swift in Sources */,
+				EB928CBD24421895007E06BA /* SymbolDescribeView.swift in Sources */,
+				EB928CBB2441F3EA007E06BA /* TopDegreeToMinuteView.swift in Sources */,
 				EBF48D90239654AD00CB3418 /* LandoltTopUIView.swift in Sources */,
 				EB87B1AC23EEFD8500A74EEF /* SpeakRightBottomView.swift in Sources */,
+				EB928CAF243F709F007E06BA /* Rotate90DegrView.swift in Sources */,
 				EB16C35123CC6D85006E9C4D /* InfoViewController.swift in Sources */,
 				EB492090239A419E0062D974 /* SnellenTopView.swift in Sources */,
 				EBDC7B5123EC789C006192BE /* InfoStartViewController.swift in Sources */,
 				EB551CC623D1C14F0020A46D /* CurrentUserTableViewCell.swift in Sources */,
 				EB12A76523EDD494008ED40E /* NormalLightView.swift in Sources */,
 				EB38F4782393EA3700D30348 /* MiopiaViewController.swift in Sources */,
+				EB928CB3243F7103007E06BA /* DegreeView.swift in Sources */,
 				EB3193DD23DC359800D97FB0 /* MiopiaAvtoDistanceViewController.swift in Sources */,
 				EB4FB53623A506D0002C0735 /* CameraViewController.swift in Sources */,
 			);

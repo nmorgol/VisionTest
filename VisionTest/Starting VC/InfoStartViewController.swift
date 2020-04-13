@@ -5,6 +5,7 @@ import UIKit
 class InfoStartViewController: UIViewController {
 
     var state = false
+    var timer = Timer()
     
     let segmentedContr = UISegmentedControl(items: ["Информация","Инструкция"])
     
@@ -34,6 +35,7 @@ class InfoStartViewController: UIViewController {
     let secondLandoltLabel = UILabel()
     let snelenView = SnellenLeftView()
     let snelenLabel = UILabel()
+    let symbolDescrButton = UIButton()
     
     
     //инструкция
@@ -74,9 +76,14 @@ class InfoStartViewController: UIViewController {
 
         self.view.backgroundColor = #colorLiteral(red: 0.6561266184, green: 0.9085168242, blue: 0.9700091481, alpha: 1)
         
+//        viewArray = [lastSpere, sphereView, sectorView, degr90, rotateView, scaledView, oneDegreeView, minutesView]
+//        currentView = viewArray[numberView]
+//        textArray = ["1", "2", "3", "4", "5", "6", "7", "8"]
+        
         if state {
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(navAction))
         }
+        timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(animateButton), userInfo: nil, repeats: true)
         
     }
 
@@ -90,6 +97,9 @@ class InfoStartViewController: UIViewController {
         addAttentionView()
         addTableViews()
         addSybolDiscrView()
+        //addDegreeView()
+        
+        
     }
 
     func addSegmContr() {
@@ -117,6 +127,7 @@ class InfoStartViewController: UIViewController {
             addAttentionView()
             addTableViews()
             addSybolDiscrView()
+            //addDegreeView()
             
         }else if segmentedContr.selectedSegmentIndex == 1{
             scrolView.removeFromSuperview()
@@ -349,6 +360,7 @@ class InfoStartViewController: UIViewController {
         landoltView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
         
+        
         symbolDescribeView.addSubview(landoltLabel)
         
         landoltLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -361,6 +373,24 @@ class InfoStartViewController: UIViewController {
         landoltLabel.textAlignment = .natural
         landoltLabel.text = "Оптотипы Ландольта по форме представляют собой черные кольца разной величины с разрывами, обращенными в разные стороны, и по распознаванию этого разрыва можно определить минимальный угол разрешения глаза."// Ширина кольца Ландольта и ширина разрыва в 5 раз меньше его наружного диаметра, то есть соотношение этих параметров – 5 : 1 : 1. Направление разрыва кольца может иметь четыре варианта (вверху, внизу, справа и слева)."
         
+        symbolDescribeView.addSubview(symbolDescrButton)
+        
+        symbolDescrButton.translatesAutoresizingMaskIntoConstraints = false
+        symbolDescrButton.topAnchor.constraint(equalTo: landoltView.bottomAnchor, constant: 10).isActive = true
+        symbolDescrButton.bottomAnchor.constraint(equalTo: landoltLabel.bottomAnchor, constant: -10).isActive = true
+        symbolDescrButton.leftAnchor.constraint(equalTo: symbolDescribeView.leftAnchor, constant: 10).isActive = true
+        symbolDescrButton.rightAnchor.constraint(equalTo: landoltLabel.leftAnchor, constant: -10).isActive = true
+        
+        symbolDescrButton.backgroundColor = .white
+        //symbolDescrButton.layer.borderWidth = 0.3
+        symbolDescrButton.layer.cornerRadius = 5
+        symbolDescrButton.layer.shadowOpacity = 0.1
+        symbolDescrButton.layer.shadowColor = UIColor.black.cgColor
+        symbolDescrButton.setTitle("Подробнее о размерах символа...", for: .normal)
+        symbolDescrButton.setTitleColor(.systemBlue, for: .normal)
+        symbolDescrButton.titleLabel?.font = .systemFont(ofSize: 10)
+        symbolDescrButton.titleLabel?.numberOfLines = 0
+        symbolDescrButton.addTarget(self, action: #selector(symbolDescrButtonAction), for: .touchUpInside)
         
         symbolDescribeView.addSubview(secondLandoltLabel)
         
@@ -394,6 +424,76 @@ class InfoStartViewController: UIViewController {
         snelenLabel.textAlignment = .natural
         snelenLabel.text = "Оптотип Снеллена - вписанная в квадрат фигура, подобная букве 'Ш', которая может иметь 4 ориентации. Такие знаки также широко используются в офтальмологии."
     }
+    
+    //MARK: окно про 1 угловую минуту
+//    func addDegreeView() {
+//        scrolView.addSubview(minuteDegreeView)
+//        minuteDegreeView.translatesAutoresizingMaskIntoConstraints = false
+//        minuteDegreeView.topAnchor.constraint(equalTo: symbolDescribeView.bottomAnchor, constant: 10).isActive = true
+//        minuteDegreeView.widthAnchor.constraint(equalTo: scrolView.widthAnchor, multiplier: 95/100).isActive = true
+//        minuteDegreeView.heightAnchor.constraint(equalToConstant: 650).isActive = true
+//        minuteDegreeView.centerXAnchor.constraint(equalTo: scrolView.centerXAnchor).isActive = true
+//
+//        minuteDegreeView.backgroundColor = .white
+//        minuteDegreeView.layer.cornerRadius = 20
+//        minuteDegreeView.layer.shadowOpacity = 0.1
+//        minuteDegreeView.layer.shadowColor = UIColor.gray.cgColor
+//
+//
+//
+//        minuteDegreeView.addSubview(nextButton)
+//        nextButton.translatesAutoresizingMaskIntoConstraints = false
+//        nextButton.bottomAnchor.constraint(equalTo: minuteDegreeView.bottomAnchor).isActive = true
+//        nextButton.widthAnchor.constraint(equalTo: minuteDegreeView.widthAnchor, multiplier: 1/3).isActive = true
+//        nextButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+//        nextButton.centerXAnchor.constraint(equalTo: minuteDegreeView.centerXAnchor).isActive = true
+//
+//        nextButton.setTitle("дальше", for: .normal)
+//        nextButton.setTitleColor(.black, for: .normal)
+//        nextButton.backgroundColor = .white
+//        nextButton.layer.cornerRadius = 10
+//        nextButton.layer.shadowOpacity = 0.1
+//        nextButton.layer.shadowColor = UIColor.gray.cgColor
+//        nextButton.addTarget(self, action: #selector(nextButtonAction), for: .touchUpInside)
+//
+//        addRemovedView()
+//
+//    }
+//
+//    func addRemovedView() {
+//        minuteDegreeView.addSubview(currentView)
+//        currentView.translatesAutoresizingMaskIntoConstraints = false
+//        currentView.widthAnchor.constraint(equalTo: minuteDegreeView.widthAnchor).isActive = true
+//        currentView.heightAnchor.constraint(equalTo: minuteDegreeView.widthAnchor).isActive = true
+//        currentView.topAnchor.constraint(equalTo: minuteDegreeView.topAnchor, constant: 20).isActive = true
+//        currentView.centerXAnchor.constraint(equalTo: minuteDegreeView.centerXAnchor).isActive = true
+//
+//        currentView.backgroundColor = .clear
+//
+//        minuteDegreeView.addSubview(degreeDescrLabel)
+//        degreeDescrLabel.translatesAutoresizingMaskIntoConstraints = false
+//        degreeDescrLabel.widthAnchor.constraint(equalTo: minuteDegreeView.widthAnchor).isActive = true
+//        degreeDescrLabel.topAnchor.constraint(equalTo: currentView.bottomAnchor).isActive = true
+//        degreeDescrLabel.bottomAnchor.constraint(equalTo: nextButton.topAnchor).isActive = true
+//
+//        degreeDescrLabel.text = textArray[numberView]
+//    }
+//
+//    @objc func nextButtonAction() {
+//        if numberView == viewArray.count-1{
+//            numberView = 0
+//        }else{
+//            numberView += 1
+//        }
+//
+//        currentView.removeFromSuperview()
+//        degreeDescrLabel.removeFromSuperview()
+//        currentView = viewArray[numberView]
+//        degreeDescrLabel.text = textArray[numberView]
+//        addRemovedView()
+//
+//    }
+    
     
     
     //MARK: инструкция
@@ -852,4 +952,33 @@ class InfoStartViewController: UIViewController {
     @objc func navAction(){
         self.dismiss(animated: false, completion: nil)
     }
+    
+    @objc func symbolDescrButtonAction(){
+        let degreeVC = DegreeViewController()
+        self.navigationController?.pushViewController(degreeVC, animated: false)
+        timer.invalidate()
+        
+    }
+    
+    @objc func animateButton(){
+        
+        UIButton.animate(withDuration: 0.1, animations: {
+            self.symbolDescrButton.transform = CGAffineTransform(translationX: 0, y: 20)
+        }) { (_) in
+            UIButton.animate(withDuration: 0.1, animations: {
+                self.symbolDescrButton.transform = CGAffineTransform(translationX: 0, y: -20)
+            }) { (_) in
+                UIButton.animate(withDuration: 0.05, animations: {
+                    self.symbolDescrButton.transform = CGAffineTransform(translationX: 0, y: 5)
+                }) { (_) in
+                    UIButton.animate(withDuration: 0.05, animations: {
+                        self.symbolDescrButton.transform = CGAffineTransform(translationX: 0, y: -5)
+                    }) { (_) in
+                        
+                    }
+                }
+            }
+        }
+    }
+    
 }

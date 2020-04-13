@@ -361,7 +361,7 @@ class StartViewController: UIViewController {
         
         let size = CGSize(width: 50, height: 50)
         startButton.setImage("✅".image(size: size), for: .normal)
-        startButton.setTitle("Тест на наличие близорукости", for: .normal)
+        startButton.setTitle("Тест зрения вдаль", for: .normal)
         startButton.titleLabel?.textAlignment = .center
         startButton.titleLabel?.numberOfLines = 0
         
@@ -377,7 +377,7 @@ class StartViewController: UIViewController {
         myopiaResultButton.rightAnchor.constraint(equalTo: startMyopiaView.rightAnchor, constant: 0).isActive = true
         
         myopiaResultButton.setImage("📁".image(size: size), for: .normal)
-        myopiaResultButton.setTitle("Результаты теста близорукости", for: .normal)
+        myopiaResultButton.setTitle("Результаты теста ", for: .normal)
         
         myopiaResultButton.titleLabel?.numberOfLines = 0
         myopiaResultButton.titleLabel?.textAlignment = .center
@@ -458,7 +458,7 @@ class StartViewController: UIViewController {
 
         let size = CGSize(width: 50, height: 50)
         startButton.setImage("✅".image(size: size), for: .normal)
-        startButton.setTitle("Тест на наличие дальнозоркости", for: .normal)
+        startButton.setTitle("Тест зрения вблизи", for: .normal)
         startButton.titleLabel?.textAlignment = .center
         startButton.titleLabel?.numberOfLines = 0
         
@@ -479,7 +479,7 @@ class StartViewController: UIViewController {
         //hyperopiaResultButton.setImage(UIImage(named: "folder"), for: .normal)
         
         hyperopiaResultButton.setImage("📁".image(size: size), for: .normal)
-        hyperopiaResultButton.setTitle("Результаты теста дальнозоркости", for: .normal)
+        hyperopiaResultButton.setTitle("Результаты теста ", for: .normal)
         
         hyperopiaResultButton.titleLabel?.numberOfLines = 0
         hyperopiaResultButton.titleLabel?.textAlignment = .center
