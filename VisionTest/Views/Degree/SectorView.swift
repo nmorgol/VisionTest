@@ -30,18 +30,18 @@ class SectorView: UIView {
         
         #colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1).setFill()
         lightBlueYZ.fill()
-        lightBlueYZ.move(to: CGPoint(x: self.frame.width/2, y: self.frame.height/10))
-        lightBlueYZ.addLine(to: CGPoint(x: self.frame.width/2 + self.frame.width/30,
-                                        y: self.frame.height/10 - self.frame.height/70))
-        lightBlueYZ.move(to: CGPoint(x: self.frame.width/2, y: self.frame.height/10))
-        lightBlueYZ.addLine(to: CGPoint(x: self.frame.width/2 + self.frame.width/30,
-                                        y: self.frame.height/10 + self.frame.height/80))
-        lightBlueYZ.move(to: CGPoint(x: self.frame.width*9/10, y: self.frame.height/2))
-        lightBlueYZ.addLine(to: CGPoint(x: self.frame.width*9/10 + self.frame.width/70,
-                                        y: self.frame.height/2 - self.frame.height/30))
-        lightBlueYZ.move(to: CGPoint(x: self.frame.width*9/10, y: self.frame.height/2))
-        lightBlueYZ.addLine(to: CGPoint(x: self.frame.width*9/10 - self.frame.width/80,
-                                        y: self.frame.height/2 - self.frame.height/30))
+//        lightBlueYZ.move(to: CGPoint(x: self.frame.width/2, y: self.frame.height/10))
+//        lightBlueYZ.addLine(to: CGPoint(x: self.frame.width/2 + self.frame.width/30,
+//                                        y: self.frame.height/10 - self.frame.height/70))
+//        lightBlueYZ.move(to: CGPoint(x: self.frame.width/2, y: self.frame.height/10))
+//        lightBlueYZ.addLine(to: CGPoint(x: self.frame.width/2 + self.frame.width/30,
+//                                        y: self.frame.height/10 + self.frame.height/80))
+//        lightBlueYZ.move(to: CGPoint(x: self.frame.width*9/10, y: self.frame.height/2))
+//        lightBlueYZ.addLine(to: CGPoint(x: self.frame.width*9/10 + self.frame.width/70,
+//                                        y: self.frame.height/2 - self.frame.height/30))
+//        lightBlueYZ.move(to: CGPoint(x: self.frame.width*9/10, y: self.frame.height/2))
+//        lightBlueYZ.addLine(to: CGPoint(x: self.frame.width*9/10 - self.frame.width/80,
+//                                        y: self.frame.height/2 - self.frame.height/30))
         
         
         lightBlueYZ.lineWidth = 2

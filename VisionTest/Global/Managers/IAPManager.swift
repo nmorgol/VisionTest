@@ -10,7 +10,9 @@ class IAPManager: NSObject {
     static let productNotificationIdentifier = "IAPManagerProductIdentifier"
     
     var products: [SKProduct] = []
+
     let paymentQueue = SKPaymentQueue.default()
+    //var productRequest: SKProductsRequest!
     
     private override init() {
         
@@ -38,6 +40,7 @@ class IAPManager: NSObject {
         let productRequest = SKProductsRequest(productIdentifiers: identifiers)
         
         productRequest.delegate = self
+        
         productRequest.start()
         
     }
@@ -96,6 +99,8 @@ extension IAPManager: SKPaymentTransactionObserver{
 }
 
 extension IAPManager: SKProductsRequestDelegate{
+    
+    
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         self.products = response.products
         products.forEach{print($0.localizedTitle)}
@@ -104,5 +109,12 @@ extension IAPManager: SKProductsRequestDelegate{
             NotificationCenter.default.post(name: NSNotification.Name(IAPManager.productNotificationIdentifier), object: nil)
         }
     }
+    
+    public func request(_ request: SKRequest, didFailWithError error: Error) {
+      print("Failed to load list of products.")
+      print("Error: \(error.localizedDescription)")
+      
+    }
+    
     
 }

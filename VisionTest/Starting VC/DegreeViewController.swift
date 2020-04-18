@@ -41,7 +41,7 @@ class DegreeViewController: UIViewController {
         textArray = ["Из центра сферы угол обзора в любой плоскости равен 360°",
                      "Выделим 1/8 часть сферы",
                      "Оставим только выделеную область",
-                     "Оставим выделеную область только в одной плоскости. Получили угол равный 90°",
+                     "Оставим выделеную область только в одной плоскости. Угол между осями координат равен 90°",
                      "Повернем влево на 45°",
                      "Немного увеличим и разделим на 90 равных частей. Две любые соседнии линии образуют угол равный 1 градусу (1°)",
                      "Оставим только один угол и немного увеличим. ",
@@ -91,7 +91,7 @@ class DegreeViewController: UIViewController {
         nextButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/20).isActive = true
         nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
         
-        nextButton.setTitle("next", for: .normal)
+        nextButton.setTitle("дальше", for: .normal)
         nextButton.backgroundColor = .red
         
         nextButton.addTarget(self, action: #selector(nextButtonAction), for: .touchUpInside)

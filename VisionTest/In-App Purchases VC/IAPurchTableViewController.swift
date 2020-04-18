@@ -39,6 +39,7 @@ class IAPurchTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(speechRecognitionAction), name: NSNotification.Name(IAPProducts.speechRecognition.rawValue), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(autoDetectDistanceAction), name: NSNotification.Name(IAPProducts.automaticDistanceDetection.rawValue), object: nil)
         
+        
     }
     
     deinit {

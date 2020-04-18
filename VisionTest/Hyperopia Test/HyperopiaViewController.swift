@@ -36,7 +36,7 @@ class HyperopiaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Hyperopia test"
+//        self.title = "Hyperopia test"
         self.view.backgroundColor = .white
         
         

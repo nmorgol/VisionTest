@@ -310,7 +310,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         case 1:
             label.text = "Настройки приложения"
         case 2:
-            label.text = "Настройки теста близорукости"
+            label.text = "Настройки теста зрения вдаль"
         case 3:
             label.text = "Встроенные покупки"
         default:

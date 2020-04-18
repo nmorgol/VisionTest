@@ -6,7 +6,7 @@ import CoreData
 class SymbolTableViewCell: UITableViewCell, UITableViewDelegate{
     
     let cellID = "SymbolCell"
-    var symbolSegment = UISegmentedControl(items: ["Landolt", "Snellen"])
+    var symbolSegment = UISegmentedControl(items: ["Landolt", "E Chart"])
     var symbolView = UIView()
     let settingsLabel = UILabel()
     var symbolArray = [UIView]()

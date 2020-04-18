@@ -57,8 +57,8 @@ class MiopiaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Miopia test"
-        self.navigationItem.title = "Miopia test"
+//        self.title = "Miopia test"
+//        self.navigationItem.title = "Miopia test"
         self.view.backgroundColor = .white
         
 //        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
@@ -135,14 +135,14 @@ class MiopiaViewController: UIViewController {
         
     }
     
-    @objc func actionResults() {//метод self.navigationItem.leftBarButtonItem
-        
-        disapearTrue = false
-        let resultVC = ResultsTableViewController()
-        resultVC.title = "Miopia test results"
-        resultVC.state = "Miopia"
-        self.navigationController?.pushViewController(resultVC, animated: true)
-    }
+//    @objc func actionResults() {//метод self.navigationItem.leftBarButtonItem
+//
+//        disapearTrue = false
+//        let resultVC = ResultsTableViewController()
+//        resultVC.title = "Miopia test results"
+//        resultVC.state = "Miopia"
+//        self.navigationController?.pushViewController(resultVC, animated: true)
+//    }
     
     func addStartLabel(){
         
@@ -331,10 +331,11 @@ class MiopiaViewController: UIViewController {
             
             addLandoltSnellenView(addingView: currentView, koef: koeficient)
         }else{//если не угадал символ
-            saveResult()
+            
             if currentEye == "Right eye"{
-                
+                saveResult()
                 addStartLabel()
+                canselForeverButton.removeFromSuperview()
                 startTestButton.removeFromSuperview()
                 goToInfoButton.removeFromSuperview()
                 startLabel.text = "Тест завершен. \nРезультат правый глаз: \(rezRightEye)\nРезультат левый глаз: \(rezLeftEye) "
@@ -451,8 +452,9 @@ class MiopiaViewController: UIViewController {
                     let koeficient = self.koef*self.counter
                     
                     self.addLandoltSnellenView(addingView: self.currentView, koef: koeficient)
-                    
+                    self.saveResult()
                     self.startAlert()
+                    
                 }
                 alertContr.addAction(alertAct)
                 self.present(alertContr, animated: true, completion: nil)

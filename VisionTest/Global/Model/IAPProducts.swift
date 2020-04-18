@@ -3,7 +3,8 @@
 import Foundation
 
 enum IAPProducts: String{
-    case moreThanOneUser = "MoreThanOneUser.nonConsumable"
-    case speechRecognition = "speechRecognition.id"
-    case automaticDistanceDetection = "AutomaticDistanceDetection.id"
+    case moreThanOneUser = "moreThanOneUser.id"
+    case speechRecognition = "SpeechRecognition.id"
+    case automaticDistanceDetection = "automaticDistanceDetection.id"
+    
 }

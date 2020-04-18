@@ -60,8 +60,8 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Hyperopia test speech"
-        self.navigationItem.title = "Hyperopia test speech"
+//        self.title = "Hyperopia test speech"
+//        self.navigationItem.title = "Hyperopia test speech"
         self.view.backgroundColor = .white
         
         
