@@ -13,6 +13,9 @@ class IAPurchTableViewController: UITableViewController {
     var autoDetectDistance = false
     var speechrecognize = false
     
+    let iapText = IAP_VC()
+    var locale = "en_US"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,8 +29,8 @@ class IAPurchTableViewController: UITableViewController {
         }catch let error as NSError{
             print(error)
         }
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Восстановить покупки", style: .plain, target: self, action: #selector(restorePurchases))
+        let rightBarButtonItemText = iapText.rightBarButtonItemTitle[locale]
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonItemText, style: .plain, target: self, action: #selector(restorePurchases))
         
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
         
@@ -62,8 +65,7 @@ class IAPurchTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
 
-//        var cell = UITableViewCell(style: .value1, reuseIdentifier: "reuseIdentifier")
-//        cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+
         var cell:UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier")
         if (cell != nil){
             cell = UITableViewCell(style: UITableViewCell.CellStyle.subtitle,
@@ -72,7 +74,8 @@ class IAPurchTableViewController: UITableViewController {
         
         let product = IAPManager.shared.products[indexPath.row]
         cell?.textLabel?.text = product.localizedTitle + " - " + self.priceStringFor(product: product)
-        cell?.detailTextLabel?.text = "Не расходуемая покупка"
+        
+        cell?.detailTextLabel?.text = iapText.detailTextLabelText[locale]
         
         
         return cell!

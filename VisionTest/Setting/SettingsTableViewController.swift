@@ -14,6 +14,10 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     let settingsCellID = "SettingsCell"
     let symbolCellId = "SymbolCell"
     let cellIAPurchasesID = "cellID"
+    let cellLocaleID = "cellLocaleID"
+    
+    var langLocale = "en_US"
+    let textLocale = SettingsVCText()
     
     let userInfoImageView = UIImageView()
     
@@ -43,8 +47,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = #colorLiteral(red: 0.6561266184, green: 0.9085168242, blue: 0.9700091481, alpha: 1)
-//        let tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 2)
-//        self.tabBarItem = tabBarItem
+        //        let tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 2)
+        //        self.tabBarItem = tabBarItem
         
         //self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(actionSave))
         
@@ -54,19 +58,20 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         self.tableView.register(SymbolTableViewCell.self, forCellReuseIdentifier: symbolCellId)
         
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIAPurchasesID)
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellLocaleID)
         
         tableView.tableFooterView = UIView()
         
         labelTextField.delegate = self
         
-//        let tap = UITapGestureRecognizer(target: self, action: #selector(tapTableView(recognizer:)))
-//        self.view.addGestureRecognizer(tap)
+        //        let tap = UITapGestureRecognizer(target: self, action: #selector(tapTableView(recognizer:)))
+        //        self.view.addGestureRecognizer(tap)
         
     }
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(true)
         
-//        self.navigationController?.navigationBar.isHidden = false
+        //        self.navigationController?.navigationBar.isHidden = false
         
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let image = UIImage(named: "placeholder")?.pngData()!
@@ -75,6 +80,11 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             let resCurrentUser = try context.fetch(CurrentUser.fetchRequest())
             let settings = try context.fetch(SettingsApp.fetchRequest())
             let iap = try context.fetch(InAppPurchases.fetchRequest())
+            let language = try context.fetch(Localization.fetchRequest())
+            
+            if language.count > 0{
+                langLocale = (language.last as! Localization).identificator ?? "en_US"
+            }
             
             if iap.count > 0{
                 iapSpeechRecognition = (iap.last as! InAppPurchases).speechRecognition
@@ -111,7 +121,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     
     override func viewWillDisappear(_ animated: Bool) {
         super .viewWillDisappear(false)
-//        self.navigationController?.navigationBar.isHidden = false
+        //        self.navigationController?.navigationBar.isHidden = false
     }
     
     // MARK: - Table view data source
@@ -127,7 +137,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         case 0:
             return 1
         case 1:
-            return 2
+            return 3
         case 2:
             return 3
         case 3:
@@ -156,7 +166,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             cell1.userNameLabel.text = name
             cell1.userInfoLabel.text = userInfoText
             cell1.userInfoLabel.isUserInteractionEnabled = true
-
+            
             cell1.accessoryBtn.addTarget(self, action: #selector(userCellAction), for: .touchUpInside)
             
             cell = cell1
@@ -165,12 +175,32 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         }
             
         else if indexPath.section == 1{
-            let cell2 = tableView.dequeueReusableCell(withIdentifier: purchasesCellID, for: indexPath) as! PurchasesTableViewCell
             if indexPath.row == 0{
+                var cell2 = tableView.dequeueReusableCell(withIdentifier: cellLocaleID)
+                //                var cell2 = tableView.dequeueReusableCell(withIdentifier: cellLocaleID, for: indexPath)
                 
-                cell2.settingLabel.text = otstup + "Автоопределение расстояния"
+                cell2 = UITableViewCell(style: .value1, reuseIdentifier: cellLocaleID)
+                
+                
+                cell2?.textLabel?.text = textLocale.cell2TextLabelLanguage[langLocale]
+                cell2?.textLabel?.font = .systemFont(ofSize: 17)
+                cell2?.textLabel?.textAlignment = .left
+                if langLocale == "en_US"{
+                    cell2?.detailTextLabel?.text = "English"
+                }
+                if langLocale == "ru_Ru" {
+                    cell2?.detailTextLabel?.text = "Русский"
+                }
+                
+                cell2?.detailTextLabel?.font = .systemFont(ofSize: 17)
+                cell2?.accessoryType = .disclosureIndicator
+                cell = cell2!
+                
+            }else if indexPath.row == 1{
+                let cell2 = tableView.dequeueReusableCell(withIdentifier: purchasesCellID, for: indexPath) as! PurchasesTableViewCell
+                cell2.settingLabel.text = textLocale.cell2TextLabelAutoDist[langLocale]
                 cell2.settingLabel.numberOfLines = 0
-                cell2.settingLabel.textAlignment = .center
+                //                cell2.settingLabel.textAlignment = .right
                 cell2.settingSwitch.addTarget(self, action: #selector(avtodetectSwitchAction(paramSwitch:)), for: .valueChanged)
                 cell2.settingSwitch.isOn = avtoDetectDistBool
                 cell2.accessoryType = .detailButton
@@ -189,11 +219,14 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
                     lock1.removeFromSuperview()
                     cell2.settingSwitch.isEnabled = true
                 }
+                cell = cell2
                 
-            }else{
-                cell2.settingLabel.text = otstup + "Распознавание речи"
+                
+            }else if indexPath.row == 2{
+                let cell2 = tableView.dequeueReusableCell(withIdentifier: purchasesCellID, for: indexPath) as! PurchasesTableViewCell
+                cell2.settingLabel.text = textLocale.cell2TextLabelSpeechRecogn[langLocale]
                 cell2.settingLabel.numberOfLines = 0
-                cell2.settingLabel.textAlignment = .center
+                cell2.settingLabel.textAlignment = .left
                 cell2.settingSwitch.addTarget(self, action: #selector(speechSwitchAction(paramSwitch:)), for: .valueChanged)
                 cell2.settingSwitch.isOn = speechRecognBool
                 cell2.accessoryType = .detailButton
@@ -212,10 +245,10 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
                     lock2.removeFromSuperview()
                     cell2.settingSwitch.isEnabled = true
                 }
-                
+                cell = cell2
             }
-//            cell2.accessoryType = .detailButton
-            cell = cell2
+            //            cell2.accessoryType = .detailButton
+            
             
             return cell
             
@@ -224,9 +257,9 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             
             if indexPath.row == 0{
                 let cell3 = tableView.dequeueReusableCell(withIdentifier: settingsCellID, for: indexPath) as! SettingsTableViewCell
-                cell3.settingLabel.text = otstup + "Установите дистанцию теста "
+                cell3.settingLabel.text = textLocale.cell3TextLabelDistance[langLocale]
                 cell3.settingLabel.numberOfLines = 0
-                cell3.settingLabel.textAlignment = .center
+                cell3.settingLabel.textAlignment = .left
                 cell3.deteilLabel.text = "m."
                 cell3.accessoryType = .detailButton
                 cell3.settingTextLabel.text = "\(distanceTest)"
@@ -241,9 +274,9 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
                 
             }else if indexPath.row == 1{
                 let cell3 = tableView.dequeueReusableCell(withIdentifier: settingsCellID, for: indexPath) as! SettingsTableViewCell
-                cell3.settingLabel.text = otstup + "Установите время до старта теста"
+                cell3.settingLabel.text = textLocale.cell3TextLabelTime[langLocale]
                 cell3.settingLabel.numberOfLines = 0
-                cell3.settingLabel.textAlignment = .center
+                cell3.settingLabel.textAlignment = .left
                 cell3.deteilLabel.text = "s."
                 cell3.accessoryType = .detailButton
                 cell3.settingTextLabel.text = "\(timeToStart)"
@@ -259,12 +292,12 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             }else if indexPath.row == 2{
                 let cell3 = tableView.dequeueReusableCell(withIdentifier: symbolCellId, for: indexPath) as! SymbolTableViewCell
                 
-                cell3.settingsLabel.text = otstup + "Выберите символ "
+                cell3.settingsLabel.text = textLocale.cell3TextLabelSymbol[langLocale]
                 cell3.settingsLabel.numberOfLines = 0
-                cell3.settingsLabel.textAlignment = .center
-//                cell3.symbolSegment.selectedSegmentIndex = 0
+                cell3.settingsLabel.textAlignment = .natural
+                //                cell3.symbolSegment.selectedSegmentIndex = 0
                 cell3.symbolSegment.addTarget(self, action: #selector(segmetAction), for: .valueChanged)
-
+                
                 if cell3.symbolView.isEqual(cell3.landolt){
                     symbolTest = "Landolt"
                 }else{symbolTest = "Snellen"}
@@ -276,7 +309,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             
         }else if indexPath.section == 3{
             let cell4 = tableView.dequeueReusableCell(withIdentifier: cellIAPurchasesID, for: indexPath)
-            cell4.textLabel?.text = "Покупки"
+            cell4.textLabel?.text = textLocale.cell4TextLabelIAP[langLocale]
             cell4.accessoryType = .disclosureIndicator
             cell = cell4
             return cell
@@ -284,21 +317,21 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         return cell
     }
     
-//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        switch section {
-//        case 0:
-//            return "Информация о пользователе"
-//        case 1:
-//            return "Настройки приложения"
-//        case 2:
-//            return "Настройки теста близорукости"
-//        case 3:
-//            return "Встроенные покупки"
-//        default:
-//            break
-//        }
-//        return "11"
-//    }
+    //    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    //        switch section {
+    //        case 0:
+    //            return "Информация о пользователе"
+    //        case 1:
+    //            return "Настройки приложения"
+    //        case 2:
+    //            return "Настройки теста близорукости"
+    //        case 3:
+    //            return "Встроенные покупки"
+    //        default:
+    //            break
+    //        }
+    //        return "11"
+    //    }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let label : UILabel = UILabel()
@@ -306,13 +339,13 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         label.backgroundColor = .systemBlue
         switch section {
         case 0:
-            label.text = "Информация о пользователе"
+            label.text = textLocale.headerInSectionTitle0[langLocale]
         case 1:
-            label.text = "Настройки приложения"
+            label.text = textLocale.headerInSectionTitle1[langLocale]
         case 2:
-            label.text = "Настройки теста зрения вдаль"
+            label.text = textLocale.headerInSectionTitle2[langLocale]
         case 3:
-            label.text = "Встроенные покупки"
+            label.text = textLocale.headerInSectionTitle3[langLocale]
         default:
             break
         }
@@ -329,22 +362,26 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         return height
     }
     
-
+    
     override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
             print(0)
         case 1:
-            if indexPath.row == 0{
-                accessoryButtonAction(title: "Автоопределение расстояния")
-            }else{
-               accessoryButtonAction(title: "Распознавание речи")
+            if indexPath.row == 1{
+                let text1:String = textLocale.accessoryButtonActionTitle1[langLocale] ?? "Auto-detect distance"
+                accessoryButtonAction(title: text1)
+            }else if indexPath.row == 2{
+                let text2:String = textLocale.accessoryButtonActionTitle2[langLocale] ?? "Auto-detect distance"
+                accessoryButtonAction(title: text2)
             }
         case 2:
             if indexPath.row == 0{
-                accessoryButtonAction(title: "Дистанция теста")
+                let text3:String = textLocale.accessoryButtonActionTitle3[langLocale] ?? "Auto-detect distance"
+                accessoryButtonAction(title: text3)
             }else{
-                accessoryButtonAction(title: "Время до начала теста")
+                let text4:String = textLocale.accessoryButtonActionTitle4[langLocale] ?? "Auto-detect distance"
+                accessoryButtonAction(title: text4)
             }
         default:
             print("default")
@@ -355,13 +392,22 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         if indexPath.section == 3{
             if indexPath.row == 0{
                 let vc = IAPurchTableViewController()
+                vc.locale = langLocale
                 self.navigationController?.pushViewController(vc, animated: false)
             }
         }
+        if indexPath.section == 1{
+            if indexPath.row == 0{
+                let vc = LanguageTableViewController()
+                self.navigationController?.pushViewController(vc, animated: false)
+                
+            }
+        }
+        
     }
     
     
-   
+    
     @objc func actionSave() {
         
         let appDelegat = UIApplication.shared.delegate as! AppDelegate
@@ -373,7 +419,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             for res in result{
                 context.delete(res as! NSManagedObject)
             }
-
+            
             try? context.save()
             
         } catch let error as NSError {
@@ -383,7 +429,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         settingsNew.setValue(avtoDetectDistBool, forKey: "avtoDetectDistance")
         settingsNew.setValue(speechRecognBool, forKey: "speechRecognize")
         
-
+        
         settingsNew.setValue(distanceTest, forKey: "distanceTest")
         settingsNew.setValue(timeToStart, forKey: "timeBeforeTest")
         settingsNew.setValue(symbolTest, forKey: "symbolTest")
@@ -423,7 +469,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         //self.navigationController?.navigationBar.isHidden = false
         self.tabBarController?.tabBar.isHidden = false
     }
-
+    
     
     @objc func segmetAction() {
         tableView.reloadData()
@@ -432,6 +478,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     
     @objc func userCellAction(){
         let userVC = UserViewController()
+        userVC.locale = langLocale
         self.navigationController?.pushViewController(userVC, animated: false)
     }
     
@@ -451,22 +498,22 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
             
             speechRecognizer.delegate = self
             SFSpeechRecognizer.requestAuthorization { authStatus in
-
+                
                 // Divert to the app's main thread so that the UI
                 // can be updated.
                 OperationQueue.main.addOperation {
                     switch authStatus {
                     case .authorized:
-//
+                        //
                         print(true)
                     case .denied:
-
+                        
                         print("User denied access to speech recognition")
                     case .restricted:
-
+                        
                         print("Speech recognition restricted on this device")
                     case .notDetermined:
-
+                        
                         print("Speech recognition not yet authorized")
                     default:
                         print(false)
@@ -478,7 +525,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         }
         actionSave()
     }
-     
+    
     @objc func labelDistTextAction(_ sender: UILabel){
         self.navigationController?.navigationBar.isHidden = true
         self.view.addSubview(coverView)
@@ -509,7 +556,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         labelForTextField.centerXAnchor.constraint(equalTo: coverView.centerXAnchor).isActive = true
         labelForTextField.bottomAnchor.constraint(equalTo: labelTextField.topAnchor).isActive = true
         labelForTextField.backgroundColor = .clear
-        labelForTextField.text = "Установите расстояние для теста - м."
+        let text:String = textLocale.labelForTextFieldText[langLocale]?[0] ?? "Установите расстояние для теста - м."
+        labelForTextField.text = text
         labelForTextField.font = .systemFont(ofSize: 13)
         labelForTextField.textAlignment = .center
         
@@ -520,7 +568,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         
         labelTextField.delegate = self
         
-
+        
     }
     
     
@@ -566,7 +614,8 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
         labelForTextField.centerXAnchor.constraint(equalTo: coverView.centerXAnchor).isActive = true
         labelForTextField.bottomAnchor.constraint(equalTo: labelTextField.topAnchor).isActive = true
         labelForTextField.backgroundColor = .clear
-        labelForTextField.text = "Установите время до начала теста - сек."
+        let text:String = textLocale.labelForTextFieldText[langLocale]?[1] ?? "Установите время до начала теста - сек."
+        labelForTextField.text = text
         labelForTextField.font = .systemFont(ofSize: 13)
         
         labelForTextField.textAlignment = .center
@@ -594,6 +643,7 @@ class SettingsTableViewController: UITableViewController, UITextFieldDelegate, S
     @objc func accessoryButtonAction(title: String){
         let infoVC = InfoViewController()
         infoVC.title = title
+        infoVC.locale = langLocale
         self.navigationController?.pushViewController(infoVC, animated: false)
     }
 }

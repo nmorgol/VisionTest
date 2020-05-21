@@ -15,6 +15,7 @@ class StartViewController: UIViewController {
     let eyeHypView = EyeView()
     let hyperopiaLight = HyperopiaLightView()
     
+    
     var avtoDetectDistBool = false
     var speechRecognBool = false
     var distanceTest = Float(0.5)
@@ -24,6 +25,7 @@ class StartViewController: UIViewController {
     var name = "name"
     var photo = Data()
     var infoText = "info"
+    var langLocale = "en_US"
     
     let settingsView = UIView()
     let settingsLabel = UILabel()
@@ -39,13 +41,12 @@ class StartViewController: UIViewController {
     let informHyperopiaButton = UIButton()
     let hyperopiaResultButton = UIButton()
     
-    
+    let textCurrent = LocalTextStartVC()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = #colorLiteral(red: 0.6561266184, green: 0.9085168242, blue: 0.9700091481, alpha: 1)
-        
         
     }
     
@@ -63,14 +64,22 @@ class StartViewController: UIViewController {
             let settings = try context.fetch(SettingsApp.fetchRequest())
             let iap = try context.fetch(InAppPurchases.fetchRequest())
             let canselInfo = try context.fetch(CanselInstruction.fetchRequest())
+            let languageLocale = try context.fetch(Localization.fetchRequest())
             
             
-            print(iap.count)
+            if languageLocale.count > 0{
+                langLocale = (languageLocale.last as! Localization).identificator ?? "en_US"
+            }else{
+                let newLocale = Localization(context: context)
+                newLocale.setValue("en_US", forKey: "identificator")
+            }
+            
             if iap.count == 0{
                 let newIAP = InAppPurchases(context: context)
                 newIAP.setValue(false, forKey: "speechRecognition")
                 newIAP.setValue(false, forKey: "moreThanOneUser")
                 newIAP.setValue(false, forKey: "autoDetectDistance")
+                
                 do {
                     try context.save()
                 }catch let error as NSError{
@@ -297,8 +306,8 @@ class StartViewController: UIViewController {
         let size = CGSize(width: 50, height: 50)
         settingsButton.setImage("⚙️".image(size: size), for: .normal)
         
-        
-        settingsButton.setTitle("Настройки приложения", for: .normal)
+        let settingsButtonTitle = textCurrent.buttonAppSettings[langLocale]//localiz
+        settingsButton.setTitle(settingsButtonTitle, for: .normal)
         settingsButton.setTitleColor(.systemBlue, for: .normal)
         settingsButton.addTarget(self, action: #selector(settingsViewAction), for: .touchUpInside)
         
@@ -361,7 +370,9 @@ class StartViewController: UIViewController {
         
         let size = CGSize(width: 50, height: 50)
         startButton.setImage("✅".image(size: size), for: .normal)
-        startButton.setTitle("Тест зрения вдаль", for: .normal)
+        
+        let startButtonTitle = textCurrent.buttonMiopiaTest[langLocale]
+        startButton.setTitle(startButtonTitle, for: .normal)
         startButton.titleLabel?.textAlignment = .center
         startButton.titleLabel?.numberOfLines = 0
         
@@ -377,7 +388,9 @@ class StartViewController: UIViewController {
         myopiaResultButton.rightAnchor.constraint(equalTo: startMyopiaView.rightAnchor, constant: 0).isActive = true
         
         myopiaResultButton.setImage("📁".image(size: size), for: .normal)
-        myopiaResultButton.setTitle("Результаты теста ", for: .normal)
+        
+        let myopiaResultButtonTitle = textCurrent.buttonMiopiaTestResult[langLocale]
+        myopiaResultButton.setTitle(myopiaResultButtonTitle, for: .normal)
         
         myopiaResultButton.titleLabel?.numberOfLines = 0
         myopiaResultButton.titleLabel?.textAlignment = .center
@@ -401,7 +414,9 @@ class StartViewController: UIViewController {
         informMyopiaButton.layer.shadowOpacity = 0.1
         
         informMyopiaButton.setImage("ℹ️".image(size: size), for: .normal)
-        informMyopiaButton.setTitle("Информация и инструкции", for: .normal)
+        
+        let informMyopiaButtonTitle = textCurrent.informMyopiaButton[langLocale]
+        informMyopiaButton.setTitle(informMyopiaButtonTitle, for: .normal)
         informMyopiaButton.titleLabel?.textAlignment = .center
         informMyopiaButton.titleLabel?.numberOfLines = 0
         informMyopiaButton.setTitleColor(.systemBlue, for: .normal)
@@ -458,7 +473,8 @@ class StartViewController: UIViewController {
 
         let size = CGSize(width: 50, height: 50)
         startButton.setImage("✅".image(size: size), for: .normal)
-        startButton.setTitle("Тест зрения вблизи", for: .normal)
+        let startHyperopiaButtonTitle = textCurrent.startHyperopiaView[langLocale]
+        startButton.setTitle(startHyperopiaButtonTitle, for: .normal)
         startButton.titleLabel?.textAlignment = .center
         startButton.titleLabel?.numberOfLines = 0
         
@@ -479,7 +495,8 @@ class StartViewController: UIViewController {
         //hyperopiaResultButton.setImage(UIImage(named: "folder"), for: .normal)
         
         hyperopiaResultButton.setImage("📁".image(size: size), for: .normal)
-        hyperopiaResultButton.setTitle("Результаты теста ", for: .normal)
+        let hyperopiaResultButtonTitle = textCurrent.buttonMiopiaTestResult[langLocale]
+        hyperopiaResultButton.setTitle(hyperopiaResultButtonTitle, for: .normal)
         
         hyperopiaResultButton.titleLabel?.numberOfLines = 0
         hyperopiaResultButton.titleLabel?.textAlignment = .center
@@ -506,7 +523,9 @@ class StartViewController: UIViewController {
         informHyperopiaButton.titleLabel?.textAlignment = .center
         informHyperopiaButton.titleLabel?.numberOfLines = 0
         informHyperopiaButton.setImage("ℹ️".image(size: size), for: .normal)
-        informHyperopiaButton.setTitle("Информация и инструкции", for: .normal)
+        
+        let informHyperopiaButtonTitle = textCurrent.informMyopiaButton[langLocale]
+        informHyperopiaButton.setTitle(informHyperopiaButtonTitle, for: .normal)
         informHyperopiaButton.addTarget(self, action: #selector(infoButtonHyperAction), for: .touchUpInside)
     }
     
@@ -544,23 +563,27 @@ class StartViewController: UIViewController {
     @objc func myopiaResultButtonAction(){
         let resVC = ResultsTableViewController()
         resVC.state = "Miopia"
+        resVC.locale = langLocale
         self.navigationController?.pushViewController(resVC, animated: false)
     }
     
     @objc func hyperopiaResultButtonAction(){
         let resVC = ResultsTableViewController()
         resVC.state = "Hyperopia"
+        resVC.locale = langLocale
         self.navigationController?.pushViewController(resVC, animated: false)
     }
     
     @objc func userImageViewAction(){
         let userVC = UserViewController()
-        
+        userVC.locale = langLocale
         self.navigationController?.pushViewController(userVC, animated: false)
     }
     
     @objc func startMyopiaViewAction(){
+//        let startVC = MiopiaViewController()
         let startVC = MiopiaViewController()
+        startVC.locale = langLocale
         let startVCGood = MiopiaAvtoDistanceViewController()
         if speechRecognBool{
             self.navigationController?.pushViewController(startVCGood, animated: false)
@@ -571,6 +594,7 @@ class StartViewController: UIViewController {
     
     @objc func startHyperopiaViewAction(){
         let startVC = HyperopiaViewController()
+        startVC.locale = langLocale
         let startVCGood = HyperopiaSpeechViewController()
         if speechRecognBool{
             self.navigationController?.pushViewController(startVCGood, animated: false)
@@ -581,10 +605,12 @@ class StartViewController: UIViewController {
     
     @objc func infoButtonMyopAction(){
         let infoVC = InfoStartViewController()
+        infoVC.langLocale = langLocale
         self.navigationController?.pushViewController(infoVC, animated: false)
     }
     @objc func infoButtonHyperAction(){
         let infoVC = InfoHyperopiaViewController()
+        infoVC.langLocale = langLocale
         self.navigationController?.pushViewController(infoVC, animated: false)
     }
     

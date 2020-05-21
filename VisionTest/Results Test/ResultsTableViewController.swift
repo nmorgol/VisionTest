@@ -17,12 +17,27 @@ class ResultsTableViewController: UITableViewController {
     
     var sortedMiopiaArray: [MiopiaTestResult]?//отсортированные массивы по дате тестов
     var sortedHyperopiaArray: [HyperopiaTestResult]?
+    
+    let text = ResultsVC()
+    var locale = "en_US"
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = #colorLiteral(red: 0.6561266184, green: 0.9085168242, blue: 0.9700091481, alpha: 1)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(navBarAction))
+
+//        self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(navBarAction)), UIBarButtonItem(title: "📈", style: .plain, target: self, action: #selector(grafBarAction))]
+        let btn = UIButton(type: .custom)
+        btn.frame = CGRect(x: 0.0, y: 0.0, width: 20, height: 20)
+        btn.setImage(UIImage(named: "diagramma"), for: .normal)
+        btn.addTarget(self, action: #selector(grafBarAction), for: .touchUpInside)
+        let menuBarItem = UIBarButtonItem(customView: btn)
+        let currWidth = menuBarItem.customView?.widthAnchor.constraint(equalToConstant: 24)
+        currWidth?.isActive = true
+        let currHeight = menuBarItem.customView?.heightAnchor.constraint(equalToConstant: 24)
+        currHeight?.isActive = true
+        
+        self.navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(navBarAction)), menuBarItem]
         
         self.tableView.register(CurrentUserTableViewCell.self, forCellReuseIdentifier: userCellID)
         self.tableView.register(ResultsTableViewCell.self, forCellReuseIdentifier: resultCellID)
@@ -33,7 +48,7 @@ class ResultsTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(false)
         
-        self.tabBarController?.tabBar.isHidden = true
+//        self.tabBarController?.tabBar.isHidden = false
         
         recieveTestsResults()
     }
@@ -91,21 +106,49 @@ class ResultsTableViewController: UITableViewController {
                 formatter.dateFormat = "dd.MM.yyyy"
                 let result = formatter.string(from: recieveDate ?? currentDate)
                 
+                var eyeText:String = "Right eye"
                 
+                if sortedMiopiaArray?[indexPath.row].testingEye == "Левый глаз"{
+                    eyeText = text.eyeLabelTextLeft[locale] ?? "Right eye"
+                }
+                if sortedMiopiaArray?[indexPath.row].testingEye == "Правый глаз"{
+                    eyeText = text.eyeLabelTextRight[locale] ?? "Right eye"
+                }
                 
-                cell2.eyeLabel.text = sortedMiopiaArray?[indexPath.row].testingEye
-                cell2.distanceTestLabel.text = "Дистанция теста:" + " " + " \(sortedMiopiaArray?[indexPath.row].distance ?? 0)"
-                cell2.dateTestLabel.text = "Дата теста:" + " " + result
-                cell2.testResultLabel.text = "Результат теста:" + " " + "\(sortedMiopiaArray?[indexPath.row].result ?? 0)"
+//                cell2.eyeLabel.text = sortedMiopiaArray?[indexPath.row].testingEye
+                cell2.eyeLabel.text = eyeText
+                
+                let distanceText:String = text.distanceTestLabelText[locale] ?? "Дистанция теста:"
+                cell2.distanceTestLabel.text = distanceText + " " + " \(sortedMiopiaArray?[indexPath.row].distance ?? 0)"
+                
+                let dateText:String = text.dateTestLabelText[locale] ?? "Дата теста:"
+                cell2.dateTestLabel.text = dateText + " " + result
+                
+                let resultText:String = text.testResultLabelText[locale] ?? "Результат теста:"
+                cell2.testResultLabel.text = resultText + " " + "\(sortedMiopiaArray?[indexPath.row].result ?? 0)"
+                
             }else if state == "Hyperopia"{
+                
                 let recieveDate = sortedHyperopiaArray?[indexPath.row].dateTest
                 formatter.dateFormat = "dd.MM.yyyy"
                 let result = formatter.string(from: recieveDate ?? currentDate)
                 
-                cell2.eyeLabel.text = sortedHyperopiaArray?[indexPath.row].testingEye
-                //cell2.distanceTestLabel.text = "Distance test: \(sortedMiopiaArray?[indexPath.row].distance ?? 0)"
-                cell2.dateTestLabel.text = "Дата теста:" + " " + result
-                cell2.testResultLabel.text = "Результат теста:" + " " + "\(sortedHyperopiaArray?[indexPath.row].result ?? 0)"
+                var eyeText:String = "Right eye"
+                
+                if sortedHyperopiaArray?[indexPath.row].testingEye == "Левый глаз"{
+                    eyeText = text.eyeLabelTextLeft[locale] ?? "Right eye"
+                }
+                if sortedHyperopiaArray?[indexPath.row].testingEye == "Правый глаз"{
+                    eyeText = text.eyeLabelTextRight[locale] ?? "Right eye"
+                }
+                
+                cell2.eyeLabel.text = eyeText
+                
+                let dateText:String = text.dateTestLabelText[locale] ?? "Дата теста:"
+                cell2.dateTestLabel.text = dateText + " " + result
+                
+                let resultText:String = text.testResultLabelText[locale] ?? "Результат теста:"
+                cell2.testResultLabel.text = resultText + " " + "\(sortedHyperopiaArray?[indexPath.row].result ?? 0)"
             }
             
             
@@ -123,11 +166,12 @@ class ResultsTableViewController: UITableViewController {
         print(indexPath)
     }
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let text1:String = text.testResultsLabelTextSS[locale] ?? "Результаты теста: "
         switch section {
         case 0:
             return ""
         case 1:
-            return "Результаты теста: "
+            return text1
         default:
             break
         }
@@ -246,6 +290,14 @@ class ResultsTableViewController: UITableViewController {
             self.recieveTestsResults()
         }
         self.navigationController?.pushViewController(usersVC, animated: false)
+    }
+    @objc func grafBarAction(){
+        let grafVC = GrafViewController()
+        grafVC.sortedHyperopiaArray = sortedHyperopiaArray
+        grafVC.sortedMiopiaArray = sortedMiopiaArray
+        grafVC.state = state
+        grafVC.locale = locale
+        self.navigationController?.pushViewController(grafVC, animated: false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

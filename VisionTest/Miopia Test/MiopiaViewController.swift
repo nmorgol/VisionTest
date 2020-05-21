@@ -54,22 +54,21 @@ class MiopiaViewController: UIViewController {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
+    var locale = "en_US"
+    let myopiaText = MyopiaAvtoDistanceText()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        self.title = "Miopia test"
-//        self.navigationItem.title = "Miopia test"
+
         self.view.backgroundColor = .white
-        
-//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Results", style: .plain, target: self, action: #selector(actionResults))
-        
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(false)
         
-        disapearTrue = true // для того чтобы можно было зайти в результ VC
+        //disapearTrue = true // для того чтобы можно было зайти в результ VC
         
         viewArray = [rightLandoltView, leftLandoltView, topLandoltView, bottomLandoltView]
         
@@ -94,7 +93,7 @@ class MiopiaViewController: UIViewController {
             }
             let canselInfo = try context.fetch(CanselInstruction.fetchRequest())
             canselStartLabel = (canselInfo.last as! CanselInstruction).myopiaLightCansel
-            print("значение \(canselInfo)")
+            //print("значение \(canselInfo)")
             
         } catch let error as NSError {
             print(error)
@@ -135,14 +134,6 @@ class MiopiaViewController: UIViewController {
         
     }
     
-//    @objc func actionResults() {//метод self.navigationItem.leftBarButtonItem
-//
-//        disapearTrue = false
-//        let resultVC = ResultsTableViewController()
-//        resultVC.title = "Miopia test results"
-//        resultVC.state = "Miopia"
-//        self.navigationController?.pushViewController(resultVC, animated: true)
-//    }
     
     func addStartLabel(){
         
@@ -153,7 +144,7 @@ class MiopiaViewController: UIViewController {
         //startLabel.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
         startLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
-        startLabel.text = "Для корректного выполнения теста ознакомьтесь с инструкциями к приложению"
+        startLabel.text = myopiaText.startLabelText[locale]
         startLabel.textAlignment = .center
         startLabel.numberOfLines = 0
         startLabel.textColor = .black
@@ -172,7 +163,8 @@ class MiopiaViewController: UIViewController {
         centralButton.isEnabled = false
         
         startLabel.addSubview(canselForeverButton)
-        canselForeverButton.setTitle("Больше не показывать это окно", for: .normal)
+        let text1: String = myopiaText.canselForeverButtonTitle[locale] ?? "Больше не показывать это окно"
+        canselForeverButton.setTitle(text1, for: .normal)
         canselForeverButton.titleLabel?.numberOfLines = 0
         canselForeverButton.titleLabel?.textAlignment = .center
         canselForeverButton.setTitleColor(.systemBlue, for: .normal)
@@ -189,7 +181,8 @@ class MiopiaViewController: UIViewController {
         canselForeverButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
         startLabel.addSubview(startTestButton)
-        startTestButton.setTitle("Начать тест", for: .normal)
+        let text2:String = myopiaText.startLabelText[locale] ?? "Начать тест"
+        startTestButton.setTitle(text2, for: .normal)
         startTestButton.setTitleColor(.systemBlue, for: .normal)
         startTestButton.addTarget(self, action: #selector(tapAction(tapGestureRecognizer:)), for: .touchUpInside)
         startTestButton.backgroundColor = .white
@@ -203,7 +196,8 @@ class MiopiaViewController: UIViewController {
         startTestButton.bottomAnchor.constraint(equalTo: canselForeverButton.topAnchor, constant: -15).isActive = true
         
         startLabel.addSubview(goToInfoButton)
-        goToInfoButton.setTitle("К инструкции", for: .normal)
+        let text3:String = myopiaText.goToInfoButtonTitle[locale] ?? "К инструкции"
+        goToInfoButton.setTitle(text3, for: .normal)
         goToInfoButton.setTitleColor(.systemBlue, for: .normal)
         goToInfoButton.addTarget(self, action: #selector(goToInfoButtonAction), for: .touchUpInside)
         goToInfoButton.backgroundColor = .white
@@ -330,21 +324,22 @@ class MiopiaViewController: UIViewController {
             wrongCounter = 0
             
             addLandoltSnellenView(addingView: currentView, koef: koeficient)
-        }else{//если не угадал символ
-            
-            if currentEye == "Right eye"{
-                saveResult()
-                addStartLabel()
-                canselForeverButton.removeFromSuperview()
-                startTestButton.removeFromSuperview()
-                goToInfoButton.removeFromSuperview()
-                startLabel.text = "Тест завершен. \nРезультат правый глаз: \(rezRightEye)\nРезультат левый глаз: \(rezLeftEye) "
-                startLabel.font = .systemFont(ofSize: 17)
-                
-            }else{
-                wrongAnswer()
-            }
         }
+//        else{//если не угадал символ
+//
+//            if currentEye == "Right eye"{
+//                saveResult()
+//                addStartLabel()
+//                canselForeverButton.removeFromSuperview()
+//                startTestButton.removeFromSuperview()
+//                goToInfoButton.removeFromSuperview()
+//                startLabel.text = "Тест завершен. \nРезультат правый глаз: \(rezRightEye)\nРезультат левый глаз: \(rezLeftEye) "
+//                startLabel.font = .systemFont(ofSize: 17)
+//
+//            }else{
+//                wrongAnswer()
+//            }
+//        }
     }
     
     @objc func centralButtonAction(){
@@ -359,10 +354,14 @@ class MiopiaViewController: UIViewController {
 //            goToInfoButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
             startTestButton.removeFromSuperview()
             goToInfoButton.removeFromSuperview()
-            startLabel.text = "Тест завершен. \nРезультат правый глаз: \(rezRightEye)\nРезультат левый глаз: \(rezLeftEye) "
+            let text1:String = myopiaText.startLabelText1[locale] ?? " "
+            let text2:String = myopiaText.startLabelText2[locale] ?? " "
+            startLabel.text = text1 + "\(rezRightEye)" + text2 + "\(rezLeftEye)"
+            //startLabel.text = "Тест завершен. \nРезультат правый глаз: \(rezRightEye)\nРезультат левый глаз: \(rezLeftEye) "
             startLabel.font = .systemFont(ofSize: 17)
         }else{
             wrongAnswer()
+            
         }
     }
     
@@ -441,7 +440,10 @@ class MiopiaViewController: UIViewController {
             print(superWrong)
             if superWrong == 2{
                 self.currentView.removeFromSuperview()
-                let alertContr = UIAlertController(title: "тест завершен", message: "острота зрения равна:\((counter-1)/10)", preferredStyle: .alert)
+                let text1:String = myopiaText.alert1_1[locale] ?? "тест завершен"
+                let text2:String = myopiaText.alert1_2[locale] ?? "тострота зрения равна:"
+                
+                let alertContr = UIAlertController(title: text1, message: text2+"\((counter-1)/10)", preferredStyle: .alert)
                 let alertAct = UIAlertAction(title: "ok", style: .default) { (action) in
                     self.counter = 1
                     self.wrongCounter = 0
@@ -452,7 +454,7 @@ class MiopiaViewController: UIViewController {
                     let koeficient = self.koef*self.counter
                     
                     self.addLandoltSnellenView(addingView: self.currentView, koef: koeficient)
-                    self.saveResult()
+                    //self.saveResult()
                     self.startAlert()
                     
                 }
@@ -479,7 +481,6 @@ class MiopiaViewController: UIViewController {
             
             addLandoltSnellenView(addingView: currentView, koef: koeficient)
         }
-        
     }
     
     func startAlert(){
@@ -497,16 +498,19 @@ class MiopiaViewController: UIViewController {
     
     func createStartAlert(){
         var eye = ""
+        let text1:String = myopiaText.leftEye[locale] ?? "левый глаз"
+        let text2:String = myopiaText.rightEye[locale] ?? "правый глаз"
+        let text3:String = myopiaText.close[locale] ?? "Закройте"
         
         if currentEye == "Right eye"{
-            eye = "правый глаз"
+            eye = text2
             
         }else if currentEye == "Left eye"{
-            eye = "левый глаз"
+            eye = text1
             
         }
         
-        let alert = UIAlertController(title: "", message: "Закройте \(eye)", preferredStyle: .alert)
+        let alert = UIAlertController(title: "", message: text3 + " \(eye)", preferredStyle: .alert)
         let alertAction = UIAlertAction(title: "ok", style: .default) { (action) in
             print("ok")
         }

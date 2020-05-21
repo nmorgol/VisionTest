@@ -40,6 +40,7 @@ public extension UIDevice {
             case "iPhone12,1":                              return "iPhone 11"
             case "iPhone12,3":                              return "iPhone 11 Pro"
             case "iPhone12,5":                              return "iPhone 11 Pro Max"
+            case "iPhone12,8":                              return "iPhone SE (2nd generation)"
             case "iPad2,1", "iPad2,2", "iPad2,3", "iPad2,4":return "iPad 2"
             case "iPad3,1", "iPad3,2", "iPad3,3":           return "iPad (3rd generation)"
             case "iPad3,4", "iPad3,5", "iPad3,6":           return "iPad (4th generation)"
@@ -115,6 +116,7 @@ public extension UIDevice {
             case "iPhone12,1":                              return 25.4*828/326
             case "iPhone12,3":                              return 25.4*1125/458
             case "iPhone12,5":                              return 25.4*1242/458
+            case "iPhone12,8":                              return 25.4*640/326
             case "iPad2,1", "iPad2,2", "iPad2,3", "iPad2,4":return 25.4*1242/458
             case "iPad3,1", "iPad3,2", "iPad3,3":           return 25.4*1242/458
             case "iPad3,4", "iPad3,5", "iPad3,6":           return 25.4*1242/458

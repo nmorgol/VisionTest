@@ -4,7 +4,7 @@ import UIKit
 
 class InfoHyperopiaViewController: UIViewController {
     
-    let segmentedContr = UISegmentedControl(items: ["Информация","Инструкция"])
+    var segmentedContr = UISegmentedControl()
     var selectedSegmentIndex = 0
     //информация
     let scrolView = UIScrollView()
@@ -34,7 +34,8 @@ class InfoHyperopiaViewController: UIViewController {
 //    let secondLandoltLabel = UILabel()
 //    let snelenView = SnellenLeftView()
 //    let snelenLabel = UILabel()
-    
+    var langLocale = "en_US"
+    let textLocale = InfoHyperopiaText()
     
     //инструкция
     let scrollInfoView = UIScrollView()
@@ -82,6 +83,10 @@ class InfoHyperopiaViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(false)
+        
+        let segmentedContrItem1:String = textLocale.segmentedContrItem1[langLocale] ?? "Информация"
+        let segmentedContrItem2:String = textLocale.segmentedContrItem2[langLocale] ?? "Инструкция"
+        segmentedContr = UISegmentedControl(items: [segmentedContrItem1 ,segmentedContrItem2])
         addSegmContr()
         addScrollView()
         
@@ -188,8 +193,8 @@ class InfoHyperopiaViewController: UIViewController {
         
         myopiaDescrLabel.numberOfLines = 0
         myopiaDescrLabel.textAlignment = .natural
-        myopiaDescrLabel.text = "   Дальнозоркость (гиперметропи́я) — это дефект зрения, при котором хорошо видно лишь расположенные вдали объекты, а близко расположенные объекты видно плохо.\n   Этот дефект заключается в том, что из-за аномалии рефракции изображение фокусируется не на сетчатке глаза, а за сетчаткой. \n   Причинами дальнозоркости могут быть:\n-уменьшенный размер глазного яблока на передне-задней оси\n-уменьшение способности хрусталика изменять кривизну."
-        
+//        myopiaDescrLabel.text = "   Дальнозоркость (гиперметропи́я) — это дефект зрения, при котором хорошо видно лишь расположенные вдали объекты, а близко расположенные объекты видно плохо.\n   Этот дефект заключается в том, что из-за аномалии рефракции изображение фокусируется не на сетчатке глаза, а за сетчаткой. \n   Причинами дальнозоркости могут быть:\n-уменьшенный размер глазного яблока на передне-задней оси\n-уменьшение способности хрусталика изменять кривизну."
+        myopiaDescrLabel.text = textLocale.myopiaDescrLabelText[langLocale]
         
     }
     //MARK: окно внимание
@@ -219,7 +224,8 @@ class InfoHyperopiaViewController: UIViewController {
         
         ahtungLabel.numberOfLines = 0
         ahtungLabel.textAlignment = .center
-        ahtungLabel.text = "Внимание!"
+//        ahtungLabel.text = "Внимание!"
+        ahtungLabel.text = textLocale.ahtungLabelText[langLocale]
         ahtungLabel.textColor = .red
         ahtungLabel.font = .boldSystemFont(ofSize: 17)
         
@@ -271,7 +277,8 @@ class InfoHyperopiaViewController: UIViewController {
         
         attantionLabel.numberOfLines = 0
         attantionLabel.textAlignment = .natural
-        attantionLabel.text = "   Расстояние для проведения теста на наличие дальнозоркости должно составлять 30 - 40 сантиметров."
+//        attantionLabel.text = "   Расстояние для проведения теста на наличие дальнозоркости должно составлять 30 - 40 сантиметров."
+        attantionLabel.text = textLocale.attantionLabelText[langLocale]
     }
     //MARK: окно таблицы
     func addTableViews() {
@@ -316,7 +323,8 @@ class InfoHyperopiaViewController: UIViewController {
         
         tableDescrLabel.numberOfLines = 0
         tableDescrLabel.textAlignment = .natural
-        tableDescrLabel.text = "Тексты для контроля остроты зрения с дистанции наблюдения 30 см используются как традиционное средство контроля зрения вблизи и подбора очков для чтения. Может использоваться в офтальмологических кабинетах при исследовании дальнозоркости у пациентов или в магазинах «Оптика» для подбора очков для близи."
+//        tableDescrLabel.text = "Тексты для контроля остроты зрения с дистанции наблюдения 30 см используются как традиционное средство контроля зрения вблизи и подбора очков для чтения. Может использоваться в офтальмологических кабинетах при исследовании дальнозоркости у пациентов или в магазинах «Оптика» для подбора очков для близи."
+        tableDescrLabel.text = textLocale.tableDescrLabelText[langLocale]
         
     }
     
@@ -498,7 +506,8 @@ class InfoHyperopiaViewController: UIViewController {
         howDoTestLabel.backgroundColor = .clear
         howDoTestLabel.numberOfLines = 0
         howDoTestLabel.font = .systemFont(ofSize: 15)
-        howDoTestLabel.text = "   Расположите телефон на расстоянии 30 - 40 сантиметров. На клавиатуре наберите число, которое указано в центральном окне. "
+//        howDoTestLabel.text = "   Расположите телефон на расстоянии 30 - 40 сантиметров. На клавиатуре наберите число, которое указано в центральном окне. "
+        howDoTestLabel.text = textLocale.howDoTestLabelText[langLocale]
     }
     
     fileprivate func addCloseEyeDescrView() {
@@ -522,7 +531,8 @@ class InfoHyperopiaViewController: UIViewController {
         closeEyeDiscrLabel.heightAnchor.constraint(equalTo: closeEyeDiscrLBS.heightAnchor, multiplier: 10/11).isActive = true
         closeEyeDiscrLabel.widthAnchor.constraint(equalTo: closeEyeDiscrLBS.widthAnchor, multiplier: 4/5, constant: -10).isActive = true
         closeEyeDiscrLabel.backgroundColor = .clear
-        closeEyeDiscrLabel.text = "Указано какой глаз необходимо закрыть для проведения теста."
+//        closeEyeDiscrLabel.text = "Указано какой глаз необходимо закрыть для проведения теста."
+        closeEyeDiscrLabel.text = textLocale.closeEyeDiscrLabelText[langLocale]
         closeEyeDiscrLabel.font = .systemFont(ofSize: 7)
         closeEyeDiscrLabel.numberOfLines = 0
         
@@ -556,7 +566,8 @@ class InfoHyperopiaViewController: UIViewController {
         stopBtnDiscrLabel.heightAnchor.constraint(equalTo: stopBtnDiscrLBS.heightAnchor, multiplier: 10/11).isActive = true
         stopBtnDiscrLabel.widthAnchor.constraint(equalTo: stopBtnDiscrLBS.widthAnchor, multiplier: 4/5, constant: -10).isActive = true
         stopBtnDiscrLabel.backgroundColor = .clear
-        stopBtnDiscrLabel.text = "Когда невозможно различить число в центральном окне - нажмите кнопку с символом '❌'. Тест будет остановлен, результат сохранится. Вам будет предложено пройти тест для другого глаза. Если Вы выйдете до окончания теста - результаты сохранены не будут."
+//        stopBtnDiscrLabel.text = "Когда невозможно различить число в центральном окне - нажмите кнопку с символом '❌'. Тест будет остановлен, результат сохранится. Вам будет предложено пройти тест для другого глаза. Если Вы выйдете до окончания теста - результаты сохранены не будут."
+        stopBtnDiscrLabel.text = textLocale.stopBtnDiscrLabelText[langLocale]
         stopBtnDiscrLabel.font = .systemFont(ofSize: 7)
         stopBtnDiscrLabel.numberOfLines = 0
         
@@ -590,7 +601,8 @@ class InfoHyperopiaViewController: UIViewController {
         timeProgressDiscrLabel.heightAnchor.constraint(equalTo: timeProgressDiscrLTS.heightAnchor, multiplier: 10/11).isActive = true
         timeProgressDiscrLabel.widthAnchor.constraint(equalTo: timeProgressDiscrLTS.widthAnchor, multiplier: 1/2, constant: -10).isActive = true
         timeProgressDiscrLabel.backgroundColor = .clear
-        timeProgressDiscrLabel.text = "Индикатор оставшегося времени до момента появления нового числа."
+//        timeProgressDiscrLabel.text = "Индикатор оставшегося времени до момента появления нового числа."
+        timeProgressDiscrLabel.text = textLocale.timeProgressDiscrLabelText[langLocale]
         timeProgressDiscrLabel.font = .systemFont(ofSize: 7)
         timeProgressDiscrLabel.numberOfLines = 0
         
@@ -622,7 +634,8 @@ class InfoHyperopiaViewController: UIViewController {
         keyboardDiscrLabel.heightAnchor.constraint(equalTo: keyboardDiscrLTS.heightAnchor, multiplier: 10/11).isActive = true
         keyboardDiscrLabel.widthAnchor.constraint(equalTo: keyboardDiscrLTS.widthAnchor, multiplier: 1/2, constant: -10).isActive = true
         keyboardDiscrLabel.backgroundColor = .clear
-        keyboardDiscrLabel.text = "Наберите на клавиатуре число, которое указано в центре экрана."
+//        keyboardDiscrLabel.text = "Наберите на клавиатуре число, которое указано в центре экрана."
+        keyboardDiscrLabel.text = textLocale.keyboardDiscrLabelText[langLocale]
         keyboardDiscrLabel.font = .systemFont(ofSize: 7)
         keyboardDiscrLabel.numberOfLines = 0
         
@@ -654,7 +667,8 @@ class InfoHyperopiaViewController: UIViewController {
         textFieldLabel.heightAnchor.constraint(equalTo: textFieldDiscrRTS.heightAnchor, multiplier: 10/11).isActive = true
         textFieldLabel.widthAnchor.constraint(equalTo: textFieldDiscrRTS.widthAnchor, multiplier: 3/5, constant: -10).isActive = true
         textFieldLabel.backgroundColor = .clear
-        textFieldLabel.text = "Текстовое поле, в котором отображаются введенные на клавиатуре цифры."
+//        textFieldLabel.text = "Текстовое поле, в котором отображаются введенные на клавиатуре цифры."
+        textFieldLabel.text = textLocale.textFieldLabelText[langLocale]
         textFieldLabel.font = .systemFont(ofSize: 7)
         textFieldLabel.numberOfLines = 0
         
@@ -687,7 +701,8 @@ class InfoHyperopiaViewController: UIViewController {
         numberDiscrLabel.heightAnchor.constraint(equalTo: numberDiscrRBS.heightAnchor, multiplier: 10/11).isActive = true
         numberDiscrLabel.widthAnchor.constraint(equalTo: numberDiscrRBS.widthAnchor, multiplier: 1/2, constant: -10).isActive = true
         numberDiscrLabel.backgroundColor = .clear
-        numberDiscrLabel.text = " Трехзначное число. Если введенное Вами число окажется равно данному числу, то у следующего числа будет более мелкий шрифт."
+//        numberDiscrLabel.text = " Трехзначное число. Если введенное Вами число окажется равно данному числу, то у следующего числа будет более мелкий шрифт."
+        numberDiscrLabel.text = textLocale.numberDiscrLabelText[langLocale]
         numberDiscrLabel.font = .systemFont(ofSize: 7)
         numberDiscrLabel.numberOfLines = 0
         
@@ -781,7 +796,8 @@ class InfoHyperopiaViewController: UIViewController {
         howDoRecognLabel.heightAnchor.constraint(equalTo: secondInstrView.heightAnchor, multiplier: 1/2, constant: 0).isActive = true
         howDoRecognLabel.centerXAnchor.constraint(equalTo: scrollInfoView.centerXAnchor).isActive = true
         
-        howDoRecognLabel.text = "Для распознавания речи включите соответствующий переключатель в настройках приложения.\n\n Тест проводится как и при выключенном распознавании речи, только надо не набирать на клавиатуре цифры, а произносить их в микрофон телефона. Можно использовать беспроводную гарнитуру.\n\n В случае невозможности определения числа на экране скажите 'СТОП'."
+//        howDoRecognLabel.text = "Для распознавания речи включите соответствующий переключатель в настройках приложения.\n\n Тест проводится как и при выключенном распознавании речи, только надо не набирать на клавиатуре цифры, а произносить их в микрофон телефона. Можно использовать беспроводную гарнитуру.\n\n В случае невозможности определения числа на экране скажите 'СТОП'."
+        howDoRecognLabel.text = textLocale.howDoRecognLabelText[langLocale]
         
         howDoRecognLabel.numberOfLines = 0
         
@@ -825,7 +841,8 @@ class InfoHyperopiaViewController: UIViewController {
         speechSymbolDiscrLabel.widthAnchor.constraint(equalTo: speechSymbolDiscrLBS.widthAnchor, multiplier: 7/10, constant: -10).isActive = true
         speechSymbolDiscrLabel.backgroundColor = .clear
         
-        speechSymbolDiscrLabel.text = "Если Вы можете различить число - произнесите в микрофон какое число Вы видите, например: 'двести сорок пять' или 'два' 'четыре' 'пять'. Когда Вы правильно назовете число - на экране появится число более мелкого размера. Если невозможно определить число  - произнесите слово 'СТОП'. Тест завершится. Результат будет сохранен."
+//        speechSymbolDiscrLabel.text = "Если Вы можете различить число - произнесите в микрофон какое число Вы видите, например: 'двести сорок пять' или 'два' 'четыре' 'пять'. Когда Вы правильно назовете число - на экране появится число более мелкого размера. Если невозможно определить число  - произнесите слово 'СТОП'. Тест завершится. Результат будет сохранен."
+        speechSymbolDiscrLabel.text = textLocale.speechSymbolDiscrLabelText[langLocale]
         speechSymbolDiscrLabel.font = .systemFont(ofSize: 7)
         speechSymbolDiscrLabel.numberOfLines = 0
         
@@ -860,7 +877,8 @@ class InfoHyperopiaViewController: UIViewController {
         lineDescrLabel.widthAnchor.constraint(equalTo: lineDescrLTS.widthAnchor, multiplier: 7/10, constant: -10).isActive = true
         lineDescrLabel.backgroundColor = .clear
         
-        lineDescrLabel.text = "Текстовое поле, в котором будет отображаться текст, который Вы произнесете в микрофон."
+//        lineDescrLabel.text = "Текстовое поле, в котором будет отображаться текст, который Вы произнесете в микрофон."
+        lineDescrLabel.text = textLocale.lineDescrLabelText[langLocale]
         lineDescrLabel.font = .systemFont(ofSize: 7)
         lineDescrLabel.numberOfLines = 0
         

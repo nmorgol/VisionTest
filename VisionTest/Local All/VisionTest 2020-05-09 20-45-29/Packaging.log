@@ -1,0 +1,130 @@
+2020-05-09 17:45:17 +0000  Initial pipeline context: <IDEDistributionProcessingPipelineContext: 0x7f8c8cbbca00; archive(resolved)='<IDEArchive: 0x7f8c9092a990>', distributionTask(resolved)='2', distributionDestination(resolved)='1', distributionMethod(resolved)='<IDEDistributionMethodiOSAppStoreDistribution: 0x7f8c90514200>', team(resolved)='<IDEProvisioningDisambiguatableBasicTeam: 0x7f8c889d1510; teamID='CMSP4Z3Z9Q', teamName='Marhol Mikalai', teamType='Individual', username='nniicckkmy@icloud.com', isFreeProvisioningTeam='0'>'>
+	Chain (12, self inclusive):
+	<IDEDistributionProcessingPipelineContext: 0x7f8c8cbbca00; archive = '<IDEArchive: 0x7f8c9092a990>', distributionMethod='<IDEDistributionMethodiOSAppStoreDistribution: 0x7f8c90514200>', team='<IDEProvisioningDisambiguatableBasicTeam: 0x7f8c889d1510; teamID='CMSP4Z3Z9Q', teamName='Marhol Mikalai', teamType='Individual', username='nniicckkmy@icloud.com', isFreeProvisioningTeam='0'>'>
+	<IDEDistributionProcessingPipelineContext: 0x7f8c8cbbc030; archive = '<IDEArchive: 0x7f8c9092a990>', distributionMethod='<IDEDistributionMethodiOSAppStoreDistribution: 0x7f8c90514200>', team='<IDEProvisioningDisambiguatableBasicTeam: 0x7f8c889d1510; teamID='CMSP4Z3Z9Q', teamName='Marhol Mikalai', teamType='Individual', username='nniicckkmy@icloud.com', isFreeProvisioningTeam='0'>'>
+	<IDEDistributionContext: 0x7f8c7552bd10; archive = '<IDEArchive: 0x7f8c9092a990>', distributionMethod='<IDEDistributionMethodiOSAppStoreDistribution: 0x7f8c90514200>', team='<IDEProvisioningDisambiguatableBasicTeam: 0x7f8c889d1510; teamID='CMSP4Z3Z9Q', teamName='Marhol Mikalai', teamType='Individual', username='nniicckkmy@icloud.com', isFreeProvisioningTeam='0'>'>
+	<IDEDistributionContext: 0x7f8c758effb0; archive = '<IDEArchive: 0x7f8c9092a990>', distributionMethod='<IDEDistributionMethodiOSAppStoreDistribution: 0x7f8c90514200>', team='<IDEProvisioningDisambiguatableBasicTeam: 0x7f8c889d1510; teamID='CMSP4Z3Z9Q', teamName='Marhol Mikalai', teamType='Individual', username='nniicckkmy@icloud.com', isFreeProvisioningTeam='0'>'>
+	<IDEDistributionContext: 0x7f8c75f0cee0; archive = '<IDEArchive: 0x7f8c9092a990>', distributionMethod='<IDEDistributionMethodiOSAppStoreDistribution: 0x7f8c90514200>', team='<IDEProvisioningDisambiguatableBasicTeam: 0x7f8c889d1510; teamID='CMSP4Z3Z9Q', teamName='Marhol Mikalai', teamType='Individual', username='nniicckkmy@icloud.com', isFreeProvisioningTeam='0'>'>
+	<IDEDistributionContext: 0x7f8c7551b440; archive = '<IDEArchive: 0x7f8c9092a990>', distributionMethod='<IDEDistributionMethodiOSAppStoreDistribution: 0x7f8c90514200>', team='<IDEProvisioningDisambiguatableBasicTeam: 0x7f8c889d1510; teamID='CMSP4Z3Z9Q', teamName='Marhol Mikalai', teamType='Individual', username='nniicckkmy@icloud.com', isFreeProvisioningTeam='0'>'>
+	<IDEDistributionContext: 0x7f8c752fa260; archive = '<IDEArchive: 0x7f8c9092a990>', distributionMethod='<IDEDistributionMethodiOSAppStoreDistribution: 0x7f8c90514200>', team='<IDEProvisioningDisambiguatableBasicTeam: 0x7f8c889d1510; teamID='CMSP4Z3Z9Q', teamName='Marhol Mikalai', teamType='Individual', username='nniicckkmy@icloud.com', isFreeProvisioningTeam='0'>'>
+	<IDEDistributionContext: 0x7f8c742976a0; archive = '<IDEArchive: 0x7f8c9092a990>', distributionMethod='<IDEDistributionMethodiOSAppStoreDistribution: 0x7f8c90514200>', team='<IDEProvisioningDisambiguatableBasicTeam: 0x7f8c889d1510; teamID='CMSP4Z3Z9Q', teamName='Marhol Mikalai', teamType='Individual', username='nniicckkmy@icloud.com', isFreeProvisioningTeam='0'>'>
+	<IDEDistributionContext: 0x7f8c75f4f480; archive = '<IDEArchive: 0x7f8c9092a990>', distributionMethod='<IDEDistributionMethodiOSAppStoreDistribution: 0x7f8c90514200>', team='<IDEProvisioningDisambiguatableBasicTeam: 0x7f8c889d1510; teamID='CMSP4Z3Z9Q', teamName='Marhol Mikalai', teamType='Individual', username='nniicckkmy@icloud.com', isFreeProvisioningTeam='0'>'>
+	<IDEDistributionContext: 0x7f8c759ab960; archive = '<IDEArchive: 0x7f8c9092a990>', distributionMethod='<IDEDistributionMethodiOSAppStoreDistribution: 0x7f8c90514200>', team='(null)'>
+	<IDEDistributionContext: 0x7f8c756882b0; archive = '<IDEArchive: 0x7f8c9092a990>', distributionMethod='<IDEDistributionMethodiOSAppStoreDistribution: 0x7f8c90514200>', team='(null)'>
+	<IDEDistributionContext: 0x7f8c7592ac70; archive = '<IDEArchive: 0x7f8c9092a990>', distributionMethod='(null)', team='(null)'>
+</IDEDistributionProcessingPipelineContext: 0x7f8c8cbbca00>
+2020-05-09 17:45:17 +0000  Processing step: IDEDistributionCreateDestRootStep
+2020-05-09 17:45:17 +0000  Processing step: IDEDistributionCopyItemStep
+2020-05-09 17:45:17 +0000  Running /usr/bin/ditto '-V' '/Users/kolya/Library/Developer/Xcode/Archives/2020-05-09/VisionTest 5-9-20, 20.44.xcarchive/Products/Applications/VisionTests.app' '/var/folders/q_/9k5w78cs00dd4srx1n0zpc500000gn/T/XcodeDistPipeline.~~~0iyLtA/Root/Payload/VisionTests.app'
+2020-05-09 17:45:17 +0000  >>> Copying /Users/kolya/Library/Developer/Xcode/Archives/2020-05-09/VisionTest 5-9-20, 20.44.xcarchive/Products/Applications/VisionTests.app 
+2020-05-09 17:45:17 +0000  copying file ./_CodeSignature/CodeResources ... 
+2020-05-09 17:45:17 +0000  3519 bytes for ./_CodeSignature/CodeResources
+2020-05-09 17:45:17 +0000  copying file ./AppIcon60x60@2x.png ... 
+2020-05-09 17:45:17 +0000  4872 bytes for ./AppIcon60x60@2x.png
+copying file ./VisionTests ... 
+2020-05-09 17:45:17 +0000  5366576 bytes for ./VisionTests
+copying file ./Assets.car ... 
+2020-05-09 17:45:17 +0000  911647 bytes for ./Assets.car
+copying file ./AppIcon76x76@2x~ipad.png ... 
+2020-05-09 17:45:17 +0000  5995 bytes for ./AppIcon76x76@2x~ipad.png
+2020-05-09 17:45:17 +0000  copying file ./embedded.mobileprovision ... 
+2020-05-09 17:45:17 +0000  9496 bytes for ./embedded.mobileprovision
+copying file ./Info.plist ... 
+2020-05-09 17:45:17 +0000  1620 bytes for ./Info.plist
+2020-05-09 17:45:17 +0000  copying file ./VisionTest.momd/VersionInfo.plist ... 
+2020-05-09 17:45:17 +0000  613 bytes for ./VisionTest.momd/VersionInfo.plist
+copying file ./VisionTest.momd/VisionTest.mom ... 
+2020-05-09 17:45:17 +0000  6070 bytes for ./VisionTest.momd/VisionTest.mom
+2020-05-09 17:45:17 +0000  copying file ./VisionTest.momd/VisionTest.omo ... 
+2020-05-09 17:45:17 +0000  14320 bytes for ./VisionTest.momd/VisionTest.omo
+2020-05-09 17:45:17 +0000  copying file ./PkgInfo ... 
+2020-05-09 17:45:17 +0000  8 bytes for ./PkgInfo
+2020-05-09 17:45:17 +0000  /usr/bin/ditto exited with 0
+2020-05-09 17:45:17 +0000  Processing step: IDEDistributionEmbedProfileStep
+2020-05-09 17:45:17 +0000  Processing step: IDEDistributionInfoPlistStep
+2020-05-09 17:45:17 +0000  Skipping step: IDEDistributionInfoPlistStep because it said so
+2020-05-09 17:45:17 +0000  Processing step: IDEDistributionItemRemovalStep
+2020-05-09 17:45:17 +0000  Processing step: IDEDistributionAppThinningPlistStep
+2020-05-09 17:45:17 +0000  Skipping step: IDEDistributionAppThinningPlistStep because it said so
+2020-05-09 17:45:17 +0000  Processing step: IDEDistributionCompileBitcodeStep
+2020-05-09 17:45:17 +0000  Skipping step: IDEDistributionCompileBitcodeStep because it said so
+2020-05-09 17:45:17 +0000  Processing step: IDEDistributionCodeSlimmingStep
+2020-05-09 17:45:18 +0000  Processing step: IDEDistributionCopyBCSymbolMapsStep
+2020-05-09 17:45:18 +0000  Running /usr/bin/ditto '-V' '/Users/kolya/Library/Developer/Xcode/Archives/2020-05-09/VisionTest 5-9-20, 20.44.xcarchive/BCSymbolMaps/AC3E0A7C-5352-3BD1-859D-6715E57C1900.bcsymbolmap' '/var/folders/q_/9k5w78cs00dd4srx1n0zpc500000gn/T/XcodeDistPipeline.~~~0iyLtA/Root/BCSymbolMaps/AC3E0A7C-5352-3BD1-859D-6715E57C1900.bcsymbolmap'
+2020-05-09 17:45:18 +0000  >>> Copying /Users/kolya/Library/Developer/Xcode/Archives/2020-05-09/VisionTest 5-9-20, 20.44.xcarchive/BCSymbolMaps/AC3E0A7C-5352-3BD1-859D-6715E57C1900.bcsymbolmap 
+2020-05-09 17:45:18 +0000  copying file ./AC3E0A7C-5352-3BD1-859D-6715E57C1900.bcsymbolmap ... 
+2020-05-09 17:45:18 +0000  403261 bytes for ./AC3E0A7C-5352-3BD1-859D-6715E57C1900.bcsymbolmap
+2020-05-09 17:45:18 +0000  /usr/bin/ditto exited with 0
+2020-05-09 17:45:18 +0000  Processing step: IDEDistributionSymbolsStep
+2020-05-09 17:45:18 +0000  Excluding symbols for VisionTests.app
+2020-05-09 17:45:18 +0000  Processing step: IDEDistributionCopyAppleProvidedContentStep
+2020-05-09 17:45:18 +0000  Processing step: IDEDistributionAppThinningStep
+2020-05-09 17:45:18 +0000  Skipping step: IDEDistributionAppThinningStep because it said so
+2020-05-09 17:45:18 +0000  Processing step: IDEDistributionArchThinningStep
+2020-05-09 17:45:18 +0000  Running /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo '/var/folders/q_/9k5w78cs00dd4srx1n0zpc500000gn/T/XcodeDistPipeline.~~~0iyLtA/Root/Payload/VisionTests.app/VisionTests' '-verify_arch' 'arm64e'
+2020-05-09 17:45:18 +0000  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo exited with 1
+2020-05-09 17:45:18 +0000  Skipping architecture thinning for item "VisionTests" because arch "arm64e" wasn't found
+2020-05-09 17:45:18 +0000  Processing step: IDEDistributionODRStep
+2020-05-09 17:45:18 +0000  Processing step: IDEDistributionStripXattrsStep
+2020-05-09 17:45:18 +0000  Running /usr/bin/xattr '-crs' '/var/folders/q_/9k5w78cs00dd4srx1n0zpc500000gn/T/XcodeDistPipeline.~~~0iyLtA/Root/Payload/VisionTests.app'
+2020-05-09 17:45:18 +0000  /usr/bin/xattr exited with 0
+2020-05-09 17:45:18 +0000  Processing step: IDEDistributionCodesignStep
+2020-05-09 17:45:18 +0000  Entitlements for <IDEDistributionItem: 0x7f8c7452ab60; bundleID='None.VisionTests', path='<DVTFilePath:0x7f8c87f540c0:'/Users/kolya/Library/Developer/Xcode/Archives/2020-05-09/VisionTest 5-9-20, 20.44.xcarchive/Products/Applications/VisionTests.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x7f8c8cbda600; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x7f8c73f4fb40; name='Apple Development: Marhol Mikalai (NV4CW8L9BZ)', hash='960B5486E59F83734D2858419F506D86344DCC87', serialNumber='174CC2793ABB3EF2', certificateKinds='(
+    "1.2.840.113635.100.6.1.12",
+    "1.2.840.113635.100.6.1.2"
+), issueDate='2019-11-18 14:25:05 +0000''>', entitlements='{
+    "application-identifier" = "CMSP4Z3Z9Q.None.VisionTests";
+    "com.apple.developer.team-identifier" = CMSP4Z3Z9Q;
+    "get-task-allow" = 1;
+}', teamID='CMSP4Z3Z9Q', identifier='None.VisionTests', executablePath='<DVTFilePath:0x7f8c74207840:'/Users/kolya/Library/Developer/Xcode/Archives/2020-05-09/VisionTest 5-9-20, 20.44.xcarchive/Products/Applications/VisionTests.app/VisionTests'>', hardenedRuntime='0'>'>: {
+    "application-identifier" = "CMSP4Z3Z9Q.None.VisionTests";
+    "beta-reports-active" = 1;
+    "com.apple.developer.team-identifier" = CMSP4Z3Z9Q;
+    "get-task-allow" = 0;
+}
+2020-05-09 17:45:18 +0000  Writing entitlements for <IDEDistributionItem: 0x7f8c7452ab60; bundleID='None.VisionTests', path='<DVTFilePath:0x7f8c87f540c0:'/Users/kolya/Library/Developer/Xcode/Archives/2020-05-09/VisionTest 5-9-20, 20.44.xcarchive/Products/Applications/VisionTests.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x7f8c8cbda600; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x7f8c75436ea0; name='Apple Development: Marhol Mikalai (NV4CW8L9BZ)', hash='960B5486E59F83734D2858419F506D86344DCC87', serialNumber='174CC2793ABB3EF2', certificateKinds='(
+    "1.2.840.113635.100.6.1.12",
+    "1.2.840.113635.100.6.1.2"
+), issueDate='2019-11-18 14:25:05 +0000''>', entitlements='{
+    "application-identifier" = "CMSP4Z3Z9Q.None.VisionTests";
+    "com.apple.developer.team-identifier" = CMSP4Z3Z9Q;
+    "get-task-allow" = 1;
+}', teamID='CMSP4Z3Z9Q', identifier='None.VisionTests', executablePath='<DVTFilePath:0x7f8c74207840:'/Users/kolya/Library/Developer/Xcode/Archives/2020-05-09/VisionTest 5-9-20, 20.44.xcarchive/Products/Applications/VisionTests.app/VisionTests'>', hardenedRuntime='0'>'> to: /var/folders/q_/9k5w78cs00dd4srx1n0zpc500000gn/T/XcodeDistPipeline.~~~0iyLtA/entitlements~~~pdTYbs
+2020-05-09 17:45:18 +0000  Running /usr/bin/codesign '-vvv' '--force' '--sign' 'D728540B619CB9A4A3549FD589FE5D4253D2B8B2' '--entitlements' '/var/folders/q_/9k5w78cs00dd4srx1n0zpc500000gn/T/XcodeDistPipeline.~~~0iyLtA/entitlements~~~pdTYbs' '--preserve-metadata=identifier,flags,runtime' '/var/folders/q_/9k5w78cs00dd4srx1n0zpc500000gn/T/XcodeDistPipeline.~~~0iyLtA/Root/Payload/VisionTests.app'
+2020-05-09 17:45:23 +0000  /var/folders/q_/9k5w78cs00dd4srx1n0zpc500000gn/T/XcodeDistPipeline.~~~0iyLtA/Root/Payload/VisionTests.app: signed app bundle with Mach-O thin (arm64) [None.VisionTests]
+2020-05-09 17:45:23 +0000  /usr/bin/codesign exited with 0
+2020-05-09 17:45:23 +0000  Processing step: IDEDistributionZipODRItemStep
+2020-05-09 17:45:23 +0000  Skipping step: IDEDistributionZipODRItemStep because it said so
+2020-05-09 17:45:23 +0000  Processing step: IDEDistributionCreateIPAStep
+2020-05-09 17:45:23 +0000  Running /usr/bin/ditto '-V' '-c' '-k' '--norsrc' '/var/folders/q_/9k5w78cs00dd4srx1n0zpc500000gn/T/XcodeDistPipeline.~~~0iyLtA/Root' '/var/folders/q_/9k5w78cs00dd4srx1n0zpc500000gn/T/XcodeDistPipeline.~~~0iyLtA/Packages/VisionTest.ipa'
+2020-05-09 17:45:23 +0000  >>> Copying /var/folders/q_/9k5w78cs00dd4srx1n0zpc500000gn/T/XcodeDistPipeline.~~~0iyLtA/Root 
+2020-05-09 17:45:23 +0000  copying file ./BCSymbolMaps/AC3E0A7C-5352-3BD1-859D-6715E57C1900.bcsymbolmap ... 
+2020-05-09 17:45:23 +0000  403261 bytes for ./BCSymbolMaps/AC3E0A7C-5352-3BD1-859D-6715E57C1900.bcsymbolmap
+2020-05-09 17:45:23 +0000  copying file ./Payload/VisionTests.app/_CodeSignature/CodeResources ... 
+2020-05-09 17:45:23 +0000  3519 bytes for ./Payload/VisionTests.app/_CodeSignature/CodeResources
+2020-05-09 17:45:23 +0000  copying file ./Payload/VisionTests.app/AppIcon60x60@2x.png ... 
+2020-05-09 17:45:23 +0000  4872 bytes for ./Payload/VisionTests.app/AppIcon60x60@2x.png
+copying file ./Payload/VisionTests.app/VisionTests ... 
+2020-05-09 17:45:23 +0000  4441776 bytes for ./Payload/VisionTests.app/VisionTests
+copying file ./Payload/VisionTests.app/Assets.car ... 
+2020-05-09 17:45:23 +0000  911647 bytes for ./Payload/VisionTests.app/Assets.car
+copying file ./Payload/VisionTests.app/AppIcon76x76@2x~ipad.png ... 
+2020-05-09 17:45:23 +0000  5995 bytes for ./Payload/VisionTests.app/AppIcon76x76@2x~ipad.png
+copying file ./Payload/VisionTests.app/embedded.mobileprovision ... 
+9363 bytes for ./Payload/VisionTests.app/embedded.mobileprovision
+copying file ./Payload/VisionTests.app/Info.plist ... 
+2020-05-09 17:45:23 +0000  1620 bytes for ./Payload/VisionTests.app/Info.plist
+copying file ./Payload/VisionTests.app/VisionTest.momd/VersionInfo.plist ... 
+613 bytes for ./Payload/VisionTests.app/VisionTest.momd/VersionInfo.plist
+2020-05-09 17:45:23 +0000  copying file ./Payload/VisionTests.app/VisionTest.momd/VisionTest.mom ... 
+6070 bytes for ./Payload/VisionTests.app/VisionTest.momd/VisionTest.mom
+2020-05-09 17:45:23 +0000  copying file ./Payload/VisionTests.app/VisionTest.momd/VisionTest.omo ... 
+2020-05-09 17:45:23 +0000  14320 bytes for ./Payload/VisionTests.app/VisionTest.momd/VisionTest.omo
+copying file ./Payload/VisionTests.app/PkgInfo ... 
+2020-05-09 17:45:23 +0000  8 bytes for ./Payload/VisionTests.app/PkgInfo
+2020-05-09 17:45:23 +0000  /usr/bin/ditto exited with 0
+2020-05-09 17:45:23 +0000  Processing step: IDEDistributionAppStoreInformationStep
+2020-05-09 17:45:23 +0000  Skipping step: IDEDistributionAppStoreInformationStep because it said so
+2020-05-09 17:45:23 +0000  Processing step: IDEDistributionGenerateProcessedDistributionItems
+2020-05-09 17:45:23 +0000  Processing step: IDEDistributionCreateManifestStep
+2020-05-09 17:45:23 +0000  Skipping step: IDEDistributionCreateManifestStep because it said so

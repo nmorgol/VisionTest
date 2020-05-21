@@ -9,7 +9,7 @@ import CoreData
 
 class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate {
     
-    private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "ru_Ru"))!
+    private var speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "ru_Ru"))!
     
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     
@@ -17,6 +17,8 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     
     private let audioEngine = AVAudioEngine()
     
+    var locale = "en_US"
+    let hyperText = HyperopiaText()
     
     var currentText = String()
     
@@ -70,6 +72,18 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(false)
         
+        do {
+            
+            let languageLocale = try context.fetch(Localization.fetchRequest())
+            if languageLocale.count > 0{
+                locale = (languageLocale.last as! Localization).identificator ?? "en_US"
+            }
+            
+        } catch let error as NSError {
+            print(error)
+        }
+        speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: locale))!
+        
         disapearTrue = true
         
         startFontCounter = 1
@@ -77,8 +91,8 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         //self.session?.startRunning()
         
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
-        
-        addEyeLabel(text: "Закройте левый глаз")
+        let text1:String = hyperText.addEyeLabelText[locale] ?? "Закройте левый глаз"
+        addEyeLabel(text: text1)
         animatedEyeLabel()
         
         addWordLabel()
@@ -389,7 +403,11 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
         stopLabel.numberOfLines = 0
         stopLabel.textAlignment = .center
         
-        stopLabel.text = "Тест завершен.\n Результат: правый глаз - \(rightEyeResult). \n Результат: левый глаз - \(leftEyeResult)."
+        let text2:String = hyperText.stopLabelText1[locale] ?? "Тест завершен. \n Результаты: \n - правый глаз "
+        let text3:String = hyperText.stopLabelText2[locale] ?? "\n - левый глаз "
+        stopLabel.text = text2 + " \(rightEyeResult)" + text3 + "\(leftEyeResult)"
+        
+        //stopLabel.text = "Тест завершен.\n Результат: правый глаз - \(rightEyeResult). \n Результат: левый глаз - \(leftEyeResult)."
         stopLabel.textAlignment = .center
         
         
@@ -467,8 +485,8 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     }
     
     func compareStop(str2: String) {
-        
-        if (str2.lowercased()).contains("стоп"){
+        let stopW:String = hyperText.stopWord[locale] ?? "стоп"
+        if (str2.lowercased()).contains(stopW){
 
             stopBool = true
             saveResult()
@@ -477,11 +495,14 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
 
             recognitionRequest = nil
             reciveTextLabel.text = " "
+            
+            let text4:String = hyperText.addEyeLabelText[locale] ?? "Закройте левый глаз"
+            let text5:String = hyperText.eyeLabelText[locale] ?? "Закройте правый глаз"
 
-            if eyeLabel.text == "Закройте правый глаз"{
-                eyeLabel.text = "Закройте левый глаз"
-            }else if eyeLabel.text == "Закройте левый глаз"{
-                eyeLabel.text = "Закройте правый глаз"
+            if eyeLabel.text == text5{
+                eyeLabel.text = text4
+            }else if eyeLabel.text == text4{
+                eyeLabel.text = text5
             }
             
             
@@ -565,6 +586,8 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
     }
     
     func saveResult(){
+        let text4:String = hyperText.addEyeLabelText[locale] ?? "Закройте левый глаз"
+        let text5:String = hyperText.eyeLabelText[locale] ?? "Закройте правый глаз"
         
         do{
             let resultUser = try context.fetch(User.fetchRequest())
@@ -576,10 +599,10 @@ class HyperopiaSpeechViewController: UIViewController, SFSpeechRecognizerDelegat
 //                print("результат", ((startFontCounter-1)/10))
                 result.result = ((Float(startFontCounter)-1.0)/10.0)
                 result.dateTest = Date()
-                if eyeLabel.text == "Закройте правый глаз"{
+                if eyeLabel.text == text5{
                     result.testingEye = "Левый глаз"
                     leftEyeResult = ((Float(startFontCounter)-1.0)/10.0)
-                }else if eyeLabel.text == "Закройте левый глаз"{
+                }else if eyeLabel.text == text4{
                     result.testingEye = "Правый глаз"
                     rightEyeResult = ((Float(startFontCounter)-1.0)/10.0)
                 }

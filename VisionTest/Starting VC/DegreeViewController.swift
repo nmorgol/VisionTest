@@ -28,6 +28,7 @@ class DegreeViewController: UIViewController {
     let helpRazrView = UIView()
     
     var textArray = [String]()
+    var langLocale = "en_US"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,17 +38,31 @@ class DegreeViewController: UIViewController {
         
         viewArray = [lastSpere, sphereView, sectorView, degr90, rotateView, scaledView, oneDegreeView, minutesView, topDegreeMin, symbolDescr]
         currentView = viewArray[numberView]
+        if langLocale == "ru_Ru"{
+            textArray = ["Из центра сферы угол обзора в любой плоскости равен 360°",
+            "Выделим 1/8 часть сферы",
+            "Оставим только выделеную область",
+            "Оставим выделеную область только в одной плоскости. Угол между осями координат равен 90°",
+            "Повернем влево на 45°",
+            "Немного увеличим и разделим на 90 равных частей. Две любые соседнии линии образуют угол равный 1 градусу (1°)",
+            "Оставим только один угол и немного увеличим. ",
+            "Как видно, при удалении от вершины угла, расстояние между линиями, образующими угол, увеличивается",
+            "Для наглядности отдалимся на некоторое расстояние от вершины угла и разделим 1° на 60 равных частей, каждая из которых равна 1 угловой минуте(1')",
+            "Размер символа рассчитывается таким образом, чтобы при установленной дистанции проведения теста разрыв символа составлял 1 угловую минуту при остроте зрения равной 1"]
+        }else if langLocale == "en_US"{
+            textArray = ["From the center of the sphere, the viewing angle in any plane is 360 °",
+            "Select 1/8 of the sphere",
+            "Show only the selected area",
+            "Show the selected area in only one plane. The angle between the coordinate axes is 90 °",
+            "Turn left 45 °",
+            "We will slightly increase and divide into 90 equal parts. Any two adjacent lines form an angle equal to 1 degree (1 °)",
+            "Show only one corner and increase it slightly. ",
+            "As you can see, with distance from the top of the corner, the distance between the lines forming the angle increases",
+            "For clarity, let us move a certain distance from the top of the corner and divide 1 ° into 60 equal parts, each of which is equal to 1 minute of arc (1 ')",
+            "The size of the symbol is calculated in such a way that, at the established test distance, the gap of the symbol is 1 arc minute with a visual acuity of 1"]
+        }
         
-        textArray = ["Из центра сферы угол обзора в любой плоскости равен 360°",
-                     "Выделим 1/8 часть сферы",
-                     "Оставим только выделеную область",
-                     "Оставим выделеную область только в одной плоскости. Угол между осями координат равен 90°",
-                     "Повернем влево на 45°",
-                     "Немного увеличим и разделим на 90 равных частей. Две любые соседнии линии образуют угол равный 1 градусу (1°)",
-                     "Оставим только один угол и немного увеличим. ",
-                     "Как видно, при удалении от вершины угла, расстояние между линиями, образующими угол, увеличивается",
-                     "Для наглядности отдалимся на некоторое расстояние от вершины угла и разделим 1° на 60 равных частей, каждая из которых равна 1 угловой минуте(1')",
-                     "Размер символа рассчитывается таким образом, чтобы при установленной дистанции проведения теста разрыв символа составлял 1 угловую минуту при остроте зрения равной 1"]
+        
         textLabel.text = textArray[numberView]
         
     }
@@ -91,7 +106,7 @@ class DegreeViewController: UIViewController {
         nextButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/20).isActive = true
         nextButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
         
-        nextButton.setTitle("дальше", for: .normal)
+        nextButton.setTitle("next", for: .normal)
         nextButton.backgroundColor = .red
         
         nextButton.addTarget(self, action: #selector(nextButtonAction), for: .touchUpInside)

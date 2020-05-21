@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>VisionTest.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>bitcode</key>
+			<true/>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>D728540B619CB9A4A3549FD589FE5D4253D2B8B2</string>
+				<key>dateExpires</key>
+				<string>4/16/21</string>
+				<key>type</key>
+				<string>Apple Distribution</string>
+			</dict>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>CMSP4Z3Z9Q.None.VisionTests</string>
+				<key>beta-reports-active</key>
+				<true/>
+				<key>com.apple.developer.team-identifier</key>
+				<string>CMSP4Z3Z9Q</string>
+				<key>get-task-allow</key>
+				<false/>
+			</dict>
+			<key>name</key>
+			<string>VisionTests.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>38e7f886-3929-4023-9e21-cc3fe4832171</string>
+				<key>name</key>
+				<string>iOS Team Store Provisioning Profile: None.VisionTests</string>
+			</dict>
+			<key>symbols</key>
+			<true/>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>CMSP4Z3Z9Q</string>
+				<key>name</key>
+				<string>Marhol Mikalai</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -7,8 +7,8 @@ class InfoStartViewController: UIViewController {
     var state = false
     var timer = Timer()
     
-    let segmentedContr = UISegmentedControl(items: ["Информация","Инструкция"])
-    
+    //var segmentedContr = UISegmentedControl(items: ["Информация","Инструкция"])
+    var segmentedContr = UISegmentedControl()
     //информация
     let scrolView = UIScrollView()
     
@@ -36,7 +36,7 @@ class InfoStartViewController: UIViewController {
     let snelenView = SnellenLeftView()
     let snelenLabel = UILabel()
     let symbolDescrButton = UIButton()
-    
+    var langLocale = "en_US"
     
     //инструкция
     let scrollInfoView = UIScrollView()
@@ -69,13 +69,15 @@ class InfoStartViewController: UIViewController {
     let thirdInstrView = UIView()
     let howDoAutoDetectLabel = UILabel()
     
+    let textLocal = InfoMiopiaVCText()
+    
     //MARK: viewDidLoad()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.view.backgroundColor = #colorLiteral(red: 0.6561266184, green: 0.9085168242, blue: 0.9700091481, alpha: 1)
-        
+        print(langLocale)
 //        viewArray = [lastSpere, sphereView, sectorView, degr90, rotateView, scaledView, oneDegreeView, minutesView]
 //        currentView = viewArray[numberView]
 //        textArray = ["1", "2", "3", "4", "5", "6", "7", "8"]
@@ -89,6 +91,9 @@ class InfoStartViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(false)
+        let segmentedContrItem1:String = textLocal.segmentedContrItem1[langLocale] ?? "Информация"
+        let segmentedContrItem2:String = textLocal.segmentedContrItem2[langLocale] ?? "Инструкция"
+        segmentedContr = UISegmentedControl(items: [segmentedContrItem1 ,segmentedContrItem2])
         addSegmContr()
         addScrollView()
 
@@ -197,7 +202,9 @@ class InfoStartViewController: UIViewController {
         
         myopiaDescrLabel.numberOfLines = 0
         myopiaDescrLabel.textAlignment = .natural
-        myopiaDescrLabel.text = "   Близорукость, или миопия – самая распространенная причина низкого зрения у человека в наши дни. \n\n   Попадающие в глаз лучи света фокусируются до сетчатки, когда роговица и хрусталик чрезмерно сильно изменяют их ход. \n    Человек плохо видит при миопии из-за несоответствия силы оптики глаза и размера глазного яблока, при котором лучи света формируют изображение раньше, чем они достигнут сетчатки. И когда они все-таки попадают на нее, то картинка становиться размытой."
+        myopiaDescrLabel.text = textLocal.myopiaDescrLabelText[langLocale]
+        
+        //myopiaDescrLabel.text = "   Близорукость, или миопия – самая распространенная причина низкого зрения у человека в наши дни. \n\n   Попадающие в глаз лучи света фокусируются до сетчатки, когда роговица и хрусталик чрезмерно сильно изменяют их ход. \n    Человек плохо видит при миопии из-за несоответствия силы оптики глаза и размера глазного яблока, при котором лучи света формируют изображение раньше, чем они достигнут сетчатки. И когда они все-таки попадают на нее, то картинка становиться размытой."
 
         
     }
@@ -228,7 +235,8 @@ class InfoStartViewController: UIViewController {
         
         ahtungLabel.numberOfLines = 0
         ahtungLabel.textAlignment = .center
-        ahtungLabel.text = "Внимание!"
+        ahtungLabel.text = textLocal.ahtungLabelText[langLocale]
+        //ahtungLabel.text = "Внимание!"
         ahtungLabel.textColor = .red
         ahtungLabel.font = .boldSystemFont(ofSize: 17)
         
@@ -279,7 +287,8 @@ class InfoStartViewController: UIViewController {
         
         attantionLabel.numberOfLines = 0
         attantionLabel.textAlignment = .natural
-        attantionLabel.text = "   При нормальном зрении точка ясного видения находится как бы в бесконечности. Для человеческого глаза бесконечность начинается на расстоянии 5 метров: при расположении предмета не ближе 5 метров на сетчатке глаза с нормальным зрением собираются параллельные лучи. Именно поэтому проверку остроты зрения осуществляют с такого расстояния."
+        attantionLabel.text = textLocal.attantionLabelText[langLocale]
+        //attantionLabel.text = "   При нормальном зрении точка ясного видения находится как бы в бесконечности. Для человеческого глаза бесконечность начинается на расстоянии 5 метров: при расположении предмета не ближе 5 метров на сетчатке глаза с нормальным зрением собираются параллельные лучи. Именно поэтому проверку остроты зрения осуществляют с такого расстояния."
     }
     //MARK: окно таблицы
     func addTableViews() {
@@ -319,7 +328,8 @@ class InfoStartViewController: UIViewController {
         
         tableDescrLabel.numberOfLines = 0
         tableDescrLabel.textAlignment = .natural
-        tableDescrLabel.text = "   Чтобы определить остроту зрения человека, подбирая контактные линзы, очки или ради профилактики, применяют специальные таблицы, которые бывают разных видов. Но в целом процедура диагностики происходит по одному принципу:\n 1. Человека усаживают напротив таблицы на определенном расстоянии.\n 2. Врач указывает на строку или символ на таблице, просит человека его назвать.\n 3. Если человек хорошо может различить указанный символ, врач указывает на более мелкий шрифт."
+        tableDescrLabel.text = textLocal.tableDescrLabelText[langLocale]
+        //tableDescrLabel.text = "   Чтобы определить остроту зрения человека, подбирая контактные линзы, очки или ради профилактики, применяют специальные таблицы, которые бывают разных видов. Но в целом процедура диагностики происходит по одному принципу:\n 1. Человека усаживают напротив таблицы на определенном расстоянии.\n 2. Врач указывает на строку или символ на таблице, просит человека его назвать.\n 3. Если человек хорошо может различить указанный символ, врач указывает на более мелкий шрифт."
         
         
     }
@@ -349,7 +359,8 @@ class InfoStartViewController: UIViewController {
         
         firstLabel.numberOfLines = 0
         firstLabel.textAlignment = .natural
-        firstLabel.text = "   В приложении (в тесте на наличие близорукости)  используются оптотипы Ландольта (символ 'С') и оптотипы Снеллена (символ 'Ш')."
+        firstLabel.text = textLocal.firstLabelText[langLocale]
+        //firstLabel.text = "   В приложении (в тесте на наличие близорукости)  используются оптотипы Ландольта (символ 'С') и оптотипы Снеллена (символ 'Ш')."
         
         symbolDescribeView.addSubview(landoltView)
         
@@ -371,7 +382,8 @@ class InfoStartViewController: UIViewController {
         
         landoltLabel.numberOfLines = 0
         landoltLabel.textAlignment = .natural
-        landoltLabel.text = "Оптотипы Ландольта по форме представляют собой черные кольца разной величины с разрывами, обращенными в разные стороны, и по распознаванию этого разрыва можно определить минимальный угол разрешения глаза."// Ширина кольца Ландольта и ширина разрыва в 5 раз меньше его наружного диаметра, то есть соотношение этих параметров – 5 : 1 : 1. Направление разрыва кольца может иметь четыре варианта (вверху, внизу, справа и слева)."
+        landoltLabel.text = textLocal.landoltLabelText[langLocale]
+        //landoltLabel.text = "Оптотипы Ландольта по форме представляют собой черные кольца разной величины с разрывами, обращенными в разные стороны, и по распознаванию этого разрыва можно определить минимальный угол разрешения глаза."
         
         symbolDescribeView.addSubview(symbolDescrButton)
         
@@ -386,7 +398,8 @@ class InfoStartViewController: UIViewController {
         symbolDescrButton.layer.cornerRadius = 5
         symbolDescrButton.layer.shadowOpacity = 0.1
         symbolDescrButton.layer.shadowColor = UIColor.black.cgColor
-        symbolDescrButton.setTitle("Подробнее о размерах символа...", for: .normal)
+        let symbolDescrButtonTitle = textLocal.symbolDescrButtonTitle[langLocale]
+        symbolDescrButton.setTitle(symbolDescrButtonTitle, for: .normal)
         symbolDescrButton.setTitleColor(.systemBlue, for: .normal)
         symbolDescrButton.titleLabel?.font = .systemFont(ofSize: 10)
         symbolDescrButton.titleLabel?.numberOfLines = 0
@@ -402,7 +415,8 @@ class InfoStartViewController: UIViewController {
         
         secondLandoltLabel.numberOfLines = 0
         secondLandoltLabel.textAlignment = .natural
-        secondLandoltLabel.text = "Ширина кольца Ландольта и ширина разрыва в 5 раз меньше его наружного диаметра, то есть соотношение этих параметров – 5 : 1 : 1. Направление разрыва кольца может иметь четыре варианта (вверху, внизу, справа и слева)."
+        secondLandoltLabel.text = textLocal.secondLandoltLabelText[langLocale]
+        //secondLandoltLabel.text = "Ширина кольца Ландольта и ширина разрыва в 5 раз меньше его наружного диаметра, то есть соотношение этих параметров – 5 : 1 : 1. Направление разрыва кольца может иметь четыре варианта (вверху, внизу, справа и слева)."
         
         symbolDescribeView.addSubview(snelenView)
         
@@ -422,77 +436,9 @@ class InfoStartViewController: UIViewController {
         
         snelenLabel.numberOfLines = 0
         snelenLabel.textAlignment = .natural
-        snelenLabel.text = "Оптотип Снеллена - вписанная в квадрат фигура, подобная букве 'Ш', которая может иметь 4 ориентации. Такие знаки также широко используются в офтальмологии."
+        snelenLabel.text = textLocal.snelenLabelText[langLocale]
+        //snelenLabel.text = "Оптотип Снеллена - вписанная в квадрат фигура, подобная букве 'Ш', которая может иметь 4 ориентации. Такие знаки также широко используются в офтальмологии."
     }
-    
-    //MARK: окно про 1 угловую минуту
-//    func addDegreeView() {
-//        scrolView.addSubview(minuteDegreeView)
-//        minuteDegreeView.translatesAutoresizingMaskIntoConstraints = false
-//        minuteDegreeView.topAnchor.constraint(equalTo: symbolDescribeView.bottomAnchor, constant: 10).isActive = true
-//        minuteDegreeView.widthAnchor.constraint(equalTo: scrolView.widthAnchor, multiplier: 95/100).isActive = true
-//        minuteDegreeView.heightAnchor.constraint(equalToConstant: 650).isActive = true
-//        minuteDegreeView.centerXAnchor.constraint(equalTo: scrolView.centerXAnchor).isActive = true
-//
-//        minuteDegreeView.backgroundColor = .white
-//        minuteDegreeView.layer.cornerRadius = 20
-//        minuteDegreeView.layer.shadowOpacity = 0.1
-//        minuteDegreeView.layer.shadowColor = UIColor.gray.cgColor
-//
-//
-//
-//        minuteDegreeView.addSubview(nextButton)
-//        nextButton.translatesAutoresizingMaskIntoConstraints = false
-//        nextButton.bottomAnchor.constraint(equalTo: minuteDegreeView.bottomAnchor).isActive = true
-//        nextButton.widthAnchor.constraint(equalTo: minuteDegreeView.widthAnchor, multiplier: 1/3).isActive = true
-//        nextButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
-//        nextButton.centerXAnchor.constraint(equalTo: minuteDegreeView.centerXAnchor).isActive = true
-//
-//        nextButton.setTitle("дальше", for: .normal)
-//        nextButton.setTitleColor(.black, for: .normal)
-//        nextButton.backgroundColor = .white
-//        nextButton.layer.cornerRadius = 10
-//        nextButton.layer.shadowOpacity = 0.1
-//        nextButton.layer.shadowColor = UIColor.gray.cgColor
-//        nextButton.addTarget(self, action: #selector(nextButtonAction), for: .touchUpInside)
-//
-//        addRemovedView()
-//
-//    }
-//
-//    func addRemovedView() {
-//        minuteDegreeView.addSubview(currentView)
-//        currentView.translatesAutoresizingMaskIntoConstraints = false
-//        currentView.widthAnchor.constraint(equalTo: minuteDegreeView.widthAnchor).isActive = true
-//        currentView.heightAnchor.constraint(equalTo: minuteDegreeView.widthAnchor).isActive = true
-//        currentView.topAnchor.constraint(equalTo: minuteDegreeView.topAnchor, constant: 20).isActive = true
-//        currentView.centerXAnchor.constraint(equalTo: minuteDegreeView.centerXAnchor).isActive = true
-//
-//        currentView.backgroundColor = .clear
-//
-//        minuteDegreeView.addSubview(degreeDescrLabel)
-//        degreeDescrLabel.translatesAutoresizingMaskIntoConstraints = false
-//        degreeDescrLabel.widthAnchor.constraint(equalTo: minuteDegreeView.widthAnchor).isActive = true
-//        degreeDescrLabel.topAnchor.constraint(equalTo: currentView.bottomAnchor).isActive = true
-//        degreeDescrLabel.bottomAnchor.constraint(equalTo: nextButton.topAnchor).isActive = true
-//
-//        degreeDescrLabel.text = textArray[numberView]
-//    }
-//
-//    @objc func nextButtonAction() {
-//        if numberView == viewArray.count-1{
-//            numberView = 0
-//        }else{
-//            numberView += 1
-//        }
-//
-//        currentView.removeFromSuperview()
-//        degreeDescrLabel.removeFromSuperview()
-//        currentView = viewArray[numberView]
-//        degreeDescrLabel.text = textArray[numberView]
-//        addRemovedView()
-//
-//    }
     
     
     
@@ -567,7 +513,8 @@ class InfoStartViewController: UIViewController {
         howDoTestLabel.backgroundColor = .clear
         howDoTestLabel.numberOfLines = 0
         howDoTestLabel.font = .systemFont(ofSize: 15)
-        howDoTestLabel.text = "   Расположите телефон на расстоянии, уcтановленном в настройках приложения. Называйте направления символа вашему ассистенту, который будет нажимать соответствующие кнопки на экране телефона. "
+        howDoTestLabel.text = textLocal.howDoTestLabelText[langLocale]
+        //howDoTestLabel.text = "   Расположите телефон на расстоянии, уcтановленном в настройках приложения. Называйте направления символа вашему ассистенту, который будет нажимать соответствующие кнопки на экране телефона. "
     }
     
     fileprivate func addSymbolDescrView() {
@@ -591,7 +538,8 @@ class InfoStartViewController: UIViewController {
         symbolDiscrLabel.heightAnchor.constraint(equalTo: symbolDiscrLBS.heightAnchor, multiplier: 10/11).isActive = true
         symbolDiscrLabel.widthAnchor.constraint(equalTo: symbolDiscrLBS.widthAnchor, multiplier: 1/2, constant: -10).isActive = true
         symbolDiscrLabel.backgroundColor = .clear
-        symbolDiscrLabel.text = "Оптотипы Ландольта по форме представляют собой черные кольца разной величины с разрывами, обращенными в разные стороны, и по распознаванию этого разрыва можно определить минимальный угол разрешения глаза.  Направление разрыва кольца может иметь четыре варианта (вверху, внизу, справа и слева)"
+        symbolDiscrLabel.text = textLocal.symbolDiscrLabelText[langLocale]
+        //symbolDiscrLabel.text = "Оптотипы Ландольта по форме представляют собой черные кольца разной величины с разрывами, обращенными в разные стороны, и по распознаванию этого разрыва можно определить минимальный угол разрешения глаза.  Направление разрыва кольца может иметь четыре варианта (вверху, внизу, справа и слева)"
         symbolDiscrLabel.font = .systemFont(ofSize: 7)
         symbolDiscrLabel.numberOfLines = 0
         
@@ -624,7 +572,8 @@ class InfoStartViewController: UIViewController {
         stopBtnDiscrLabel.heightAnchor.constraint(equalTo: stopBtnDiscrLBS.heightAnchor, multiplier: 10/11).isActive = true
         stopBtnDiscrLabel.widthAnchor.constraint(equalTo: stopBtnDiscrLBS.widthAnchor, multiplier: 1/2, constant: -10).isActive = true
         stopBtnDiscrLabel.backgroundColor = .clear
-        stopBtnDiscrLabel.text = "Когда невозможно определить в какую сторону направлен символ - нажмите кнопку с символом '❌'. Тест будет остановлен, результат сохранится. Вам будет предложено пройти тест для другого глаза. Если Вы выйдете до окончания теста - результаты сохранены не будут."
+        stopBtnDiscrLabel.text = textLocal.stopBtnDiscrLabelText[langLocale]
+        //stopBtnDiscrLabel.text = "Когда невозможно определить в какую сторону направлен символ - нажмите кнопку с символом '❌'. Тест будет остановлен, результат сохранится. Вам будет предложено пройти тест для другого глаза. Если Вы выйдете до окончания теста - результаты сохранены не будут."
         stopBtnDiscrLabel.font = .systemFont(ofSize: 7)
         stopBtnDiscrLabel.numberOfLines = 0
         
@@ -659,7 +608,8 @@ class InfoStartViewController: UIViewController {
         actionBtnLabel.heightAnchor.constraint(equalTo: actionBtnDiscrLTS.heightAnchor, multiplier: 10/11).isActive = true
         actionBtnLabel.widthAnchor.constraint(equalTo: actionBtnDiscrLTS.widthAnchor, multiplier: 1/2, constant: -10).isActive = true
         actionBtnLabel.backgroundColor = .clear
-        actionBtnLabel.text = "Если Вы можете различить в какую сторону направлен символ - Ваш ассистент должен нажать на кнопку, которую Вы ему назовете. \n В случае совпадения направления символа и стрелки на кнопке  - появится символ более мелкого размера. "
+        actionBtnLabel.text = textLocal.actionBtnLabelText[langLocale]
+        //actionBtnLabel.text = "Если Вы можете различить в какую сторону направлен символ - Ваш ассистент должен нажать на кнопку, которую Вы ему назовете. \n В случае совпадения направления символа и стрелки на кнопке  - появится символ более мелкого размера. "
         actionBtnLabel.font = .systemFont(ofSize: 7)
         actionBtnLabel.numberOfLines = 0
         
@@ -691,7 +641,8 @@ class InfoStartViewController: UIViewController {
         deviceDetectLabel.heightAnchor.constraint(equalTo: deviceDetectDiscrRTS.heightAnchor, multiplier: 10/11).isActive = true
         deviceDetectLabel.widthAnchor.constraint(equalTo: deviceDetectDiscrRTS.widthAnchor, multiplier: 85/100, constant: -10).isActive = true
         deviceDetectLabel.backgroundColor = .clear
-        deviceDetectLabel.text = "Устройство, на котором запущено приложение. В зависимости от ширины экрана устройства происходит расчет размеров символа для определения остроты зрения."
+        deviceDetectLabel.text = textLocal.deviceDetectLabelText[langLocale]
+        //deviceDetectLabel.text = "Устройство, на котором запущено приложение. В зависимости от ширины экрана устройства происходит расчет размеров символа для определения остроты зрения."
         deviceDetectLabel.font = .systemFont(ofSize: 7)
         deviceDetectLabel.numberOfLines = 0
         
@@ -723,7 +674,8 @@ class InfoStartViewController: UIViewController {
         distanceDiscrLabel.heightAnchor.constraint(equalTo: distanceDiscrRBS.heightAnchor, multiplier: 10/11).isActive = true
         distanceDiscrLabel.widthAnchor.constraint(equalTo: distanceDiscrRBS.widthAnchor, multiplier: 85/100, constant: -10).isActive = true
         distanceDiscrLabel.backgroundColor = .clear
-        distanceDiscrLabel.text = " Расстояние, установленное для проведения теста. В зависимости от расстояния происходит расчет размеров символа для определения остроты зрения. Изменить расстояние проведения теста можно в настройках приложения."
+        distanceDiscrLabel.text = textLocal.distanceDiscrLabelText[langLocale]
+        //distanceDiscrLabel.text = " Расстояние, установленное для проведения теста. В зависимости от расстояния происходит расчет размеров символа для определения остроты зрения. Изменить расстояние проведения теста можно в настройках приложения."
         distanceDiscrLabel.font = .systemFont(ofSize: 7)
         distanceDiscrLabel.numberOfLines = 0
         
@@ -812,8 +764,8 @@ class InfoStartViewController: UIViewController {
         howDoRecognLabel.topAnchor.constraint(equalTo: secondInstrView.topAnchor, constant: 10).isActive = true
         howDoRecognLabel.heightAnchor.constraint(equalTo: secondInstrView.heightAnchor, multiplier: 1/2, constant: 0).isActive = true
         howDoRecognLabel.centerXAnchor.constraint(equalTo: scrollInfoView.centerXAnchor).isActive = true
-        
-        howDoRecognLabel.text = "Для распознавания речи включите соответствующий переключатель в настройках приложения. Также установите время, которое Вам потребуется чтобы отойти от телефона на установленное расстояние.\n \nПри включении распознавания речи тест на наличие миопии можно проводить самостоятельно.\n Необходимо использовать беспроводную гарнитуру.\n "
+        howDoRecognLabel.text = textLocal.howDoRecognLabelText[langLocale]
+        //howDoRecognLabel.text = "Для распознавания речи включите соответствующий переключатель в настройках приложения. Также установите время, которое Вам потребуется чтобы отойти от телефона на установленное расстояние.\n \nПри включении распознавания речи тест на наличие миопии можно проводить самостоятельно.\n Необходимо использовать беспроводную гарнитуру.\n "
         
         howDoRecognLabel.numberOfLines = 0
         
@@ -856,8 +808,8 @@ class InfoStartViewController: UIViewController {
         speechSymbolDiscrLabel.heightAnchor.constraint(equalTo: speechSymbolDiscrLBS.heightAnchor, constant: -10).isActive = true
         speechSymbolDiscrLabel.widthAnchor.constraint(equalTo: speechSymbolDiscrLBS.widthAnchor, multiplier: 7/10, constant: -10).isActive = true
         speechSymbolDiscrLabel.backgroundColor = .clear
-        
-        speechSymbolDiscrLabel.text = "Если Вы можете различить в какую сторону направлен символ - произнесите в микрофон гарнитуры направление символа: 'вправо', 'влево', 'вверх' или 'вниз'. Когда Вы правильно назвали 3 из 4-х направлений - на экране появится символ более мелкого размера. Если невозможно определить направление символа - произнесите слово 'СТОП'. Тест завершится. Результат будет сохранен."
+        speechSymbolDiscrLabel.text = textLocal.speechSymbolDiscrLabelText[langLocale]
+        //speechSymbolDiscrLabel.text = "Если Вы можете различить в какую сторону направлен символ - произнесите в микрофон гарнитуры направление символа: 'вправо', 'влево', 'вверх' или 'вниз'. Когда Вы правильно назвали 3 из 4-х направлений - на экране появится символ более мелкого размера. Если невозможно определить направление символа - произнесите слово 'СТОП'. Тест завершится. Результат будет сохранен."
         speechSymbolDiscrLabel.font = .systemFont(ofSize: 7)
         speechSymbolDiscrLabel.numberOfLines = 0
         
@@ -891,8 +843,8 @@ class InfoStartViewController: UIViewController {
         lineDescrLabel.heightAnchor.constraint(equalTo: lineDescrLTS.heightAnchor, constant: -10).isActive = true
         lineDescrLabel.widthAnchor.constraint(equalTo: lineDescrLTS.widthAnchor, multiplier: 7/10, constant: -10).isActive = true
         lineDescrLabel.backgroundColor = .clear
-        
-        lineDescrLabel.text = "Индикатор оставшегося времени до момента появления нового символа."
+        lineDescrLabel.text = textLocal.lineDescrLabelText[langLocale]
+        //lineDescrLabel.text = "Индикатор оставшегося времени до момента появления нового символа."
         lineDescrLabel.font = .systemFont(ofSize: 7)
         lineDescrLabel.numberOfLines = 0
         
@@ -933,7 +885,8 @@ class InfoStartViewController: UIViewController {
         howDoAutoDetectLabel.backgroundColor = .clear
         howDoAutoDetectLabel.numberOfLines = 0
         howDoAutoDetectLabel.font = .systemFont(ofSize: 15)
-        howDoAutoDetectLabel.text = "  Включите в настройках приложения переключатель автоматического определения расстояния. Для автоматического определения расстояния в помещении должно быть хорошее освещение.\n Установите время, которое Вам потребуется, чтобы отойти на планируемое расстояние.  \n\n!!!  При определении расстояния в кадре должно быть не более одного человека, стоящего лицом к фронтальной камере телефона:\n\n 📱    →    🧍 = ✅   \n \n Если будет более одного человека - расстояние может быть определено некорректно:\n\n 📱    →    👫 = 🚫 \n\n  Далее тест проводится также как при включенном распознавании речи."
+        howDoAutoDetectLabel.text = textLocal.howDoAutoDetectLabelText[langLocale]
+        //howDoAutoDetectLabel.text = "  Включите в настройках приложения переключатель автоматического определения расстояния. Для автоматического определения расстояния в помещении должно быть хорошее освещение.\n Установите время, которое Вам потребуется, чтобы отойти на планируемое расстояние.  \n\n!!!  При определении расстояния в кадре должно быть не более одного человека, стоящего лицом к фронтальной камере телефона:\n\n 📱    →    🧍 = ✅   \n \n Если будет более одного человека - расстояние может быть определено некорректно:\n\n 📱    →    👫 = 🚫 \n\n  Далее тест проводится также как при включенном распознавании речи."
     }
     
     func lupaInView(view: UIView){
@@ -955,6 +908,7 @@ class InfoStartViewController: UIViewController {
     
     @objc func symbolDescrButtonAction(){
         let degreeVC = DegreeViewController()
+        degreeVC.langLocale = langLocale
         self.navigationController?.pushViewController(degreeVC, animated: false)
         timer.invalidate()
         

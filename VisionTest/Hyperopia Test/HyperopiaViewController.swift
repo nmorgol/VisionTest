@@ -31,7 +31,8 @@ class HyperopiaViewController: UIViewController {
     var animateCounter = Int(1)
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
+    var locale = "en_US"
+    let hyperText = HyperopiaText()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,8 +47,8 @@ class HyperopiaViewController: UIViewController {
         super .viewWillAppear(false)
         //disapearTrue = true
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
-        
-        addEyeLabel(text: "Закройте левый глаз")
+        let text1:String = hyperText.addEyeLabelText[locale] ?? "Закройте левый глаз"
+        addEyeLabel(text: text1)
         
         addWordLabel()
         addStopButton()
@@ -164,7 +165,10 @@ class HyperopiaViewController: UIViewController {
         stopLabel.numberOfLines = 0
         stopLabel.textAlignment = .center
         
-        stopLabel.text = "Тест завершен. \n Результаты: \n - правый глаз \(rightRes) \n - левый глаз \(leftRes)"
+        let text2:String = hyperText.stopLabelText1[locale] ?? "Тест завершен. \n Результаты: \n - правый глаз "
+        let text3:String = hyperText.stopLabelText2[locale] ?? "\n - левый глаз "
+        stopLabel.text = text2 + " \(rightRes)" + text3 + "\(leftRes)"
+        //stopLabel.text = "Тест завершен. \n Результаты: \n - правый глаз \(rightRes) \n - левый глаз \(leftRes)"
 
         stopLabel.isUserInteractionEnabled = true
 //        let tap = UITapGestureRecognizer(target: self, action: #selector(stopLabelGestureAction))
@@ -231,20 +235,21 @@ class HyperopiaViewController: UIViewController {
             
             saveResult()//надо до сброса счетчика ставить
             
+            let text4:String = hyperText.addEyeLabelText[locale] ?? "Закройте левый глаз"
+            let text5:String = hyperText.eyeLabelText[locale] ?? "Закройте правый глаз"
             
-            
-            if eyeLabel.text == "Закройте левый глаз"{//надо до сброса счетчика ставить
+            if eyeLabel.text == text4{//надо до сброса счетчика ставить
                 rightRes = ((Float(startFontCounter)-1.0)/10.0)
-            }else if eyeLabel.text == "Закройте правый глаз"{
+            }else if eyeLabel.text == text5{
                 leftRes = ((Float(startFontCounter)-1.0)/10.0)
             }
             
             startFontCounter = 1//сброс счетчика
             fontSize = 47.0/Double(startFontCounter)
             
-            if eyeLabel.text == "Закройте левый глаз"{//надо до сброса счетчика ставить
-                eyeLabel.text = "Закройте правый глаз"
-            }else if eyeLabel.text == "Закройте правый глаз"{
+            if eyeLabel.text == text4{//надо до сброса счетчика ставить
+                eyeLabel.text = text5
+            }else if eyeLabel.text == text5{
                 
                 reciveTextField.resignFirstResponder()
                 addStopLabel()
@@ -265,6 +270,8 @@ class HyperopiaViewController: UIViewController {
     
     
     func saveResult(){
+        let text4:String = hyperText.addEyeLabelText[locale] ?? "Закройте левый глаз"
+        let text5:String = hyperText.eyeLabelText[locale] ?? "Закройте правый глаз"
             
             do{
                 let resultUser = try context.fetch(User.fetchRequest())
@@ -276,9 +283,9 @@ class HyperopiaViewController: UIViewController {
     //                print("результат", ((startFontCounter-1)/10))
                     result.result = ((Float(startFontCounter)-1.0)/10.0)
                     result.dateTest = Date()
-                    if eyeLabel.text == "Закройте правый глаз"{
+                    if eyeLabel.text == text5{
                         result.testingEye = "Левый глаз"
-                    }else if eyeLabel.text == "Закройте левый глаз"{
+                    }else if eyeLabel.text == text4{
                         result.testingEye = "Правый глаз"
                     }
                     

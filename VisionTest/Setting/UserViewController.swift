@@ -23,6 +23,8 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var iapMoreThenOneUser = false
     
+    var locale = "en_US"
+    let textUserVC = UserVCText()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,7 +104,7 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         photoButton.centerXAnchor.constraint(equalTo: firstView.centerXAnchor).isActive = true
         photoButton.widthAnchor.constraint(equalTo: userImageView.widthAnchor).isActive = true
         photoButton.heightAnchor.constraint(equalTo: firstView.widthAnchor, multiplier: 9/10).isActive = true
-        photoButton.setTitle("Новое фото", for: .normal)
+        photoButton.setTitle("New photo", for: .normal)
         photoButton.setTitleColor(.systemBlue, for: .normal)
         photoButton.addTarget(self, action: #selector(photoButtonAction), for: .touchUpInside)
         
@@ -155,9 +157,17 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         if iapMoreThenOneUser{
             
-            let alert = UIAlertController(title: nil, message: "Хотите добавить нового пользователя?", preferredStyle: .alert)
-            let alertCansel = UIAlertAction(title: "Отмена", style: .destructive, handler: nil)
-            let alertAction = UIAlertAction(title: "Добавить пользователя", style: .default) { (action) in
+            let text4:String = textUserVC.allertMessage[locale] ?? "Хотите добавить нового пользователя?"
+            
+            let alert = UIAlertController(title: nil, message: text4, preferredStyle: .alert)
+            
+            let text5:String = textUserVC.alertCanselText[locale] ?? "Отмена"
+            
+            let alertCansel = UIAlertAction(title: text5, style: .destructive, handler: nil)
+            
+            let text6:String = textUserVC.alertAction[locale] ?? "Добавить пользователя"
+            
+            let alertAction = UIAlertAction(title: text6, style: .default) { (action) in
                 self.userImageView.image = UIImage(named: "placeholder")
                 self.userTextView.text = ""
                 self.userTextField.text = ""
@@ -212,12 +222,19 @@ class UserViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
             
         }else{
             let iapVC = IAPurchTableViewController()
+            let text1:String = textUserVC.alertIAPMessage[locale] ?? "Для увеличения количества пользователей необходимо совершить покупку"
+            let alert = UIAlertController(title: " ", message: text1, preferredStyle: .actionSheet)
             
-            let alert = UIAlertController(title: " ", message: "Для увеличения количества пользователей необходимо совершить покупку", preferredStyle: .actionSheet)
-            let alertAction = UIAlertAction(title: "Перейти к покупкам", style: .default) { (_) in
+//            let alert = UIAlertController(title: " ", message: "Для увеличения количества пользователей необходимо совершить покупку", preferredStyle: .actionSheet)
+            let text2:String = textUserVC.alertActionIAP[locale] ?? "Перейти к покупкам"
+            let alertAction = UIAlertAction(title: text2, style: .default) { (_) in
                 self.navigationController?.pushViewController(iapVC, animated: true)
             }
-            let alertCancel = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+//            let alertAction = UIAlertAction(title: "Перейти к покупкам", style: .default) { (_) in
+//                self.navigationController?.pushViewController(iapVC, animated: true)
+//            }
+            let text3:String = textUserVC.alertCanselText[locale] ?? "Отмена"
+            let alertCancel = UIAlertAction(title: text3, style: .cancel, handler: nil)
             alert.addAction(alertAction)
             alert.addAction(alertCancel)
             self.present(alert, animated: true, completion: nil)
